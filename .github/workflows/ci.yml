@@ -1,0 +1,36 @@
+name: checks
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Run the verification suite
+        run: |
+          cd code
+          python3 checks_clusters.py | tee ../checks.log
+          grep -q "0 failed" ../checks.log
+      - name: Regenerate every figure and test for label collisions
+        run: |
+          cd code
+          for f in fig01_arrangement fig02_torus fig03_formfactor fig04_residues fig05_propagator fig06_schwinger fig07_transfer fig08_annealed; do
+            python3 $f.py | tee -a ../figs.log
+          done
+          ! grep -qE "[1-9][0-9]* collisions" ../figs.log
+      - uses: actions/upload-artifact@v4
+        with:
+          name: logs-and-figures
+          path: |
+            checks.log
+            figs.log
+            paper/figs
