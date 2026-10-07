@@ -1,0 +1,52 @@
+name: release
+
+# Merging a change to .github/release/notes.md into main publishes the GitHub release for the
+# version in CITATION.cff, with the paper's PDF, LaTeX source, arXiv package and figures
+# attached; Zenodo then archives it. The first line of notes.md is the title, the rest the
+# description. On a pull request the assets are only built, as a check.
+on:
+  push:
+    branches: [main]
+    paths: [.github/release/notes.md]
+  pull_request:
+    paths: [.github/release/**, .github/workflows/release.yml]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Read the version
+        id: version
+        run: echo "version=$(sed -n 's/^version: *//p' CITATION.cff | tr -d '"')" >> "$GITHUB_OUTPUT"
+      - name: Install LaTeX and poppler
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends texlive-latex-base texlive-latex-recommended \
+            texlive-latex-extra texlive-pictures texlive-publishers texlive-fonts-recommended \
+            texlive-science cm-super poppler-utils
+      - name: Build the assets
+        run: bash .github/release/build.sh "${{ steps.version.outputs.version }}" dist
+      - uses: actions/upload-artifact@v4
+        with:
+          name: release-assets
+          path: dist
+      - name: Publish the release
+        if: github.event_name != 'pull_request'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          TAG: v${{ steps.version.outputs.version }}
+        run: |
+          if gh release view "$TAG" > /dev/null 2>&1; then
+            echo "Release $TAG already exists; nothing to publish."
+            exit 0
+          fi
+          tail -n +3 .github/release/notes.md > "$RUNNER_TEMP/notes.md"
+          gh release create "$TAG" dist/* --target "$GITHUB_SHA" \
+            --title "$(head -n 1 .github/release/notes.md | sed 's/^# *//')" \
+            --notes-file "$RUNNER_TEMP/notes.md"
