@@ -11,6 +11,9 @@
  * fraction, adaptive Simpson quadrature), so this program does not share code
  * with the Python checks.  Units: M = 1.
  *
+ * References such as Eq. (omega) or Sec. degree name the LaTeX labels of the
+ * paper (\label{eq:omega}, \label{sec:degree}).
+ *
  * Build and run:   cc -O2 -std=c99 -o formfactor_check formfactor_check.c -lm
  *                  ./formfactor_check
  */
@@ -139,7 +142,7 @@ static double inva_integrand(double u, void *p)
     return dk / a_of(k * k, n);          /* a(z) at z = k^2, i.e. x = k^2 */
 }
 
-/* integrands for the zero-point energy checks (Sec. VI C) */
+/* integrands for the zero-point energy checks (Sec. vacuum) */
 struct wpar { double W, s; };
 static double ein_of_w(double w, void *p) { (void)p; return ein(w); }
 static double laplace_integrand(double u, void *p)
@@ -163,6 +166,24 @@ static rat add(rat a, rat b) { return mk(a.p * b.q + b.p * a.q, a.q * b.q); }
 static rat mul(rat a, rat b) { return mk(a.p * b.p, a.q * b.q); }
 static rat neg(rat a) { return mk(-a.p, a.q); }
 static int is0(rat a) { return a.p == 0; }
+
+/* integrands for the cutoff variance of Eq. (cutvar): v^(zeta-5) (1 - e^{-v^2})^2 and its Gaussian part */
+static double cutvar_integrand(double v, void *p)
+{
+    double zeta = *(double *)p, x = v * v;
+    double r = x < 1e-8 ? 1.0 - 0.5 * x : -expm1(-x) / x;
+    return pow(v, zeta - 1.0) * r * r;
+}
+static double cutvar_tail(double v, void *p)
+{
+    double zeta = *(double *)p;
+    return pow(v, zeta - 5.0) * (2.0 * exp(-v * v) - exp(-2.0 * v * v));
+}
+static int omega_m2(int n, int L, int j) /* omega_bar with 2 m_sigma = j */
+{
+    int e = 2 * L - 2 * n - 2 + j;
+    return 4 * L - (2 * n + 2) * (L - 1) + (e > 0 ? e : 0);
+}
 
 int main(void)
 {
@@ -580,6 +601,43 @@ int main(void)
         check("Mellin transform of Ein: Gamma(s)/s at s = -0.3, -0.5", ok);
         double n = 6.0, rho = 1.5 * n * 2 * PI * PI * tgamma(1.0) / 4 / pow(2 * PI, 4);
         check("rho_1 = 3n/(64 pi^2) for n = 6", fabs(rho - 3 * n / (64 * PI * PI)) < 1e-15);
+    }
+
+    /* 12. The derived premises (Secs. cells, vacuum) and the weakest fine graining (Sec. degree) */
+    {
+        double th = 1.2, sc = 0.7, zs3[3] = {0.4, 1.1, 2.5};
+        int ok = 1;
+        for (int i = 0; i < 3; i++) {
+            double sum = 0.0, term = exp(-th), q = exp(-sc * sc * zs3[i] * zs3[i]);
+            for (int N = 0; N < 120; N++) { sum += term; term *= th * q / (N + 1); }
+            if (fabs(sum - exp(-th * (1.0 - q))) > 1e-15) ok = 0;
+        }
+        check("Eq. (cellt): Poisson sum over the number of cells = exp[-theta(1 - e^{-s^2 z^2})]", ok);
+        ok = 1;
+        double zetas[4] = {1.0, 2.5, 3.0, 3.5};
+        for (int i = 0; i < 4; i++) {
+            double z = zetas[i];
+            double q = integrate(cutvar_integrand, &z, 0.0, 1.0, 1e-13) + 1.0 / (4.0 - z) - integrate(cutvar_tail, &z, 1.0, 12.0, 1e-13);
+            double cz = 0.5 * tgamma(0.5 * z - 2.0) * (pow(2.0, 2.0 - 0.5 * z) - 2.0);
+            if (fabs(q / cz - 1.0) > 1e-9) ok = 0;
+        }
+        check("Eq. (cutvar): C_zeta = Gamma(zeta/2-2)(2^(2-zeta/2)-2)/2 against Simpson, zeta = 1, 2.5, 3, 3.5", ok);
+        int lower[6][5] = {{4, 0, -4, -6, -8}, {4, -2, -8, -12, -16}, {4, -4, -12, -18, -24},
+                           {4, -6, -16, -24, -32}, {4, -8, -20, -30, -40}, {4, -10, -24, -36, -48}};
+        ok = 1;
+        for (int n = 3; n <= 8; n++)
+            for (int L = 1; L <= 5; L++)
+                if (omega_m2(n, L, 2 * n - 4) != lower[n - 3][L - 1]) ok = 0;
+        check("Table (power), lower block: m_sigma = n - 2", ok);
+        ok = 1;
+        for (int n = 1; n <= 30; n++) {
+            int allneg = 1;
+            for (int L = 2; L <= 200; L++)
+                for (int j = 0; j <= (2 * n - 4 > 0 ? 2 * n - 4 : 0); j++)
+                    if (omega_m2(n, L, j) >= 0) allneg = 0;
+            if (allneg != (n >= 4)) ok = 0;
+        }
+        check("omega_bar < 0 for 2 <= L <= 200 and all 0 <= 2 m_sigma <= 2n - 4 exactly when n >= 4", ok);
     }
 
     printf("\n%d checks passed, %d failed\n", npass, nfail);

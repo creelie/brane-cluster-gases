@@ -35,11 +35,11 @@ def Ein_series(y, terms=200):
     return float(mp.nsum(lambda k: (-1) ** (k + 1) * mp.mpf(y) ** k / (k * mp.factorial(k)), [1, mp.inf]))
 
 
-# 1. Euler's constant as the difference of the two integrals (Lemma 2).
+# 1. Euler's constant as the difference of the two integrals (Eq. (gamma-id)).
 g = mp.quad(lambda t: (1 - mp.e ** (-t)) / t, [0, 1]) - mp.quad(lambda t: mp.e ** (-t) / t, [1, mp.inf])
 check("gamma = int_0^1 (1-e^-t)/t - int_1^inf e^-t/t", abs(g - mp.euler) < 1e-25)
 
-# 2. 0 <= Ein(y) - log(1+y) <= gamma, increasing (Lemma 2).
+# 2. 0 <= Ein(y) - log(1+y) <= gamma, increasing (Eq. (twosided)).
 ys = np.concatenate([np.linspace(0, 5, 51)[1:], np.logspace(0.7, 3, 40)])
 diffs = [float(mp.quad(lambda t: (1 - mp.e ** (-t)) / t, [0, y])) - math.log1p(y) for y in ys]
 check("0 <= Ein(y)-log(1+y) <= gamma", all(0 <= d <= GAMMA + 1e-12 for d in diffs))
@@ -48,13 +48,13 @@ y = 40.0
 lhs = float(mp.quad(lambda t: (1 - mp.e ** (-t)) / t, [0, y]))
 check("Ein(y) = log y + gamma + E1(y)", abs(lhs - (math.log(y) + GAMMA + special.exp1(y))) < 1e-12)
 
-# 3. Phi(x) = int_0^1 phi(x tau) dtau/tau = Ein(x^2)/2 for phi(w) = 1 - exp(-w^2) (Prop. 2).
+# 3. Phi(x) = int_0^1 phi(x tau) dtau/tau = Ein(x^2)/2 for phi(w) = 1 - exp(-w^2) (Eq. (Phi)).
 for x in [0.3, 1.0, 2.5, -1.7, 6.0]:
     val = integrate.quad(lambda tau: (1 - math.exp(-(x * tau) ** 2)) / tau, 0, 1, limit=200)[0]
     ref = 0.5 * float(mp.quad(lambda t: (1 - mp.e ** (-t)) / t, [0, x * x]))
     check(f"Phi({x}) = Ein(x^2)/2", abs(val - ref) < 1e-10)
 
-# complex z: H(z) via the power series n*sum c_k (z/M^2)^k / k (Theorem 1)
+# complex z: H(z) via the power series n*sum c_k (z/M^2)^k / k (Eq. (avg))
 n = 6
 for zc in [0.7 + 0.4j, -1.2 + 0.9j, 2.0 - 1.5j]:
     direct = n * mp.quad(lambda tau: (1 - mp.e ** (-(zc * tau) ** 2)) / tau, [0, 1])
@@ -80,7 +80,7 @@ exact = math.exp(n * 0.5 * (float(mp.quad(lambda t: (1 - mp.e ** (-t)) / t, [0, 
 se = prod.std() / math.sqrt(N_real)
 check("PGFL: E prod(1+f) = exp int f dnu (MC)", abs(mc - exact) < 5 * se, f"mc={mc:.5f} exact={exact:.5f} se={se:.1e}")
 
-# 5. Two-sided bound (1+x^2)^{n/2} <= a <= e^{n gamma/2}(1+x^2)^{n/2} on the real axis (Prop. 2).
+# 5. Two-sided bound (1+x^2)^{n/2} <= a <= e^{n gamma/2}(1+x^2)^{n/2} on the real axis (Eq. (twosided)).
 ok = True
 for x in np.concatenate([-np.logspace(-2, 2, 40), np.logspace(-2, 2, 40)]):
     a = math.exp(n * 0.5 * float(mp.quad(lambda t: (1 - mp.e ** (-t)) / t, [0, x * x])))
@@ -88,7 +88,7 @@ for x in np.concatenate([-np.logspace(-2, 2, 40), np.logspace(-2, 2, 40)]):
     ok &= lo * (1 - 1e-12) <= a <= hi * (1 + 1e-12)
 check("two-sided bound on a(z), all real z", ok)
 
-# 6. Spin projectors and linearized curvature (Lemma 3), D = 4 and D = 5.
+# 6. Spin projectors and linearized curvature (Eqs. (Ric1)-(S2)), D = 4 and D = 5.
 def projectors(k, D):
     eta = np.eye(D)
     k2 = k @ k
@@ -129,7 +129,7 @@ for D in (4, 5):
     pred = 0.5 * k2 * (P2h + np.trace(th @ h) * T)
     check(f"D={D}: Ric = k^2/2 [P2 h + (theta.h) T]", np.max(np.abs(Ric - pred)) < 1e-10 * k2 * np.max(np.abs(h)))
 
-# 7. Angular averages and the killer matrix (Prop. 9), D = 4.
+# 7. Angular averages and the killer matrix (App. angular, Eq. (killcontrib)), D = 4.
 D = 4
 eta = np.eye(D)
 
@@ -223,7 +223,7 @@ def hcomp(deg, zs):
 zs = [0.5, 1.3, 2.2]
 check("(z^5)[z0,z1,z2] = h_3(z0,z1,z2)", abs(divdiff(lambda t: t ** 5, zs) - hcomp(3, zs)) < 1e-10)
 
-# 9. Power counting from the vertex bound (Sec. IV D):
+# 9. Power counting from the vertex bound (Sec. degree, Eq. (omega)):
 #    omega_bar(L) = 4L - (2n+2)(L-1) + 2(L-n-1)_+ < 0 for every L >= 2 iff n >= 4.
 def omega_bar(L, nn):
     return 4 * L - (2 * nn + 2) * (L - 1) + 2 * max(L - nn - 1, 0)
@@ -233,7 +233,7 @@ for nn in range(2, 12):
 check("n=3 is marginal: omega_bar(2) = 0", omega_bar(2, 3) == 0)
 table = {3: [4, 0, -4, -8, -10], 4: [4, -2, -8, -14, -20], 5: [4, -4, -12, -20, -28],
          6: [4, -6, -16, -26, -36], 7: [4, -8, -20, -32, -44], 8: [4, -10, -24, -38, -52]}
-check("Table III entries of omega_bar(L), n = 3..8, L = 1..5",
+check("Table (power) entries of omega_bar(L), n = 3..8, L = 1..5",
       all(omega_bar(L, nn) == table[nn][L - 1] for nn in table for L in range(1, 6)))
 # merging inequality: sum_v (h_v - k)_+ <= (sum h_v - 2(V-1) - k)_+ for h_v >= 2, k >= 2 (random)
 bad = 0
@@ -242,7 +242,7 @@ for _ in range(100000):
     bad += sum(max(x - k, 0) for x in h) > max(int(h.sum()) - 2 * (V - 1) - k, 0)
 check("merging inequality, 1e5 random vertex sets", bad == 0)
 
-# 10. Potential at the origin: Beta-function bounds (Prop. 10).
+# 10. Potential at the origin: Beta-function bounds (Eqs. (Jn)-(Kn)).
 for nn in (4, 5, 6, 7, 8):
     J = 0.25 * special.gamma(0.25) * special.gamma(nn / 2 - 0.25) / special.gamma(nn / 2)
     Jn = integrate.quad(lambda k: (1 + k ** 4) ** (-nn / 2), 0, np.inf)[0]
@@ -279,7 +279,7 @@ okw = all((x / (x + s)) ** (1 - s) <= special.gamma(x + s) / (x ** s * special.g
           for x in np.linspace(0.3, 30, 60) for s in (0.1, 0.25, 0.5, 0.75, 0.9))
 check("Wendel: (x/(x+s))^(1-s) <= Gamma(x+s)/(x^s Gamma(x)) <= 1", okw)
 
-# 11. Newtonian tail: deviation falls faster than any power (Prop. 10).
+# 11. Newtonian tail: deviation falls faster than any power (Eq. (tail)).
 nn = 6
 def inv_a(k):
     return math.exp(-nn * 0.5 * float(mp.quad(lambda t: (1 - mp.e ** (-t)) / t, [0, k ** 4])))
@@ -305,7 +305,7 @@ a = math.exp(nn * 0.5 * float(mp.quad(lambda t: (1 - mp.e ** (-t)) / t, [0, x * 
 check("a(x) = 1 + (n/2) x^2 + O(x^4)", abs((a - 1) / x ** 2 - nn / 2) < 1e-5)
 
 # 14. Exact averages over the unit sphere S^3 with the 600-cell (a spherical 11-design),
-#     and the one-loop poles of the three quartic operators (Sec. V C, Appendix B).
+#     and the one-loop poles of the three quartic operators (Sec. killers, App. angular).
 def cell600():
     phi = (1 + 5 ** 0.5) / 2
     V = []
@@ -403,7 +403,7 @@ b0 = np.array([0.731, -2.4, 1.37])          # stand-ins for beta_1^(0), beta_2^(
 s3 = -b0[2] / 2; s2 = -b0[1] + 4 * b0[2]; s1 = (b0[0] + b0[1] - 8 / 3 * b0[2]) / 12
 check("closed-form tuning cancels all three one-loop poles", np.allclose(b0 + A3 @ np.array([s1, s2, s3]), 0, atol=1e-14))
 
-# 15. Polynomial cone: a(z) = c (z/M^2)^n [1 + O(exp(-Re z^2/M^4))] for |arg z| < pi/4 (Sec. II E)
+# 15. Polynomial cone: a(z) = c (z/M^2)^n [1 + O(exp(-Re z^2/M^4))] for |arg z| < pi/4 (Eq. (cone))
 def Ein_c(w):
     return w * mp.hyp2f2(1, 1, 2, 2, -w)
 
@@ -467,7 +467,7 @@ for th_ in (0.5, 1.0, 1.7):
     slope = (la(x2) - la(x1)) / math.log(x2 / x1)
     check(f"strength {th_}, 6 branes per e-fold: growth exponent {6*th_}", abs(slope - 6 * th_) < 1e-9)
 
-# 19. Zero-point energy of the graviton (Sec. VI C).  Per momentum the one-loop
+# 19. Zero-point energy of the graviton (Sec. vacuum).  Per momentum the one-loop
 #     log-determinant is (1/2)*10 log(p^2 a) - 4 log(p^2 a) + (1/2)*4 log a
 #     = log p^2 + 3 log a, and int d^4k Ein(k^4/M^4) is continued from the
 #     Mellin strip -1 < Re s < 0, where int_0^inf w^(s-1) Ein(w) dw = Gamma(s)/s.
@@ -512,7 +512,7 @@ nn = 6
 rho = 1.5 * nn * (2 * math.pi ** 2) * math.gamma(1.0) / 4 / (2 * math.pi) ** 4
 check("rho_1 = (3n/2)(pi^2 M^4/2)/(2 pi)^4 = 3n M^4/(64 pi^2)", abs(rho - 3 * nn / (64 * math.pi ** 2)) < 1e-15)
 
-# 15. Round 4: insertion lemma, chain bookkeeping, admissible class, identical branes,
+# 15. Insertion lemma, chain bookkeeping, admissible class, identical branes,
 #     cutoff universality, Newton numbers for n = 4, 5.
 worst = 0.0
 for _ in range(60000):
@@ -531,7 +531,7 @@ for _ in range(60000):
     worst = max(worst, lhs / rhs)
 check("insertion lemma (|q|+s)^2 <= C_r (1+|q|)(1+|q'|) prod(1+|l_a|)", worst <= 1, f"(worst ratio {worst:.3f})")
 
-# chain with two insertions, n = 4 (Fig. 5b): the full term over the legs stays bounded
+# chain with two insertions, n = 4 (Fig. (chain)): the full term over the legs stays bounded
 mp.mp.dps = 50
 def a_minus(z, nn=4):
     z = mp.mpf(z); c = mp.e ** (nn * mp.euler / 2)
@@ -587,7 +587,7 @@ W = 7.0
 direct = float(mp.quad(lambda w: mp.ein(w) if hasattr(mp, "ein") else mp.quad(lambda t: (1 - mp.e ** (-t)) / t, [0, w]), [0, W]))
 check("sharp cutoff remainder = 1 - e^-W + W E1(W)", abs(direct - W * math.log(W) - (GAMMA - 1) * W - (1 - math.exp(-W) + W * special.exp1(W))) < 1e-9)
 
-# Newton numbers for n = 4, 5 (Table VIII) and c = e^{n gamma/2}
+# Newton numbers for n = 4, 5 (Table (newton)) and c = e^{n gamma/2}
 for nn_, I_ref in ((4, 0.8011), (5, 0.7485)):
     I_ = integrate.quad(lambda k: math.exp(-nn_ / 2 * (Ein(k ** 4) if k > 0 else 0.0)), 0, 30, limit=200)[0]
     check(f"n={nn_}: int dk/a = {I_ref} and |Phi(0)|/GmM = 2I/pi", abs(I_ - I_ref) < 1e-4, f"[{I_:.5f}, {2*I_/math.pi:.4f}]")
@@ -595,7 +595,7 @@ check("J_4 = 3 pi sqrt2 / 16", abs(0.25 * special.gamma(0.25) * special.gamma(1.
 check("c = e^{n gamma/2} = 3.172, 4.234, 5.650, 7.540, 10.063 for n = 4..8",
       all(abs(math.exp(k * GAMMA / 2) - v) < 6e-4 for k, v in zip(range(4, 9), (3.172, 4.234, 5.650, 7.540, 10.063))))
 
-# 20. Round 5: one frozen realization of the fine-grained gas (Sec. II F).
+# 20. One frozen realization of the fine-grained gas (Sec. fluct).
 #     Power law: strength th0 tau^zeta, intensity nu = (n/th0) tau^(-zeta) dtau/tau on (0, 1],
 #     so that th * nu = n dtau/tau.  Response psi_* = 1 - exp(-w^2), units M = 1.
 TH0 = math.log(2)
@@ -773,20 +773,190 @@ check("argument principle on |z| = 2M^2: realization winds 0 times; resonant pro
       abs(wind_a[-1] - wind_a[0]) < 1e-6 and abs(wind_r / (2 * math.pi) - cnt) < 1e-6 and cnt > 0, f"[0, {wind_r/(2*math.pi):.4f} = {cnt}]")
 
 # Table (fluct) and the zero-point fluctuation, Eq. (drhorel)
-tabf = {4: (0.555, 1.190, 0.257, 4.47, 0.372), 5: (0.561, 1.195, 0.253, 3.74, 0.281), 6: (0.566, 1.198, 0.250, 3.35, 0.227),
-        7: (0.569, 1.201, 0.249, 3.11, 0.190), 8: (0.571, 1.202, 0.247, 2.97, 0.163)}
+tabf = [(4, 5, (0.745, 1.368, 0.162, 12.66, 0.833)),
+        (4, 9, (0.555, 1.190, 0.257, 4.47, 0.372)), (5, 11, (0.561, 1.195, 0.253, 3.74, 0.281)), (6, 13, (0.566, 1.198, 0.250, 3.35, 0.227)),
+        (7, 15, (0.569, 1.201, 0.249, 3.11, 0.190)), (8, 17, (0.571, 1.202, 0.247, 2.97, 0.163))]
 okt = True
-for nn_, row in tabf.items():
-    zeta_ = 2 * nn_ + 1
+for nn_, zeta_, row in tabf:
     sd = math.sqrt(nn_ * TH0 / zeta_); b95 = math.exp(-math.sqrt(2 * nn_ * TH0 / zeta_ * math.log(20)))
     xstar = optimize.brentq(lambda x: math.sqrt(var_f(x, nn_, zeta_)) - 1e-3, 0.5, 50)
     drr = 2 * math.sqrt(TH0 / (nn_ * (zeta_ - 4)))
     got = (sd, EeR(nn_, zeta_), b95, xstar, drr)
     okt &= all(abs(g_ - v_) <= 0.0005 + 0.0011 * v_ for g_, v_ in zip(got, row))
-check("Table (fluct): sd, E e^R_inf, 95% bound, x_*, delta rho/rho_1 for n = 4..8", okt)
+check("Table (fluct): sd, E e^R_inf, 95% bound, x_*, delta rho/rho_1 for zeta = 5 and for zeta = 2n+1, n = 4..8", okt)
 check("Eq. (drhorel): sd(delta rho)/rho_1 = 2 [th0/(n(zeta-4))]^(1/2) from (3 mu/16 pi^2)^2 n th0/(zeta-4) and rho_1 = 3 n mu/(32 pi^2)",
       abs(3 * 0.5 / (16 * math.pi ** 2) * math.sqrt(4 * TH0 / 5) / (3 * 4 * 0.5 / (32 * math.pi ** 2)) - 0.372) < 5e-4)
 check("mean of delta rho by continuation: n int_0^1 tau^-3 dtau = -n/2 gives rho_1", abs(-(3 * 0.5 / (16 * math.pi ** 2)) * 6 * (-0.5) - 3 * 6 / (64 * math.pi ** 2)) < 1e-15)
+
+# 21. The single-brane factor from cells (Sec. cells), Eqs. (cellt), (cellpsi)
+th_c, s_c = 1.2, 0.7
+okc = True
+for zc_ in (0.4, 1.1, 2.5):
+    series = math.fsum(math.exp(-th_c) * th_c ** N / math.factorial(N) * math.exp(-N * (s_c * zc_) ** 2) for N in range(120))
+    okc &= abs(series - math.exp(-th_c * (1 - math.exp(-(s_c * zc_) ** 2)))) < 1e-15
+check("Eq. (cellt): sum over the Poisson number of cells equals exp[-theta (1 - e^{-s^2 z^2})]", okc)
+okc = True
+for u_ in (0.3, 1.0, 2.2):
+    # Y ~ N(0, 2 s^2): E e^{-i u Y/s} = int cos(u y) e^{-y^2/4} dy / (2 sqrt(pi)) over y = Y/s
+    val = integrate.quad(lambda y: math.cos(u_ * y) * math.exp(-y * y / 4) / (2 * math.sqrt(math.pi)), -60, 60, limit=400)[0]
+    okc &= abs(val - math.exp(-u_ * u_)) < 1e-12
+check("Eq. (cellpsi): the characteristic function of Y/s is e^{-u^2}, so psi = 1 - phi = psi_*", okc)
+rng_c = np.random.default_rng(11); mc = 400000
+Nc = rng_c.poisson(th_c, mc); Ysum = rng_c.normal(0.0, 1.0, mc) * np.sqrt(2.0 * Nc) * s_c
+errs = []
+for zc_ in (0.4, 1.1, 2.5):
+    est = np.mean(np.exp(-1j * zc_ * Ysum))
+    errs.append(abs(est - math.exp(-th_c * (1 - math.exp(-(s_c * zc_) ** 2)))) * math.sqrt(mc))
+check("cell model by Monte Carlo: coherent average of the phase over Poisson cells with Gaussian shifts", max(errs) < 4.5,
+      f"[max error {max(errs):.2f}/sqrt(N)]")
+okc = True
+for r_ in (0.5, 2.0, 6.0):
+    for ang in (0.2, 0.6, 0.95):
+        w_ = r_ * cmath.exp(1j * ang * math.pi / 4)
+        okc &= abs(cmath.exp(-w_ * w_)) <= math.exp(-r_ * r_ * math.cos(2 * ang * math.pi / 4)) * (1 + 1e-12)
+check("(S4) for the cell model: |e^{-w^2}| = e^{-Re w^2} decays in |arg w| < pi/4, so theta = pi/4", okc)
+
+# 22. Why (G) needs zeta > 4 (Sec. vacuum), Eq. (cutvar)
+def C_zeta(z):
+    return 0.5 * special.gamma(z / 2 - 2) * (2 ** (2 - z / 2) - 2)
+okz = True
+for zeta in (1.0, 2.5, 3.0, 3.5):
+    q = integrate.quad(lambda v: v ** (zeta - 5) * (-math.expm1(-v * v)) ** 2, 0, 1, limit=200)[0] \
+        + integrate.quad(lambda v: v ** (zeta - 5) * (-math.expm1(-v * v)) ** 2, 1, np.inf, limit=200)[0]
+    okz &= abs(q / C_zeta(zeta) - 1) < 1e-8
+check("Eq. (cutvar): int_0^inf v^(zeta-5) (1-e^{-v^2})^2 dv = Gamma(zeta/2-2)(2^(2-zeta/2)-2)/2, zeta = 1, 2.5, 3, 3.5", okz)
+check("Eq. (cutvar): C_2 = log 2 as a limit, and (4 - zeta) C_zeta -> 1 as zeta -> 4",
+      abs(0.5 * (C_zeta(2 - 1e-6) + C_zeta(2 + 1e-6)) - math.log(2)) < 1e-9 and abs((4 - 3.9999) * C_zeta(3.9999) - 1) < 1e-3)
+X_ = 1e4; zeta = 6.0
+q = integrate.quad(lambda v: v ** (zeta - 5) * (-math.expm1(-v * v)) ** 2, 0, X_, limit=400, points=[1, 10, 100])[0]
+check("Eq. (cutvar), zeta > 4: (Lambda/M)^(2(4-zeta)) times the integral up to Lambda^2/M^2 tends to 1/(zeta-4)",
+      abs(q * X_ ** (4 - zeta) - 1 / (zeta - 4)) < 1e-3)
+
+# 23. Power counting with the weakest fine graining (Sec. degree), Eq. (omega), lower block of Table (power)
+def omega_bar_m(L, nn, m):
+    return 4 * L - (2 * nn + 2) * (L - 1) + 2 * max(L - nn - 1 + m, 0)
+lower = {3: [4, 0, -4, -6, -8], 4: [4, -2, -8, -12, -16], 5: [4, -4, -12, -18, -24], 6: [4, -6, -16, -24, -32],
+         7: [4, -8, -20, -30, -40], 8: [4, -10, -24, -36, -48]}
+check("Table (power), lower block: omega_bar with m_sigma = n - 2, n = 3..8, L = 1..5",
+      all([omega_bar_m(L, nn, nn - 2) for L in range(1, 6)] == row for nn, row in lower.items()))
+check("omega_bar(L) < 0 for every L >= 2 and every 0 <= m_sigma <= n-2 exactly when n >= 4; equals -(2n-4)(L-1) at m = n-2, L >= 3",
+      all(omega_bar_m(L, nn, m) < 0 for nn in range(4, 13) for L in range(2, 41) for m in np.linspace(0, nn - 2, 9))
+      and omega_bar_m(2, 3, 1) == 0
+      and all(omega_bar_m(L, nn, nn - 2) == -(2 * nn - 4) * (L - 1) for nn in range(3, 13) for L in range(3, 30)))
+
+# 24. Divided-difference bound for a symbol of positive order (App. dd), Eq. (ddbound) with mu = 3/2
+mp.mp.dps = 40
+fpos = lambda t: (1 + t) ** mp.mpf(1.5)
+for p in [[0.1, 1.0], [0.1, 1.0, 1.3], [0.2, 1.0, 0.5, 1.7]]:
+    ratios = []
+    for lam in (1, 10, 100, 1000):
+        zs = [mp.mpf(v) * (lam if v > 0.5 else 1) for v in p]
+        imin = min(range(len(zs)), key=lambda i: zs[i])
+        bnd = (1 + max(zs)) ** mp.mpf(1.5) * mp.fprod([1 / (1 + zs[i]) for i in range(len(zs)) if i != imin])
+        ratios.append(float(abs(divdiff(fpos, zs)) / bnd))
+    check(f"divided-difference bound, mu = 3/2: ratio stays bounded under scaling {p}", max(ratios[1:]) <= ratios[0] * 1.05 + 10,
+          str([f"{r:.3g}" for r in ratios]))
+mp.mp.dps = 15
+
+# 25. The one-loop bubble (Sec. bubble), Eqs. (bubble)-(bubblebound); units M = 1, skeleton with n = 4
+def ein_s(w):
+    """entire exponential integral at one complex point: power series for |w| < 2, else gamma + log w + E1(w)"""
+    if abs(w) < 2.0:
+        acc = 0j; term = 1 + 0j
+        for k in range(1, 50):
+            term *= w / k; acc += (term if k % 2 else -term) / k
+        return acc
+    return cmath.log(w) + GAMMA + complex(special.exp1(w))
+
+def A_closed(s_, mu2):
+    """pi^2 int_0^1 log(D_0mu D_mu0 / (D_00 D_mumu)) dx at p^2 = -s + i0."""
+    P = mp.mpc(-s_, 1e-40)
+    g_ = lambda x: (-mp.log(x * (1 - x) * P) + mp.log(x * (1 - x) * P + x * mu2) + mp.log(x * (1 - x) * P + (1 - x) * mu2)
+                    - mp.log(x * (1 - x) * P + mu2))
+    return complex(mp.pi ** 2 * mp.quad(g_, [0, 0.5, 1]))
+
+okb = all(abs(A_closed(s_, mu2).imag + math.pi ** 3) < 1e-10 for s_, mu2 in ((0.5, 1.0), (2.0, 5.0), (9.0, 30.0)))
+check("Eq. (bubbleIm): Im A_mu = -pi^3 for every s < mu^2", okb)
+
+def real_section(Fa, Fb, s_):
+    """(2 pi/E) int over P_s of rho (|Fa|^2 - |Fb|^2) d^2 xi, in polar coordinates about the focus xi = 0 of P_s."""
+    E_ = math.sqrt(s_)
+    def inner(ph):
+        Rmax = s_ / (2 * (1 - math.cos(ph)))
+        def f(R):
+            xi = R * cmath.exp(1j * ph)
+            rho = math.sqrt(max(R * math.cos(ph) + s_ / 4 - (R * math.sin(ph)) ** 2 / s_, 0.0))
+            return rho * (abs(Fa(xi)) ** 2 - abs(Fb(xi)) ** 2) * R
+        Rc = min(Rmax, 20.0 * s_ + 20.0)
+        val = integrate.quad(f, 0, Rc, limit=200, epsabs=1e-12, epsrel=1e-10)[0]
+        if Rmax > Rc:
+            val += integrate.quad(f, Rc, Rmax, limit=200, epsabs=1e-12, epsrel=1e-10)[0]
+        return val
+    return 2 * (2 * math.pi / E_) * integrate.quad(inner, 0, math.pi, limit=200, epsabs=1e-11, epsrel=1e-9)[0]
+
+def residue_term(Fa, Fb, s_):
+    return (2 * math.pi ** 2 / s_) * integrate.quad(lambda w: (w + s_) * (Fa(complex(w)) - Fb(complex(w))).real, -s_, 0, limit=200)[0]
+
+# local propagators with two Pauli-Villars masses: Eq. (bubbledec) with F_nu as reference reproduces the closed form of A_mu
+s_ = 1.0; mu2, nu2 = 3.0, 6.0
+F_mu = lambda z: 1 / z - 1 / (z + mu2); F_nu = lambda z: 1 / z - 1 / (z + nu2)
+dec = A_closed(s_, nu2) + real_section(F_mu, F_nu, s_) + residue_term(F_mu, F_nu, s_)
+ref = A_closed(s_, mu2)
+check("Eq. (bubbledec) for a local propagator: real section + residue term + A_nu reproduce the closed form of A_mu",
+      abs(dec - ref) < 1e-6 * abs(ref), f"[{dec.real:.9f}{dec.imag:+.9f}i vs {ref.real:.9f}{ref.imag:+.9f}i]")
+
+# the skeleton at E = M: the result does not depend on the Pauli-Villars mass, and matches Table (bubble)
+F_sk = lambda z: cmath.exp(-2.0 * ein_s(z * z)) / z
+vals = []
+for mu2 in ((2 * 1.0 + 2) ** 2, (3 * 1.0 + 3) ** 2):
+    F_p = lambda z, m2=mu2: 1 / z - 1 / (z + m2)
+    vals.append(A_closed(1.0, mu2) + real_section(F_sk, F_p, 1.0) + residue_term(F_sk, F_p, 1.0))
+check("skeleton bubble at E = M: independent of the Pauli-Villars mass, Re A = 11.65 and Im A = -pi^3 as in Table (bubble)",
+      abs(vals[0] - vals[1]) < 1e-5 * abs(vals[0]) and abs(vals[0].real - 11.650) < 1e-3 and abs(vals[0].imag + math.pi ** 3) < 1e-9,
+      f"[{vals[0].real:.6f}, {vals[1].real:.6f}]")
+
+# the disk of the lower bound at E = 1.7 M, delta = 0.2: rho^2 >= 7 delta s/64 on it, and its contribution exceeds the leading term
+E_ = 1.7; s_ = E_ * E_; dl = 0.2; c0 = (1 - dl) * s_ / 2; rad = dl * s_ / 8
+rr_, aa_ = np.meshgrid(np.linspace(0, rad, 201), np.linspace(0, 2 * math.pi, 401), indexing="ij")
+xr = rr_ * np.cos(aa_); yi = c0 + rr_ * np.sin(aa_)
+rho2 = xr + s_ / 4 - yi ** 2 / s_
+logF2 = lambda xi: -4 * ein_s(xi * xi).real - 2 * math.log(abs(xi))
+disk = integrate.dblquad(lambda th_, r_: (2 * math.pi / E_) * math.sqrt(r_ * math.cos(th_) + s_ / 4 - (c0 + r_ * math.sin(th_)) ** 2 / s_)
+                         * math.exp(logF2(complex(r_ * math.cos(th_), c0 + r_ * math.sin(th_)))) * r_,
+                         0, rad, 0, 2 * math.pi, epsrel=1e-8)[0]
+lead = math.pi ** 2 * math.sqrt(7) * dl ** 2.5 / (64 * (1 - dl) ** 2) * math.exp(4 * float(mp.ei((1 - dl) ** 2 * s_ * s_ / 4) - mp.log((1 - dl) ** 2 * s_ * s_ / 4) - mp.euler))
+check("Eq. (bubblebound): on the disk rho^2 >= 7 delta s/64, and the disk contributes at least the leading term (Jensen)",
+      rho2.min() >= 7 * dl * s_ / 64 * (1 - 1e-12) and disk >= lead, f"[{disk:.4g} >= {lead:.4g}]")
+
+# the seagull tensor factor: Tr(B_12 P B_34 P) = (t-u)^2/16 for on-shell massless scalars
+d4 = np.eye(4)
+Ebasis = []
+for a_ in range(4):
+    for b_ in range(4):
+        e_ = np.zeros((4, 4)); e_[a_, b_] = 1; Ebasis.append(e_)
+def seagull(p, q):
+    def Q(h):
+        tr = np.trace(h)
+        Mh = h @ h - 0.5 * tr * h + (tr * tr / 8 - np.sum(h * h) / 4) * d4
+        return 0.5 * (p @ Mh @ q + q @ Mh @ p)
+    A = np.zeros((16, 16), dtype=complex)
+    for i in range(16):
+        for j in range(16):
+            A[i, j] = 0.5 * (Q(Ebasis[i] + Ebasis[j]) - Q(Ebasis[i]) - Q(Ebasis[j]))
+    return A
+Pdd = np.zeros((16, 16))
+for m_, n_, a_, b_ in itertools.product(range(4), repeat=4):
+    Pdd[4 * m_ + n_, 4 * a_ + b_] = 0.5 * (d4[m_, a_] * d4[n_, b_] + d4[m_, b_] * d4[n_, a_] - d4[m_, n_] * d4[a_, b_])
+oks = True; rng_s = np.random.default_rng(17)
+for _ in range(3):
+    E_, th_, ph_ = rng_s.uniform(0.5, 3.0), rng_s.uniform(0.1, 3.0), rng_s.uniform(0, 2 * math.pi)
+    nv = np.array([math.sin(th_) * math.cos(ph_), math.sin(th_) * math.sin(ph_), math.cos(th_)])
+    p1 = np.array([0, 0, E_ / 2, 1j * E_ / 2]); p2 = np.array([0, 0, -E_ / 2, 1j * E_ / 2])
+    p3 = -np.concatenate([E_ / 2 * nv, [1j * E_ / 2]]); p4 = -np.concatenate([-E_ / 2 * nv, [1j * E_ / 2]])
+    t_ = -(p1 + p3) @ (p1 + p3); u_ = -(p1 + p4) @ (p1 + p4)
+    T_ = np.trace(seagull(p1, p2) @ Pdd @ seagull(p3, p4) @ Pdd)
+    oks &= abs(T_ - (t_ - u_) ** 2 / 16) < 1e-12 * (1 + abs(T_)) and all(abs(v @ v) < 1e-14 for v in (p1, p2, p3, p4))
+check("seagull graph: Tr(B_12 P B_34 P) = (t-u)^2/16 for on-shell massless scalars at random angles", oks)
 
 npass = sum(ok for _, ok in results)
 print(f"\n{npass} checks passed, {len(results) - npass} failed")

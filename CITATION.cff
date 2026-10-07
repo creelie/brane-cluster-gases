@@ -10,15 +10,17 @@ abstract: >-
   the weak-field threshold, the Schwinger parametric representation, and the
   composition of transmission amplitudes through a stack of branes. The second,
   "Finite quantum gravity from a scale-invariant gas of branes" (new in 2.0.0),
-  comes with 178 Python, 80 C and 106 Julia checks of its analytical results
-  and 13 Lean 4 theorems on its power counting: the form factor of one
-  realization of a Poisson gas of branes and its fluctuations, the vertex bound
-  and power counting, the one-loop poles of the quartic operators, the vacuum
-  energy, the free-field curvature and the Newtonian potential.
+  comes with 195 Python, 84 C and 114 Julia checks of its analytical results
+  and 17 Lean 4 theorems on its power counting: the single-brane factor of the
+  cell model, the form factor of one realization of a Poisson gas of branes and
+  its fluctuations, the necessity of fine graining, the vertex bound and power
+  counting, the one-loop poles of the quartic operators, the vacuum energy, the
+  one-loop bubble and its cutting rule, the free-field curvature and the
+  Newtonian potential.
 type: software
 license: MIT
-version: 2.0.0
-doi: 10.5281/zenodo.23220676
+version: 2.1.0
+doi: 10.5281/zenodo.22866290
 identifiers:
   - type: doi
     value: 10.5281/zenodo.22866290
