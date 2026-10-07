@@ -137,7 +137,7 @@ cd uv-finite/code
 python3 verify.py                  # 178 checks passed, 0 failed
 cc -O2 -std=c99 -o formfactor_check formfactor_check.c -lm
 ./formfactor_check                 # 80 checks passed, 0 failed
-julia verify.jl                    # 96 checks passed, 0 failed (Julia 1.10, stdlib only)
+julia verify.jl                    # 106 checks passed, 0 failed (Julia 1.10, stdlib only)
 lean PowerCounting.lean            # compiles with no output (Lean 4.15, core only)
 python3 make_figures.py            # writes the ten PNG figures to ../figs/
 ```

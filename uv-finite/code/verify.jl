@@ -288,7 +288,7 @@ for (n, ζ) in ((4, 9), (6, 13))
 end
 
 # ---------------------------------------------------------------------------------------
-println("== 6. Newtonian potential: depth of the well (Eqs. 85-89)")
+println("== 6. Newtonian potential: depth of the well (Eqs. 86-90)")
 # ---------------------------------------------------------------------------------------
 let g = BigFloat()       # MPFR's own Gamma, an independent implementation
     ccall((:mpfr_gamma, Base.MPFR.libmpfr), Int32, (Ref{BigFloat}, Ref{BigFloat}, Base.MPFR.MPFRRoundingMode),
@@ -458,6 +458,50 @@ let ok = true
         ok &= A <= bound * (1 + B(10)^-60)
     end
     check("skeleton matter amplitude below the bound of Sec. VII C (C = 1) on a grid of angles and momenta", ok)
+end
+
+# ---------------------------------------------------------------------------------------
+println("== 10. The free Euclidean graviton: curvature at a point (Sec. VII D, Eq. 83)")
+# ---------------------------------------------------------------------------------------
+# Linearized Riemann tensor of a Fourier mode h e^{ipx} (Euclidean, overall factors drop out
+# of C.C / (h P2 h)): R_{abcd} = (p_b p_c h_ad + p_a p_d h_bc - p_a p_c h_bd - p_b p_d h_ac)/2.
+let rng = MersenneTwister(13), ok = true, okP = true
+    for _ in 1:20
+        p = randn(rng, 4); p2 = sum(abs2, p)
+        h = randn(rng, 4, 4); h = (h + h') / 2
+        Rm = [(p[b] * p[c] * h[a, d] + p[a] * p[d] * h[b, c] - p[a] * p[c] * h[b, d] - p[b] * p[d] * h[a, c]) / 2
+              for a in 1:4, b in 1:4, c in 1:4, d in 1:4]
+        Ric = [sum(Rm[m, a, m, b] for m in 1:4) for a in 1:4, b in 1:4]
+        Rs = sum(Ric[a, a] for a in 1:4)
+        δ(a, b) = a == b ? 1.0 : 0.0
+        g(a, b, c, d) = δ(a, c) * δ(b, d) - δ(a, d) * δ(b, c)
+        C = [Rm[a, b, c, d] - (δ(a, c) * Ric[b, d] - δ(a, d) * Ric[b, c] - δ(b, c) * Ric[a, d] + δ(b, d) * Ric[a, c]) / 2 +
+             Rs * g(a, b, c, d) / 6 for a in 1:4, b in 1:4, c in 1:4, d in 1:4]
+        θ = [δ(a, b) - p[a] * p[b] / p2 for a in 1:4, b in 1:4]
+        P2(a, b, c, d) = (θ[a, c] * θ[b, d] + θ[a, d] * θ[b, c]) / 2 - θ[a, b] * θ[c, d] / 3
+        hP2h = sum(h[a, b] * P2(a, b, c, d) * h[c, d] for a in 1:4, b in 1:4, c in 1:4, d in 1:4)
+        ok &= abs(sum(C .^ 2) - p2^2 / 2 * hP2h) < 1e-10 * (1 + p2^2 * sum(abs2, h))
+        okP &= abs(sum(P2(a, b, a, b) for a in 1:4, b in 1:4) - 5) < 1e-12
+    end
+    check("Weyl tensor of a Fourier mode: C.C = (p^4/2) h P2 h (20 random modes)", ok)
+    check("tr P2 = 5 in four dimensions", okP)
+end
+for n in 4:8
+    closed = sqrt(PIB) / 4 * gammaq((n - 3) // 2) / gammaq(n // 2)
+    direct = quad(x -> x^2 / (1 + x^2)^(B(n) / 2), B(0), B(1)) + quadinf(x -> x^2 / (1 + x^2)^(B(n) / 2), B(1); T2 = 5.5)   # slow x^(2-n) tail
+    check("int_0^inf x^2 (1+x^2)^(-n/2) dx = (sqrt(pi)/4) Gamma((n-3)/2)/Gamma(n/2), n = $n", relerr(closed, direct) < B(10)^-30)
+end
+let n = 4, chat = exp(4 * γE / 2)
+    I = quad(x -> x^2 * exp(-n / B(2) * Ein_big(x^2)), B(0), B(1)) + quadinf(x -> x^2 * exp(-n / B(2) * Ein_big(x^2)), B(1))
+    check(@sprintf("skeleton, n = 4: int x^2/ahat = %.4f, between pi/(4 chat) = %.4f and pi/4", Float64(I), Float64(PIB / (4 * chat))),
+          PIB / (4 * chat) <= I <= PIB / 4 && abs(Float64(I) - 0.4237) < 5e-5)
+    check(@sprintf("rms Weyl curvature sqrt(5 I/pi) = %.3f M^3/M_P", Float64(sqrt(5 * I / PIB))), abs(Float64(sqrt(5 * I / PIB)) - 0.82) < 5e-3)
+end
+let # n = 3: the partial integrals grow like log X, so the variance diverges logarithmically
+    part(X) = quad(x -> x^2 / (1 + x^2)^(B(3) / 2), B(0), X; T = 7.0)
+    d1 = part(B(10)^4) - part(B(10)^3); d2 = part(B(10)^5) - part(B(10)^4)
+    check("n = 3: int_0^X x^2/(1+x^2)^(3/2) grows like log X (increments per decade -> log 10)",
+          abs(d1 - log(B(10))) < 1e-5 && abs(d2 - log(B(10))) < 1e-7)
 end
 
 @printf("\n%d checks passed, %d failed\n", NPASS[], NFAIL[])
