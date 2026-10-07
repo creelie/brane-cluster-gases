@@ -67,3 +67,37 @@ jobs:
             uv-verify.log
             uv-c.log
             uv-figs
+
+  uv-finite-julia:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: julia-actions/setup-julia@v2
+        with:
+          version: "1.10"
+      - name: Run the Julia checks
+        run: |
+          cd uv-finite/code
+          julia verify.jl | tee ../../uv-julia.log
+          grep -q " 0 failed" ../../uv-julia.log
+      - uses: actions/upload-artifact@v4
+        with:
+          name: uv-finite-julia-log
+          path: uv-julia.log
+
+  uv-finite-lean:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Lean 4.15.0
+        run: |
+          curl -sSL -o lean.zip https://github.com/leanprover/lean4/releases/download/v4.15.0/lean-4.15.0-linux.zip
+          unzip -q lean.zip
+          echo "$PWD/lean-4.15.0-linux/bin" >> "$GITHUB_PATH"
+      - name: Check the Lean proofs
+        run: |
+          cd uv-finite/code
+          lean --version
+          lean PowerCounting.lean 2>&1 | tee ../../uv-lean.log
+          test "${PIPESTATUS[0]}" -eq 0
+          ! grep -q "sorry" ../../uv-lean.log
