@@ -23,16 +23,6 @@ authors:
     orcid: "https://orcid.org/0000-0003-0466-750X"
     email: itsdeep@live.com
     affiliation: "Formerly, Electro-Gravitational Space Propulsion Laboratory (EGSPL), Bhubaneswar, Odisha 751030, India"
-  - family-names: Mandal
-    given-names: Priyabrata
-    orcid: "https://orcid.org/0000-0001-6472-6239"
-    email: priyabrata@manit.ac.in
-    affiliation: "Department of Mathematics, Bioinformatics and Computer Applications, Maulana Azad National Institute of Technology Bhopal, Bhopal 462003, India"
-  - family-names: Bhattacharya
-    given-names: Ushashi
-    orcid: "https://orcid.org/0009-0002-2254-3914"
-    email: rai.bhattacharya.in@gmail.com
-    affiliation: "Formerly, National Taiwan University, Taipei 106319, Taiwan"
 preferred-citation:
   type: article
   title: "Brane cluster gases and ghost-free form factors for quantum gravity"
@@ -41,9 +31,3 @@ preferred-citation:
     - family-names: Bhattacharjee
       given-names: Deep
       orcid: "https://orcid.org/0000-0003-0466-750X"
-    - family-names: Mandal
-      given-names: Priyabrata
-      orcid: "https://orcid.org/0000-0001-6472-6239"
-    - family-names: Bhattacharya
-      given-names: Ushashi
-      orcid: "https://orcid.org/0009-0002-2254-3914"

@@ -2,11 +2,10 @@
 
 Source, figures and verification code for the manuscript
 
-> Deep Bhattacharjee, Priyabrata Mandal and Ushashi Bhattacharya,
+> Deep Bhattacharjee,
 > *Brane cluster gases and ghost-free form factors for quantum gravity*.
 
-Prepared for submission to *Physical Review D*. Corresponding author:
-Deep Bhattacharjee, <itsdeep@live.com>.
+Prepared for submission to *Physical Review D*. Contact: <itsdeep@live.com>.
 
 ## What the paper does
 
