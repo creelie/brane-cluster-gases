@@ -59,7 +59,7 @@ jobs:
         run: |
           cd uv-finite/code
           FIG_OUT=../../uv-figs python3 make_figures.py
-          test "$(ls ../../uv-figs/*.png | wc -l)" -eq 10
+          test "$(ls ../../uv-figs/*.png | wc -l)" -eq 12
       - uses: actions/upload-artifact@v4
         with:
           name: uv-finite-logs-and-figures

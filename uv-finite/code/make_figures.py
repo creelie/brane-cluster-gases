@@ -8,6 +8,7 @@ captions say.
 
 Run:  python3 make_figures.py [name ...]   (writes PNG files to ../figs/)
 """
+import cmath
 import math
 import os
 
@@ -330,7 +331,7 @@ def fig_fluct():
     plt.close(fig)
 
 
-# ---------------------------------------------------------------- Fig. 3
+# ---------------------------------------------------------------- form factor on the real axis
 def fig_formfactor():
     fig = plt.figure(figsize=(7.0, 2.75))
     pal = {4: "#1b4f72", 5: "#2874a6", 6: "#c0392b", 7: "#7d3c98", 8: "#117864"}
@@ -391,7 +392,7 @@ def fig_formfactor():
     plt.close(fig)
 
 
-# ---------------------------------------------------------------- Fig. 4
+# ---------------------------------------------------------------- the complex plane
 def fig_complex():
     fig = plt.figure(figsize=(7.0, 3.2))
     # (a) (2/n) log|a(z)| = Re Ein(z^2/M^4) over a disc, compressed as sign(v) log(1+|v|)
@@ -460,7 +461,7 @@ def fig_complex():
     plt.close(fig)
 
 
-# ---------------------------------------------------------------- Fig. 7
+# ---------------------------------------------------------------- power counting
 def omega_bar(L, n):
     return 4 * L - (2 * n + 2) * (L - 1) + 2 * max(L - n - 1, 0)
 
@@ -482,7 +483,7 @@ def fig_power():
     ax.zaxis.set_rotate_label(False); ax.set_zlabel(r"$\bar\omega$", labelpad=-6, rotation=0)
     ax.set_xticks(Ls); ax.set_yticks(ns); ax.set_zticks([0, -20, -40, -60])
     style3d(ax, elev=22, azim=-52)
-    fig.text(0.5, 0.955, r"$\bar\omega(L)=4L-(2n+2)(L-1)+2(L-n-1)_+$", fontsize=7.3, ha="center")
+    fig.text(0.5, 0.955, r"$\bar\omega(L)=4L-(2n+2)(L-1)+2(L-n-1)_+$ for $m_\sigma=0$", fontsize=7.3, ha="center")
     fig.text(0.06, 0.885, "divergent ($L=1$)", color="#c0392b", fontsize=6.6)
     fig.text(0.06, 0.845, "marginal ($n=3$, $L=2$)", color="#b9770e", fontsize=6.6)
     fig.text(0.06, 0.805, "convergent", color="#1f618d", fontsize=6.6)
@@ -776,7 +777,224 @@ def fig_unitarity():
     plt.close(fig)
 
 
-ALL = ["gas", "fluct", "formfactor", "complex", "power", "newton", "chain3d", "class", "vacuum", "unitarity"]
+# ---------------------------------------------------------------- why (G) needs zeta > 4
+def cut_var(lam, zeta):
+    """lam^(4-zeta) int_0^lam v^(zeta-5) (1-exp(-v^2))^2 dv: the variance of the realization's part
+    of the zero-point energy with a sharp cutoff, lam = (Lambda/M)^2, in units K^2 n th0 (psi_*)."""
+    lam = np.atleast_1d(np.asarray(lam, dtype=float))
+    x = np.linspace(-9.0, math.log(lam.max()), 20001)
+    f = np.exp((zeta - 4) * x) * (-np.expm1(-np.exp(2 * x))) ** 2
+    cum = integrate.cumulative_trapezoid(f, x, initial=0.0) + math.exp((zeta) * -9.0) / zeta
+    return lam ** (4 - zeta) * np.interp(np.log(lam), x, cum)
+
+
+def C_zeta(zeta):
+    """closed form of the limit for 0 < zeta < 4, Eq. (cutvar)"""
+    if abs(zeta - 2) < 1e-12:
+        return math.log(2)
+    b = zeta / 2 - 2
+    return 0.5 * special.gamma(b) * (2 ** (-b) - 2)
+
+
+def rho_paths(rng_, zeta, lam, n=4, tau_c=0.3, tau_min=1e-9, h=0.01):
+    """delta rho_Lambda / K for one realization: exact branes above tau_c, Gaussian shells below."""
+    lam = np.asarray(lam, dtype=float)
+    m = lambda U: -np.expm1(-U ** 2)
+    N = rng_.poisson((n / TH0) * (tau_c ** -zeta - 1) / zeta)
+    A = tau_c ** -zeta
+    tau = (A - (A - 1) * rng_.random(N)) ** (-1 / zeta)
+    g = -TH0 * tau ** (zeta - 2)
+    out = (g[:, None] * m(np.outer(tau, lam))).sum(0)
+    s = np.linspace(math.log(tau_c), 0.0, 4001); ts = np.exp(s)
+    out += n * integrate.trapezoid(ts[None, :] ** -2 * m(np.outer(lam, ts)), s, axis=1)   # minus the mean
+    L = np.arange(math.log(tau_min), math.log(tau_c), h) + h / 2
+    tg = np.exp(L)
+    S = np.sqrt(n * TH0 * tg ** (zeta - 4) * h) * rng_.standard_normal(len(L))
+    out += (S[:, None] * m(np.outer(tg, lam))).sum(0)
+    return out
+
+
+def fig_necessity():
+    fig = plt.figure(figsize=(7.0, 2.75))
+    n = 4
+    # (a) log10 of the standard deviation over (log10 Lambda/M, zeta)
+    ax = fig.add_axes([0.0, 0.0, 0.34, 0.84], projection="3d")
+    ll = np.linspace(0.0, 4.0, 81); zg = np.linspace(2.0, 9.0, 71)
+    S = np.array([0.5 * np.log10(cut_var(10.0 ** (2 * ll), z)) for z in zg]).T
+    LL, ZG = np.meshgrid(ll, zg, indexing="ij")
+    norm = colors.Normalize(-0.5, 4.0)
+    ax.plot_surface(LL, ZG, S, facecolors=cm.plasma(norm(S)), rstride=2, cstride=2, linewidth=0.1, edgecolor=(1, 1, 1, 0.25), shade=False, alpha=0.93)
+    ax.plot(ll, np.full_like(ll, 4.0), 0.5 * np.log10(cut_var(10.0 ** (2 * ll), 4.0)) + 0.04, color="#c0392b", lw=1.6, zorder=20)
+    for z in (2.0, 3.0):
+        ax.plot(ll, np.full_like(ll, z), 0.5 * np.log10(C_zeta(z)) + (4 - z) * ll, color="k", lw=0.8, ls=":", zorder=21)
+    for z in (6.0, 9.0):
+        ax.plot(ll, np.full_like(ll, z), np.full_like(ll, -0.5 * math.log10(z - 4)), color="w", lw=0.8, ls="--", zorder=21)
+    ax.set_xlabel(r"$\log_{10}(\Lambda/M)$", labelpad=-5); ax.set_ylabel(r"$\zeta$", labelpad=-5)
+    ax.set_xticks([0, 1, 2, 3, 4]); ax.set_yticks([2, 4, 6, 8]); ax.set_zticks([0, 2, 4, 6, 8])
+    zlab(ax, r"$\log_{10}$ s.d. of $\delta\rho_\Lambda$", x=0.62, y=0.86)
+    style3d(ax, elev=22, azim=-62)
+    fig.text(0.01, 0.95, "(a)", fontsize=9)
+    fig.text(0.05, 0.955, r"s.d. in units $K(n\vartheta_0)^{1/2}$: slope $4-\zeta$ for $\zeta<4$" "\n" r"(dotted, Eq. (cutvar)); red: $\zeta=4$, $\log$ growth;" "\n" r"white: limit $(\zeta-4)^{-1/2}$ for $\zeta>4$", fontsize=6.6, ha="left", va="top", linespacing=1.15)
+
+    # (b), (c) sample paths for zeta = 6 and zeta = 3
+    lx = np.linspace(0.0, 3.0, 151); lam = 10.0 ** (2 * lx)
+    r_ = np.random.default_rng(31)
+    comp = lambda v: np.sign(v) * np.log10(1 + np.abs(v))
+    for k, (zeta, x0, lab, cmapn, band, edge) in enumerate([(6.0, 0.33, "(b)", "Blues", "#aed6f1", "#1b4f72"),
+                                                             (3.0, 0.655, "(c)", "Oranges", "#f5cba7", "#a04000")]):
+        ax = fig.add_axes([x0, 0.0, 0.33, 0.84], projection="3d")
+        sd = np.sqrt(n * TH0 * cut_var(lam, zeta))
+        pal = matplotlib.colormaps[cmapn](np.linspace(0.45, 0.92, 12))
+        for sgn in (1, -1):
+            Y, X_ = np.meshgrid([0.5, 12.5], lx)
+            ax.plot_surface(X_, Y, np.outer(comp(sgn * sd), [1, 1]), color=band, alpha=0.15, linewidth=0, shade=False)
+        for j in range(12):
+            p = rho_paths(r_, zeta, lam, n)
+            ax.plot(lx, np.full_like(lx, j + 1), comp(p), color=pal[j], lw=0.9)
+            if zeta > 4:
+                ax.scatter([lx[-1]], [j + 1], [comp(p[-1])], s=9, color="#c0392b", depthshade=False, zorder=20)
+        for y0 in (0.5, 12.5):
+            ax.plot(lx, np.full_like(lx, y0), comp(sd), color=edge, lw=0.8, ls="--")
+            ax.plot(lx, np.full_like(lx, y0), comp(-sd), color=edge, lw=0.8, ls="--")
+        ax.set_xlabel(r"$\log_{10}(\Lambda/M)$", labelpad=-5); ax.set_ylabel("realization", labelpad=-5)
+        ax.set_xticks([0, 1, 2, 3]); ax.set_yticks([1, 4, 8, 12])
+        ax.set_zlim(-4, 4); ax.set_zticks([-4, -2, 0, 2, 4])
+        zlab(ax, r"$\mathrm{sgn}(v)\log_{10}(1+|v|)$, $v=\delta\rho_\Lambda/K$", x=0.42, y=0.86)
+        style3d(ax, elev=22, azim=-60)
+        fig.text(x0 + 0.015, 0.95, lab, fontsize=9)
+        txt = (r"$\zeta=6$: every path settles to its own" "\n" r"finite $\delta\rho_\Pi$ (red dots)") if zeta > 4 else \
+              (r"$\zeta=3$: the band widens like $\Lambda/M$;" "\n" r"the paths wander without limit")
+        fig.text(x0 + 0.055, 0.955, txt, fontsize=6.6, ha="left", va="top", linespacing=1.15)
+    fig.savefig(os.path.join(OUT, "fig_necessity.png"))
+    plt.close(fig)
+    print("C_3 = %.6f (closed form), check %.6f" % (C_zeta(3.0), cut_var(1e12, 3.0)[0] / 1e12))
+
+
+# ---------------------------------------------------------------- the one-loop bubble
+def bubble_logF2(xi, n=4):
+    """log |F(xi)|^2 for the skeleton propagator F = 1/(xi a(xi)), M = 1"""
+    return -n * np.real(ein_c(xi * xi)) - 2 * np.log(np.abs(xi))
+
+
+def ein_point(w):
+    """entire exponential integral at one complex point"""
+    if abs(w) < 2.0:
+        acc = 0j; term = 1 + 0j
+        for k in range(1, 50):
+            term *= w / k; acc += (term if k % 2 else -term) / k
+        return acc
+    return cmath.log(w) + G_E + complex(special.exp1(w))
+
+
+def bubble_ReA(E, n=4):
+    """Re A for the skeleton bubble at energy E (M = 1), Eq. (bubbledec) with the Pauli-Villars mass
+    mu = 2E + 2: closed-form A_mu, plus the real section in polar coordinates about the focus xi = 0
+    of the region P_s, where it ends at R = s/(2(1 - cos phi)), plus the residue term.  Returns log10 Re A."""
+    s = E * E; mu2 = (2 * E + 2) ** 2
+    F = lambda z: cmath.exp(-0.5 * n * ein_point(z * z)) / z
+    Fp = lambda z: 1 / z - 1 / (z + mu2)
+
+    def inner(ph):
+        Rmax = s / (2 * (1 - math.cos(ph)))
+        def f(R):
+            xi = R * cmath.exp(1j * ph)
+            rho = math.sqrt(max(R * math.cos(ph) + s / 4 - (R * math.sin(ph)) ** 2 / s, 0.0))
+            return rho * (abs(F(xi)) ** 2 - abs(Fp(xi)) ** 2) * R
+        Rc = min(Rmax, 20.0 * s + 20.0)
+        val = integrate.quad(f, 0, Rc, limit=200, epsabs=1e-12, epsrel=1e-10)[0]
+        if Rmax > Rc:
+            val += integrate.quad(f, Rc, Rmax, limit=200, epsabs=1e-12, epsrel=1e-10)[0]
+        return val
+    sect = 2 * (2 * math.pi / E) * integrate.quad(inner, 0, math.pi, limit=200, epsabs=1e-11, epsrel=1e-9)[0]
+    res = (2 * math.pi ** 2 / s) * integrate.quad(lambda w: (w + s) * (F(complex(w)) - Fp(complex(w))).real, -s, 0, limit=200)[0]
+    P = mp.mpc(-s, 1e-40)
+    g = lambda x: (-mp.log(x * (1 - x) * P) + mp.log(x * (1 - x) * P + x * mu2) + mp.log(x * (1 - x) * P + (1 - x) * mu2)
+                   - mp.log(x * (1 - x) * P + mu2))
+    apv = float(mp.re(mp.pi ** 2 * mp.quad(g, [0, 0.5, 1])))
+    return math.log10(apv + sect + res)
+
+
+def ein_minus(X):
+    return float(mp.ei(X) - mp.log(X) - mp.euler)
+
+
+def bubble_lower(E, n=4):
+    """log10 of the rigorous lower bound, maximized over delta (the power-law remainder is dropped)"""
+    s = E * E
+    best = -np.inf
+    for d in np.linspace(0.01, 0.6, 240):
+        v = math.log(math.pi ** 2 * math.sqrt(7) * d ** 2.5 / (64 * (1 - d) ** 2)) + n * ein_minus((1 - d) ** 2 * s * s / 4)
+        best = max(best, v)
+    return best / math.log(10)
+
+
+def fig_bubble():
+    fig = plt.figure(figsize=(7.0, 2.9))
+    n = 4
+    # (a) the real section in the xi plane at E = 1.7 M: log10 of the weight rho |F|^2 over the region P_s
+    ax = fig.add_axes([-0.06, 0.03, 0.64, 0.88], projection="3d")
+    ax.computed_zorder = False
+    E = 1.7; s = E * E
+    X = np.linspace(-0.85, 1.6, 246); Y = np.linspace(0.0, 2.6, 261)
+    XX, YY = np.meshgrid(X, Y, indexing="ij")
+    rho2 = XX + s / 4 - YY ** 2 / s
+    xi = XX + 1j * YY
+    with np.errstate(all="ignore"):
+        Z = np.log10(2 * np.pi / E * np.sqrt(np.clip(rho2, 0, None))) + bubble_logF2(xi, n) / math.log(10)
+    lo, hi = -6.0, 9.0
+    Z = np.where(rho2 > 0, np.clip(np.nan_to_num(Z, nan=lo, neginf=lo, posinf=hi), lo, hi), np.nan)
+    norm = colors.Normalize(lo, hi)
+    fl = lo - 1.5
+    ax.contourf(XX, YY, np.nan_to_num(Z, nan=lo - 5), levels=np.linspace(lo, hi, 14), zdir="z", offset=fl, cmap="magma", norm=norm, alpha=0.7, zorder=1)
+    yb = np.linspace(0, 2.6, 200)
+    ax.plot(yb ** 2 / s - s / 4, yb, np.full_like(yb, fl), color="k", lw=1.0, zorder=2)
+    ax.plot([0, 0], [0, s / 2], [fl, fl], color="#2e86c1", lw=1.6, zorder=3)
+    d = 0.2; c0 = (1 - d) * s / 2; rad = d * s / 8
+    ph = np.linspace(0, 2 * np.pi, 100)
+    ax.plot(rad * np.cos(ph), c0 + rad * np.sin(ph), np.full_like(ph, fl), color="#27ae60", lw=1.4, zorder=4)
+    ax.scatter([0], [0], [fl], color="w", edgecolor="k", s=16, depthshade=False, zorder=5)
+    ax.plot_surface(XX, YY, Z, facecolors=cm.magma(norm(np.nan_to_num(Z, nan=lo))), rstride=2, cstride=2, linewidth=0, antialiased=True, shade=False, alpha=0.92, zorder=6)
+    # the segment xi = iy and the disk of the bound, lifted onto the surface
+    ys = np.linspace(0.12, s / 2 - 0.01, 120)
+    zs = np.log10(2 * np.pi / E * np.sqrt(s / 4 - ys ** 2 / s)) + bubble_logF2(1j * ys, n) / math.log(10)
+    ax.plot(np.zeros_like(ys), ys, np.clip(zs, lo, hi) + 0.08, color="#5dade2", lw=1.6, zorder=7)
+    xd, yd = rad * np.cos(ph), c0 + rad * np.sin(ph)
+    zd = np.log10(2 * np.pi / E * np.sqrt(xd + s / 4 - yd ** 2 / s)) + bubble_logF2(xd + 1j * yd, n) / math.log(10)
+    ax.plot(xd, yd, zd + 0.08, color="#58d68d", lw=1.6, zorder=8)
+    ax.set_zlim(fl, hi); ax.set_xlim(-0.85, 1.6); ax.set_ylim(0, 2.6)
+    ax.set_xticks([-0.5, 0, 0.5, 1, 1.5]); ax.set_yticks([0, 1, 2]); ax.set_zticks([-6, -3, 0, 3, 6, 9])
+    ax.set_xlabel(r"$\mathrm{Re}\,\xi/M^2$", labelpad=-5); ax.set_ylabel(r"$\mathrm{Im}\,\xi/M^2$", labelpad=-5)
+    zlab(ax, r"$\log_{10}\,\frac{2\pi}{E}\rho\,|F(\xi)|^2$", x=0.73, y=0.84)
+    style3d(ax, elev=27, azim=-58)
+    fig.text(0.01, 0.95, "(a)", fontsize=9)
+    fig.text(0.05, 0.955, r"$E=1.7M$: integrand of the real section over $P_s$, clipped to $[10^{-6},10^{9}]$" "\n"
+             r"(black: edge $\mathrm{Re}\,\xi=(\mathrm{Im}\,\xi)^2/s-s/4$; blue: $\xi=iy$, $0<y<s/2$; green: disk" "\n"
+             r"of the lower bound, $\delta=0.2$; white dot: graviton pole $\xi=0$)", fontsize=6.6, ha="left", va="top", linespacing=1.15)
+
+    # (b) Re A against E, with the rigorous lower bound, |Im A| and the scales where the graph beats the tree
+    ax = fig.add_axes([0.625, 0.15, 0.36, 0.70])
+    Es = np.round(np.arange(0.25, 1.951, 0.05), 3)
+    lv = np.array([bubble_ReA(e, n) for e in Es])
+    ax.plot(Es, lv, color="#1b4f72", lw=1.4, marker="o", ms=2.3, label=r"$\mathrm{Re}\,A$ (quadrature)")
+    El = np.linspace(1.2, 1.95, 60)
+    ax.plot(El, [bubble_lower(e, n) for e in El], color="#27ae60", lw=1.1, ls="--", label=r"lower bound (leading term)")
+    ax.axhline(math.log10(math.pi ** 3), color="#c0392b", lw=1.0, ls="-.", label=r"$|\mathrm{Im}\,A|=\pi^3$ (local cut)")
+    Eg = np.linspace(0.8, 1.95, 200)
+    for k, ratio in enumerate([3, 19, 40]):
+        y = 2 * ratio - np.log10(Eg ** 2 * a_real(Eg ** 2, n))
+        ax.plot(Eg, y, color="0.45", lw=0.7, ls=":")
+        ax.text(1.0, y[np.argmin(np.abs(Eg - 1.0))] + 1.5, r"$M/M_{\rm P}=10^{-%d}$" % ratio, fontsize=6.0, color="0.35")
+    ax.set_xlim(0.2, 2.0); ax.set_ylim(-3, 165)
+    ax.set_xlabel(r"$E/M$"); ax.set_ylabel(r"$\log_{10}\mathrm{Re}\,A$")
+    ax.legend(loc="upper left", frameon=False, fontsize=6.3)
+    fig.text(0.575, 0.955, "(b)", fontsize=9)
+    fig.text(0.61, 0.955, r"dotted: $Gs\,a(-s)\,\mathrm{Re}\,A=1$, where the graph reaches" "\n" r"the tree amplitude (up to angular factors)", fontsize=6.6, ha="left", va="top", linespacing=1.15)
+    fig.savefig(os.path.join(OUT, "fig_bubble.png"))
+    plt.close(fig)
+    print("bubble: log10 Re A at E =", dict(zip(Es.tolist(), np.round(lv, 3).tolist())))
+
+
+ALL = ["gas", "fluct", "formfactor", "complex", "power", "newton", "chain3d", "class", "vacuum", "unitarity", "necessity", "bubble"]
 
 if __name__ == "__main__":
     import sys

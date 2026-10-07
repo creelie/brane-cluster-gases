@@ -11,16 +11,19 @@
     * the superficial-degree bound 4L - (2n+2) I + sum_v max(2n+2, h_v) <= omegaBar n L
       for every graph with I lines, V vertices and I - V = L - 1;
     * omegaBar n L < 0 for all n >= 4 and L >= 2, while omegaBar n 2 >= 0 for n <= 3;
-    * the entries of Table V;
+    * with the weakest fine graining, 2 m_sigma = j <= 2n - 4: the bound omegaBarM grows with j,
+      equals omegaBar at j = 0, and is negative for all n >= 4 and L >= 2;
+    * the entries of Table (power), both blocks;
     * the determinants -24 and -12 of the pole matrix and of its upper-left block,
-      and the fact that the tuning of Eq. (74) cancels the three one-loop poles;
+      and the fact that the tuning of Eq. (tuning) cancels the three one-loop poles;
     * the constant C_r = 1 + 2r + 2r^2 of the insertion lemma as the sum of its three parts.
+  References such as Eq. (omega) or Table (power) name the LaTeX labels of the paper.
   Analytic statements (bounds on special functions, integrals, probability) are not
   formalized here; they are proved in the paper and checked numerically in C, Python
   and Julia.
 -/
 
-/-! ## Merging inequality (footnote to Sec. IV D) -/
+/-! ## Merging inequality (footnote in Sec. degree) -/
 
 theorem merge_pair (a b k : Nat) (ha : 2 ≤ a) (hb : 2 ≤ b) (hk : 2 ≤ k) :
     (a - k) + (b - k) ≤ a + b - 2 - k := by
@@ -58,12 +61,12 @@ theorem sum_max_split (k : Nat) :
     have : max k h = k + (h - k) := by omega
     omega
 
-/-! ## Superficial degree, Eq. (62) -/
+/-! ## Superficial degree, Eq. (omega) -/
 
-/-- The bound on the superficial degree of an L-loop subgraph, Eq. (62). -/
+/-- The bound on the superficial degree of an L-loop subgraph, Eq. (omega), for m_sigma = 0. -/
 def omegaBar (n L : Int) : Int := 4*L - (2*n+2)*(L-1) + 2*(max (L - n - 1) 0)
 
-/-- The degree count of Sec. IV D: lines contribute -(2n+2) each, a vertex with h_v lines
+/-- The degree count of Sec. degree: lines contribute -(2n+2) each, a vertex with h_v lines
     of the subgraph at most max(2n+2, h_v), the measure 4L.  For any valences h_v >= 2 with
     sum 2I and I - V = L - 1, the count is at most omegaBar n L. -/
 theorem degree_le_omegaBar (n L I : Nat) (hs : List Nat) (hne : hs ≠ [])
@@ -126,8 +129,8 @@ theorem omegaBar_one_loop (n : Int) (hn : 0 ≤ n) : omegaBar n 1 = 4 := by
   rw [e, Int.max_eq_right (by omega)]
   omega
 
-/-- Table V: rows n = 3..8, columns L = 1..5. -/
-theorem table_V :
+/-- Table (power), upper block: rows n = 3..8, columns L = 1..5. -/
+theorem table_power_upper :
     ([3,4,5,6,7,8].map fun n => [1,2,3,4,5].map fun L => omegaBar n L) =
     [[4, 0, -4, -8, -10],
      [4, -2, -8, -14, -20],
@@ -136,7 +139,58 @@ theorem table_V :
      [4, -8, -20, -32, -44],
      [4, -10, -24, -38, -52]] := by decide
 
-/-! ## One-loop poles of the quartic operators, Eqs. (73)-(74) -/
+/-! ## The weakest fine graining, Eq. (omega) with m_sigma > 0 -/
+
+/-- The bound of Eq. (omega) with j = 2 m_sigma:  4L - (2n+2)(L-1) + (2L - 2n - 2 + j)_+ . -/
+def omegaBarM (n L j : Int) : Int := 4*L - (2*n+2)*(L-1) + max (2*L - 2*n - 2 + j) 0
+
+theorem omegaBarM_zero (n L : Int) : omegaBarM n L 0 = omegaBar n L := by
+  unfold omegaBarM omegaBar
+  rcases Int.le_total (L - n - 1) 0 with h | h
+  · rw [Int.max_eq_right h, Int.max_eq_right (by omega)]; omega
+  · rw [Int.max_eq_left h, Int.max_eq_left (by omega)]; omega
+
+/-- The bound grows with m_sigma, so the limit m_sigma = n - 2 bounds every sigma > 4. -/
+theorem omegaBarM_mono (n L j j' : Int) (h : j ≤ j') : omegaBarM n L j ≤ omegaBarM n L j' := by
+  unfold omegaBarM
+  have : max (2*L - 2*n - 2 + j) 0 ≤ max (2*L - 2*n - 2 + j') 0 := by
+    rcases Int.le_total (2*L - 2*n - 2 + j) 0 with h1 | h1 <;>
+    rcases Int.le_total (2*L - 2*n - 2 + j') 0 with h2 | h2
+    · rw [Int.max_eq_right h1, Int.max_eq_right h2]; exact Int.le_refl 0
+    · rw [Int.max_eq_right h1, Int.max_eq_left h2]; omega
+    · omega
+    · rw [Int.max_eq_left h1, Int.max_eq_left h2]; omega
+  omega
+
+/-- For n >= 4 every graph with L >= 2 loops converges for every fine graining allowed by (G):
+    omegaBarM n L j < 0 whenever 2 m_sigma = j <= 2n - 4. -/
+theorem omegaBarM_neg (n L j : Int) (hn : 4 ≤ n) (hL : 2 ≤ L) (hj : j ≤ 2*n - 4) :
+    omegaBarM n L j < 0 := by
+  have hm := omegaBarM_mono n L j (2*n - 4) hj
+  have hp : 0 ≤ (n - 4) * (L - 2) := Int.mul_nonneg (by omega) (by omega)
+  have e1 : (n - 4) * (L - 2) = n*L - 2*n - 4*L + 8 := by
+    simp only [Int.sub_mul, Int.mul_sub]; omega
+  have e2 : (2*n+2)*(L-1) = 2*(n*L) - 2*n + 2*L - 2 := by
+    simp only [Int.add_mul, Int.mul_sub, Int.mul_assoc]; omega
+  have hw : omegaBarM n L (2*n - 4) < 0 := by
+    unfold omegaBarM
+    rw [e2]
+    rcases Int.le_total (2*L - 2*n - 2 + (2*n - 4)) 0 with h | h
+    · rw [Int.max_eq_right h]; omega
+    · rw [Int.max_eq_left h]; omega
+  omega
+
+/-- Table (power), lower block: m_sigma = n - 2, rows n = 3..8, columns L = 1..5. -/
+theorem table_power_lower :
+    ([3,4,5,6,7,8].map fun n => [1,2,3,4,5].map fun L => omegaBarM n L (2*n - 4)) =
+    [[4, 0, -4, -6, -8],
+     [4, -2, -8, -12, -16],
+     [4, -4, -12, -18, -24],
+     [4, -6, -16, -24, -32],
+     [4, -8, -20, -30, -40],
+     [4, -10, -24, -36, -48]] := by decide
+
+/-! ## One-loop poles of the quartic operators, Eqs. (killcontrib)-(tuning) -/
 
 /-- Determinant of a 3x3 integer matrix by cofactor expansion. -/
 def det3 (a : Fin 3 → Fin 3 → Int) : Int :=
@@ -144,7 +198,7 @@ def det3 (a : Fin 3 → Fin 3 → Int) : Int :=
   - a 0 1 * (a 1 0 * a 2 2 - a 1 2 * a 2 0)
   + a 0 2 * (a 1 0 * a 2 1 - a 1 1 * a 2 0)
 
-/-- Three times the matrix of Eq. (73), which has integer entries. -/
+/-- Three times the matrix of Eq. (killcontrib), which has integer entries. -/
 def poleMatrix3 : Fin 3 → Fin 3 → Int :=
   fun i j => [[-36, -3, -8], [0, 3, 24], [0, 0, 6]][i]![j]!
 
@@ -154,10 +208,10 @@ theorem pole_matrix_det : det3 poleMatrix3 = 27 * (-24) := by decide
 /-- The upper-left 2x2 block used when s_3 = 0: det = (-12)(1) = -12. -/
 theorem pole_block_det : (-12 : Int) * 1 - (-1) * 0 = -12 := by decide
 
-/-- The tuning of Eq. (74) cancels all three poles.  With t_i = s_i / c and the one-loop
+/-- The tuning of Eq. (tuning) cancels all three poles.  With t_i = s_i / c and the one-loop
     coefficients b1, b2, bE, write u_i = 36 t_i:
       u3 = -18 bE,  u2 = -36 b2 + 144 bE,  u1 = 3 b1 + 3 b2 - 8 bE.
-    The rows of Eq. (73), multiplied by 108, then give 108 (b_i + Delta b_i) = 0. -/
+    The rows of Eq. (killcontrib), multiplied by 108, then give 108 (b_i + Delta b_i) = 0. -/
 theorem tuning_cancels (b1 b2 bE : Int) :
     let u1 := 3*b1 + 3*b2 - 8*bE
     let u2 := -36*b2 + 144*bE
@@ -168,7 +222,7 @@ theorem tuning_cancels (b1 b2 bE : Int) :
   intro u1 u2 u3
   refine ⟨?_, ?_, ?_⟩ <;> omega
 
-/-! ## Insertion lemma constant, Eq. (61) -/
+/-! ## Insertion lemma constant, Eq. (insertion) -/
 
 /-- The three pieces (1+r) + 2r + (2r^2 - r) of the constant add to 1 + 2r + 2r^2. -/
 theorem insertion_constant (r : Nat) : (1 + r) + 2*r + (2*(r*r) - r) = 1 + 2*r + 2*(r*r) := by

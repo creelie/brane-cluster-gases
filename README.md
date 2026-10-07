@@ -109,22 +109,28 @@ near the top of `paper/brane-gases.tex`:
 
 With `\zenodofalse` the Data Availability section describes the code as
 supplied with the article and makes no claim about a repository. The second
-manuscript cites version 2.0.0 in its bibliography.
+manuscript cites the all-versions DOI, which resolves to the newest release, so
+its code and figures are archived once a release containing them is published.
 
 ## Finite quantum gravity from a scale-invariant gas of branes
 
 The second manuscript derives the form factor from a Poisson gas of branes with
-no preferred size, each multiplying the graviton kinetic operator by a passive,
-saturating factor without resonances, and works with one frozen realization of
-the gas rather than an average. Under its two stated premises (the single-brane
-conditions and the fine graining of the gas) almost every realization gives an
-entire form factor without zeros, and for `n >= 4` the paper proves
-ultraviolet finiteness at every order of perturbation theory around flat space,
-unitarity at every loop order in the Efimov-Pius-Sen prescription, and a finite
-graviton zero-point energy, so the theory is ultraviolet complete in
-perturbation theory (its Sec. VII D says exactly in what sense, and what a
-nonperturbative definition would still need). Infrared divergences are physical
-and are not removed. The open points are listed in its Sec. IX.
+no preferred size and works with one frozen realization of the gas rather than
+an average. The single-brane factor is derived from a model of a brane as a
+layer of independent cells that shift the proper time of a crossing graviton,
+and the fine graining of the gas is shown to be necessary, up to slowly varying
+factors, for a zero-point energy that does not depend on the regulator. Almost
+every realization then gives an entire form factor without zeros, and for
+`n >= 4` the paper proves ultraviolet finiteness at every order of perturbation
+theory around flat space, unitarity at every loop order (the Lorentzian
+amplitudes are the unique analytic continuation of the Euclidean ones), and a
+finite graviton zero-point energy, so the theory is ultraviolet complete in
+perturbation theory. A one-loop bubble computed in closed form confirms the
+cutting rule, but it grows faster than any exponential of the energy and
+overtakes the tree amplitude between 1.4M and 1.9M, so the loop expansion is
+an expansion in a small number only up to energies of order `M`. Infrared
+divergences are physical and are not removed. The paper's discussion lists the
+open points.
 
 Every result is derived analytically in the text. The code only re-evaluates
 the formulas at sample points and samples realizations of the gas:
@@ -132,12 +138,12 @@ the formulas at sample points and samples realizations of the gas:
 ```
 pip install -r requirements.txt
 cd uv-finite/code
-python3 verify.py                  # 178 checks passed, 0 failed
+python3 verify.py                  # 195 checks passed, 0 failed
 cc -O2 -std=c99 -o formfactor_check formfactor_check.c -lm
-./formfactor_check                 # 80 checks passed, 0 failed
-julia verify.jl                    # 106 checks passed, 0 failed (Julia 1.10, stdlib only)
+./formfactor_check                 # 84 checks passed, 0 failed
+julia verify.jl                    # 114 checks passed, 0 failed (Julia 1.10, stdlib only)
 lean PowerCounting.lean            # compiles with no output (Lean 4.15, core only)
-python3 make_figures.py            # writes the ten PNG figures to ../figs/
+python3 make_figures.py            # writes the twelve PNG figures to ../figs/
 ```
 
 The Python, C and Julia programs share no code. The Julia program works in

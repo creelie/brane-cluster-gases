@@ -4,9 +4,12 @@
 # Every statement checked here is derived analytically in the paper.  This file re-evaluates
 # the identities, bounds and closed forms with its own special functions (power series,
 # continued fractions, the arithmetic-geometric mean) and its own double-exponential
-# quadrature in 256-bit arithmetic, checks the angular averages of Appendix B exactly in
+# quadrature in 256-bit arithmetic, checks the angular averages of App. angular exactly in
 # rational arithmetic, and samples the gas by Monte Carlo.  It uses only Julia's standard
 # library and shares no code with verify.py or formfactor_check.c.
+#
+# References such as Eq. (omega) or Sec. degree name the LaTeX labels of the paper
+# (\label{eq:omega}, \label{sec:degree}), which do not change when equations are renumbered.
 #
 # Run:  julia verify.jl        (Julia 1.10 or later)
 
@@ -129,7 +132,7 @@ function quadinf(f, a::B; h = B(1) / 128, T1 = 6.5, T2 = 4.0)
 end
 
 # ---------------------------------------------------------------------------------------
-println("== 1. The entire exponential integral (Sec. II E)")
+println("== 1. The entire exponential integral (Sec. formfactor)")
 # ---------------------------------------------------------------------------------------
 for y in (B(1), B(2), B(7), B(20), B(35))
     lhs = Ein(y)
@@ -156,7 +159,7 @@ for n in (4, 7)
 end
 
 # ---------------------------------------------------------------------------------------
-println("== 2. Skeleton bounds on the real axis and in the cones (Eqs. 21, 26)")
+println("== 2. Skeleton bounds on the real axis and in the cones (Eqs. (twosided), (cone))")
 # ---------------------------------------------------------------------------------------
 for n in (4, 5, 8)
     chat = exp(n * γE / 2)
@@ -180,7 +183,7 @@ for n in (4, 6), δ in (0.1, 0.3), r in (1.5, 2.5, 4.0)
 end
 
 # ---------------------------------------------------------------------------------------
-println("== 3. Fluctuations of a realization for the power law (Eqs. 41-44, Table II)")
+println("== 3. Fluctuations of a realization for the power law (Eqs. (varR)-(lowertail), Table (fluct))")
 # ---------------------------------------------------------------------------------------
 const θ0 = log(B(2))
 for (n, ζ) in ((4, 9), (6, 13))
@@ -198,7 +201,7 @@ EeR(n, ζ) = exp(n / B(ζ) * sum(θ0^(k - 1) / (factorial(big(k)) * (k - 1)) for
 let I = quad(t -> t < B(10)^-25 ? 1 / B(2) + t / 6 : (expm1(t) - t) / t^2, B(0), θ0), S = sum(θ0^(k - 1) / (factorial(big(k)) * (k - 1)) for k in 2:80)
     check("int_0^theta0 (e^t-1-t)/t^2 dt: series = quadrature", relerr(S, I) < B(10)^-50)
 end
-table = [(4, 9, 0.555, 1.190, 0.257, 4.47, 0.372), (5, 11, 0.561, 1.195, 0.253, 3.74, 0.281),
+table = [(4, 5, 0.745, 1.368, 0.162, 12.66, 0.833), (4, 9, 0.555, 1.190, 0.257, 4.47, 0.372), (5, 11, 0.561, 1.195, 0.253, 3.74, 0.281),
          (6, 13, 0.566, 1.198, 0.250, 3.35, 0.227), (7, 15, 0.569, 1.201, 0.249, 3.11, 0.190),
          (8, 17, 0.571, 1.202, 0.247, 2.97, 0.163)]
 for (n, ζ, sd, ee, lb, xs, rel) in table
@@ -214,7 +217,7 @@ for (n, ζ, sd, ee, lb, xs, rel) in table
     end
     c_rel = 2 * sqrt(θ0 / (n * (ζ - 4)))
     ok = all(abs.(Float64.([c_sd, c_ee, c_lb, lo, c_rel]) .- [sd, ee, lb, xs, rel]) .<= [5e-4, 5e-4, 5e-4, 5e-3, 5e-4])
-    check(@sprintf("Table II row n=%d: %.3f %.3f %.3f %.2f %.3f", n, c_sd, c_ee, c_lb, lo, c_rel), ok)
+    check(@sprintf("Table (fluct) row n=%d, zeta=%d: %.3f %.3f %.3f %.2f %.3f", n, ζ, c_sd, c_ee, c_lb, lo, c_rel), ok)
 end
 # identical branes: Psi_*(x) = Ein(x^2) - Ein(2x^2)/2 = int_0^1 psi_*(x tau)^2 dtau/tau
 for x in (B(1) / 2, B(2), B(4))
@@ -227,7 +230,7 @@ let x = B(6)
 end
 
 # ---------------------------------------------------------------------------------------
-println("== 4. Monte Carlo of the leading coefficient (Eqs. 31, 44, 45)")
+println("== 4. Monte Carlo of the leading coefficient (Eqs. (Rinf), (EeR), (lowertail))")
 # ---------------------------------------------------------------------------------------
 "Poisson variate of mean lam: sum of Knuth variates of mean at most 20."
 function poisson(rng, lam)
@@ -270,7 +273,7 @@ let rng = MersenneTwister(20261007), n = 4, ζ = 9, t0 = log(2.0), ε = 1e-4, N 
 end
 
 # ---------------------------------------------------------------------------------------
-println("== 5. Vacuum energy (Eqs. 29, 30, 77-80)")
+println("== 5. Vacuum energy (Eqs. (moment), (moment1), (count)-(rho-gen))")
 # ---------------------------------------------------------------------------------------
 let μ = quadinf(t -> t * exp(-t^2), B(0))
     check("mu_psi* = int_0^inf t e^{-t^2} dt = 1/2", abs(μ - B(1) / 2) < B(10)^-50)
@@ -278,7 +281,7 @@ end
 for τ in (B(1), B(1) / 3)
     # int d^4k/(2pi)^4 [psi(tau k^2) - 1] = -mu/(16 pi^2 tau^2), radial measure k^3 dk/(8 pi^2)
     lhs = quadinf(k -> k^3 / (8 * PIB^2) * (-exp(-τ^2 * k^4)), B(0))
-    check(@sprintf("single-brane moment, Eq. (30), tau = %.3f", Float64(τ)), relerr(lhs, -(B(1) / 2) / (16 * PIB^2 * τ^2)) < B(10)^-40)
+    check(@sprintf("single-brane moment, Eq. (moment1), tau = %.3f", Float64(τ)), relerr(lhs, -(B(1) / 2) / (16 * PIB^2 * τ^2)) < B(10)^-40)
 end
 for (n, ζ) in ((4, 9), (6, 13))
     # relative spread: (2/n) sqrt(n theta0 int tau^{zeta-5} dtau) = 2 sqrt(theta0/(n (zeta-4)))
@@ -288,7 +291,7 @@ for (n, ζ) in ((4, 9), (6, 13))
 end
 
 # ---------------------------------------------------------------------------------------
-println("== 6. Newtonian potential: depth of the well (Eqs. 86-90)")
+println("== 6. Newtonian potential: depth of the well (Eqs. (pot0)-(pot0-sharp))")
 # ---------------------------------------------------------------------------------------
 let g = BigFloat()       # MPFR's own Gamma, an independent implementation
     ccall((:mpfr_gamma, Base.MPFR.libmpfr), Int32, (Ref{BigFloat}, Ref{BigFloat}, Base.MPFR.MPFRRoundingMode),
@@ -316,7 +319,7 @@ for (n, lo, val, hi) in ((4, 0.4852, 0.5100, 0.5303), (6, 0.4385, 0.4519, 0.4640
 end
 
 # ---------------------------------------------------------------------------------------
-println("== 7. Angular averages and the one-loop pole matrix, exactly (App. B, Eqs. 71-74)")
+println("== 7. Angular averages and the one-loop pole matrix, exactly (App. angular, Eqs. (angular)-(tuning))")
 # ---------------------------------------------------------------------------------------
 # The 24 vertices of the 24-cell, (+-1, +-1, 0, 0) and permutations over sqrt 2, form a
 # spherical 5-design on S^3, so the mean over them of any polynomial of degree <= 5 in the
@@ -353,7 +356,7 @@ for trial in 1:6
     Ric = [sum(Rm[m, b, m, d] for m in 1:4) for b in 1:4, d in 1:4]
     Rs = sum(Ric[a, a] for a in 1:4)
     Ric2 = sum(Ric .^ 2); Riem2 = sum(Rm .^ 2)
-    # Eq. (71): Rbar^{mn} Rbar^{rs} <Pt - (3/2) T x T>_{mnrs} = (Ric^2 - R^2)/2
+    # Eq. (angular): Rbar^{mn} Rbar^{rs} <Pt - (3/2) T x T>_{mnrs} = (Ric^2 - R^2)/2
     lhs1 = avg(function (ω)
         θ = [δ(a, b) - ω[a, b] for a in 1:4, b in 1:4]
         T = θ / 3 + ω
@@ -363,7 +366,7 @@ for trial in 1:6
         Pt - Q(3, 2) * TT
     end)
     global ok1 &= lhs1 == (Ric2 - Rs^2) / 2
-    # Eq. (72): <tr W^2 - (tr W)^2/2> = (3 Riem^2 - R^2)/48, W^{ns} = R^{mnrs} khat_m khat_r
+    # Eq. (angularRiem): <tr W^2 - (tr W)^2/2> = (3 Riem^2 - R^2)/48, W^{ns} = R^{mnrs} khat_m khat_r
     lhs2 = avg(function (ω)
         W = [sum(Rm[m, n, r, s] * ω[m, r] for m in 1:4, r in 1:4) for n in 1:4, s in 1:4]
         sum(W .* transpose(W)) - (sum(W[a, a] for a in 1:4))^2 / 2
@@ -371,34 +374,34 @@ for trial in 1:6
     global ok2 &= lhs2 == (3 * Riem2 - Rs^2) / 48
 end
 check("random curvature tensors (Kulkarni-Nomizu sums) have the symmetries of Riemann", ok3)
-check("Eq. (71) exactly, six random curvature tensors", ok1)
-check("Eq. (72) exactly, six random curvature tensors", ok2)
+check("Eq. (angular) exactly, six random curvature tensors", ok1)
+check("Eq. (angularRiem) exactly, six random curvature tensors", ok2)
 # fixed khat = e4: T.T = D/(D-1) = 4/3, T.delta = 2, theta P0 theta = D - 1 = 3
 let ω = [δ(a, 4) * δ(b, 4) for a in 1:4, b in 1:4], θ = [δ(a, b) for a in 1:4, b in 1:4] - ω, T = θ / 3 + ω
     check("T.T = 4/3, T.delta = 2, theta.theta = 3 in D = 4",
           sum(T .* T) == Q(4, 3) && sum(T[a, a] for a in 1:4) == 2 && sum(θ .* θ) == 3)
 end
-# the three pole lines and the matrix of Eq. (73)
+# the three pole lines and the matrix of Eq. (killcontrib)
 c_s1 = 8 * Q(-3, 2)                      # R^2
 c_s2 = 8 * Q(1, 4) * Q(1, 2)             # (Ric^2 - R^2)
 c_s3R = 8 * 4 * Q(3, 48); c_s3S = 8 * 4 * Q(-1, 48)   # Riem^2 and R^2
 check("pole coefficients -12, 1, (2, -2/3)", c_s1 == -12 && c_s2 == 1 && c_s3R == 2 && c_s3S == Q(-2, 3))
 # Riem^2 = E + 4 Ric^2 - R^2
 A = Q[c_s1 -c_s2 (c_s3S - c_s3R); 0 c_s2 4*c_s3R; 0 0 c_s3R]
-check("matrix of Eq. (73) is [[-12,-1,-8/3],[0,1,8],[0,0,2]]", A == Q[-12 -1 Q(-8, 3); 0 1 8; 0 0 2])
+check("matrix of Eq. (killcontrib) is [[-12,-1,-8/3],[0,1,8],[0,0,2]]", A == Q[-12 -1 Q(-8, 3); 0 1 8; 0 0 2])
 check("det = -24 and upper-left block det = -12", det(A) == -24 && det(A[1:2, 1:2]) == -12)
 let b = Q[Q(7, 5), Q(-3, 11), Q(13, 17)]          # arbitrary beta^(0)
     t = [ (b[1] + b[2] - Q(8, 3) * b[3]) / 12, -(b[2] - 4 * b[3]), -b[3] / 2 ]
-    check("the tuning of Eq. (74) cancels the three poles", A * t + b == zeros(Q, 3))
+    check("the tuning of Eq. (tuning) cancels the three poles", A * t + b == zeros(Q, 3))
 end
 
 # ---------------------------------------------------------------------------------------
-println("== 8. Power counting (Sec. IV D)")
+println("== 8. Power counting (Sec. degree)")
 # ---------------------------------------------------------------------------------------
 ω̄(n, L) = 4L - (2n + 2) * (L - 1) + 2 * max(L - n - 1, 0)
 check("omegaBar(L) < 0 for all 2 <= L <= 200 exactly when n >= 4 (n = 1..30)",
       all((all(ω̄(n, L) < 0 for L in 2:200)) == (n >= 4) for n in 1:30))
-check("Table V", [ω̄(n, L) for n in 3:8, L in 1:5] == [4 0 -4 -8 -10; 4 -2 -8 -14 -20; 4 -4 -12 -20 -28;
+check("Table (power)", [ω̄(n, L) for n in 3:8, L in 1:5] == [4 0 -4 -8 -10; 4 -2 -8 -14 -20; 4 -4 -12 -20 -28;
                                                        4 -6 -16 -26 -36; 4 -8 -20 -32 -44; 4 -10 -24 -38 -52])
 check("merging inequality, exhaustive for 2 <= a, b, k <= 40",
       all(max(a - k, 0) + max(b - k, 0) <= max(a + b - 2 - k, 0) for a in 2:40, b in 2:40, k in 2:40))
@@ -416,7 +419,7 @@ let rng = MersenneTwister(11), worst = 0.0
 end
 
 # ---------------------------------------------------------------------------------------
-println("== 9. Gravitational scattering of matter at tree level (Sec. VII C, Eq. 82)")
+println("== 9. Gravitational scattering of matter at tree level (Sec. size, Eq. (matter))")
 # ---------------------------------------------------------------------------------------
 # Two distinct massless scalars in the center-of-mass frame, metric (+,-,-,-).
 # T^{mn} = p^m p'^n + p'^m p^n - eta^{mn} p.p' for each scalar line.
@@ -457,11 +460,11 @@ let ok = true
         bound = 8 * PIB * cos(θ / 2)^2 / sin(θ / 2)^4 * x / (1 + x^2)^(B(n) / 2)
         ok &= A <= bound * (1 + B(10)^-60)
     end
-    check("skeleton matter amplitude below the bound of Sec. VII C (C = 1) on a grid of angles and momenta", ok)
+    check("skeleton matter amplitude below the bound of Sec. size (C = 1) on a grid of angles and momenta", ok)
 end
 
 # ---------------------------------------------------------------------------------------
-println("== 10. The free Euclidean graviton: curvature at a point (Sec. VII D, Eq. 83)")
+println("== 10. The free Euclidean graviton: curvature at a point (Sec. complete, Eq. (weyl))")
 # ---------------------------------------------------------------------------------------
 # Linearized Riemann tensor of a Fourier mode h e^{ipx} (Euclidean, overall factors drop out
 # of C.C / (h P2 h)): R_{abcd} = (p_b p_c h_ad + p_a p_d h_bc - p_a p_c h_bd - p_b p_d h_ac)/2.
@@ -502,6 +505,74 @@ let # n = 3: the partial integrals grow like log X, so the variance diverges log
     d1 = part(B(10)^4) - part(B(10)^3); d2 = part(B(10)^5) - part(B(10)^4)
     check("n = 3: int_0^X x^2/(1+x^2)^(3/2) grows like log X (increments per decade -> log 10)",
           abs(d1 - log(B(10))) < 1e-5 && abs(d2 - log(B(10))) < 1e-7)
+end
+
+# ---------------------------------------------------------------------------------------
+println("== 11. The derived premises and the one-loop bubble (Secs. cells, vacuum, bubble)")
+# ---------------------------------------------------------------------------------------
+let θ = B(6) / 5, s = B(7) / 10, ok = true
+    for z in (B(2) / 5, B(11) / 10, B(5) / 2)
+        series = sum(exp(-θ) * θ^N / factorial(big(N)) * exp(-N * (s * z)^2) for N in 0:300)
+        ok &= relerr(series, exp(-θ * (1 - exp(-(s * z)^2)))) < B(10)^-70
+    end
+    check("Eq. (cellt): Poisson sum over the number of cells equals exp[-theta (1 - e^{-s^2 z^2})], 70 digits", ok)
+end
+function mpfr_gamma(x::B)
+    g = BigFloat()
+    ccall((:mpfr_gamma, Base.MPFR.libmpfr), Int32, (Ref{BigFloat}, Ref{BigFloat}, Base.MPFR.MPFRRoundingMode), g, x, Base.MPFR.ROUNDING_MODE[])
+    return g
+end
+let ok = true
+    for ζ in (B(1), B(5) / 2, B(3), B(7) / 2)
+        f(v) = v^(ζ - 5) * (-expm1(-v^2))^2
+        g(v) = v^(ζ - 5) * (2 * exp(-v^2) - exp(-2 * v^2))      # on [1, inf), f = v^(zeta-5) - g
+        q = quad(f, B(0), B(1)) + 1 / (4 - ζ) - quadinf(g, B(1))
+        Cζ = mpfr_gamma(ζ / 2 - 2) * (2^(2 - ζ / 2) - 2) / 2
+        ok &= relerr(q, Cζ) < B(10)^-30
+    end
+    check("Eq. (cutvar): C_zeta = Gamma(zeta/2-2)(2^(2-zeta/2)-2)/2 against quadrature, zeta = 1, 5/2, 3, 7/2", ok)
+end
+let ω̄m(n, L, m) = 4L - (2n + 2) * (L - 1) + 2 * max(L - n - 1 + m, 0)
+    check("Table (power), lower block (m_sigma = n - 2)", [ω̄m(n, L, n - 2) for n in 3:8, L in 1:5] ==
+          [4 0 -4 -6 -8; 4 -2 -8 -12 -16; 4 -4 -12 -18 -24; 4 -6 -16 -24 -32; 4 -8 -20 -30 -40; 4 -10 -24 -36 -48])
+    check("omegaBar < 0 for 2 <= L <= 200 and all rational 0 <= m_sigma <= n-2 exactly when n >= 4 (n = 1..30)",
+          all(all(ω̄m(n, L, m) < 0 for L in 2:200, m in (0 // 1):(1 // 4):max(n - 2, 0)) == (n >= 4) for n in 1:30))
+end
+# Table (bubble): the bound column (leading term of Eq. (bubblebound) maximized over delta) and s a(-s) Re A
+let Es = [1.0, 1.25, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9],
+    ReA = [11.6501, 24.7091, 82.0849, 474.689, 1.274250e4, 4.538866e6, 2.419674e26, 3.812686e88],
+    bnd = [0.84, 1.06, 1.35, 1.67, 3.78, 156, 1.95e5, 2.00e11],
+    rat = [57.3, 770, 7.60e3, 8.70e4, 4.45e6, 2.90e9, 2.74e29, 7.42e91]
+    okb = true; okr = true
+    for (i, E) in enumerate(Es)
+        s = B(E)^2
+        lead(δ) = PIB^2 * sqrt(B(7)) * δ^(B(5) / 2) / (64 * (1 - δ)^2) * exp(-4 * Ein(-(1 - δ)^2 * s^2 / 4))
+        best = maximum(lead(B(k) / 2000) for k in 10:1200)
+        okb &= abs(Float64(best) / bnd[i] - 1) < 0.006
+        a_minus_s = exp(2 * Ein_big(s^2))            # a(-s) = exp[(n/2) Ein(s^2)], n = 4
+        okr &= abs(Float64(s * a_minus_s) * ReA[i] / rat[i] - 1) < 0.006
+    end
+    check("Table (bubble): bound column = max over delta of the leading term of Eq. (bubblebound)", okb)
+    check("Table (bubble): last column = s a(-s) Re A with a(-s) = exp[2 Ein(s^2)]", okr)
+end
+# seagull graph in exact arithmetic: Tr(B12 P B34 P) = (t-u)^2/16, E = 2, cos(theta) = 3/5, cos(phi) = 5/13
+let Q = Complex{Rational{BigInt}}, δ = Matrix{Q}(I, 4, 4)
+    sθ, cθ, cφ, sφ = 4 // 5, 3 // 5, 5 // 13, 12 // 13
+    nv = Q[sθ * cφ, sθ * sφ, cθ]
+    p1 = Q[0, 0, 1, im]; p2 = Q[0, 0, -1, im]; p3 = -vcat(nv, Q[im]); p4 = -vcat(-nv, Q[im])
+    function Bform(p, q)
+        Qf(h) = (tr_ = tr(h); Mh = h * h - tr_ * h / 2 + (tr_^2 / 8 - sum(h .* h) / 4) * δ; (transpose(p) * Mh * q + transpose(q) * Mh * p) / 2)
+        Es_ = [(e = zeros(Q, 4, 4); e[a, b] = 1; e) for a in 1:4 for b in 1:4]
+        [(Qf(Es_[i] + Es_[j]) - Qf(Es_[i]) - Qf(Es_[j])) / 2 for i in 1:16, j in 1:16]
+    end
+    P = zeros(Q, 16, 16)
+    for m in 1:4, n in 1:4, a in 1:4, b in 1:4
+        P[4(m-1)+n, 4(a-1)+b] = (δ[m, a] * δ[n, b] + δ[m, b] * δ[n, a] - δ[m, n] * δ[a, b]) / 2
+    end
+    t = -transpose(p1 + p3) * (p1 + p3); u = -transpose(p1 + p4) * (p1 + p4)
+    T = tr(Bform(p1, p2) * P * Bform(p3, p4) * P)
+    check("seagull graph: Tr(B12 P B34 P) = (t-u)^2/16 exactly, on-shell massless scalars",
+          T == (t - u)^2 / 16 && all(iszero(transpose(v) * v) for v in (p1, p2, p3, p4)))
 end
 
 @printf("\n%d checks passed, %d failed\n", NPASS[], NFAIL[])
