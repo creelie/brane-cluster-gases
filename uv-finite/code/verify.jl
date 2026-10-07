@@ -439,15 +439,15 @@ let η = Diagonal(B[1, -1, -1, -1]), rng = MersenneTwister(5), ok = true, okt = 
     check("-t = s sin^2(theta/2), -u = s cos^2(theta/2)", okt)
 end
 for n in 4:8
-    kn = B(n - 1)^(B(n - 1) / 2) / B(n)^(B(n) / 2)
+    kmax = B(n - 1)^(B(n - 1) / 2) / B(n)^(B(n) / 2)
     lo, hi = B(0), B(1)
     f(x) = x / (1 + x^2)^(B(n) / 2)
     for _ in 1:300            # golden-section search for the maximum
         m1 = lo + (hi - lo) * (3 - sqrt(B(5))) / 2; m2 = lo + (hi - lo) * (sqrt(B(5)) - 1) / 2
         f(m1) < f(m2) ? (lo = m1) : (hi = m2)
     end
-    check(@sprintf("max_x x/(1+x^2)^(n/2) = (n-1)^((n-1)/2)/n^(n/2) = %.4f at x = (n-1)^(-1/2), n = %d", Float64(kn), n),
-          abs(f(lo) - kn) < B(10)^-50 && abs(lo - 1 / sqrt(B(n - 1))) < B(10)^-20 && (n != 4 || abs(Float64(kn) - 0.325) < 5e-4))
+    check(@sprintf("max_x x/(1+x^2)^(n/2) = (n-1)^((n-1)/2)/n^(n/2) = %.4f at x = (n-1)^(-1/2), n = %d", Float64(kmax), n),
+          abs(f(lo) - kmax) < B(10)^-50 && abs(lo - 1 / sqrt(B(n - 1))) < B(10)^-20 && (n != 4 || abs(Float64(kmax) - 0.325) < 5e-4))
 end
 let ok = true
     for n in (4, 6), θ in (B(1) / 2, B(1), B(2), B(3)), x in (B(1) / 10, B(1) / 2, B(1), B(3), B(10), B(50))
