@@ -22,7 +22,8 @@ jobs:
       - uses: actions/checkout@v4
       - name: Read the version
         id: version
-        run: echo "version=$(sed -n 's/^version: *//p' CITATION.cff | tr -d '"')" >> "$GITHUB_OUTPUT"
+        run: |
+          echo "version=$(sed -n 's/^version: *//p' CITATION.cff | tr -d '"')" >> "$GITHUB_OUTPUT"
       - name: Install LaTeX and poppler
         run: |
           sudo apt-get update
