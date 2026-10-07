@@ -34,3 +34,36 @@ jobs:
             checks.log
             figs.log
             paper/figs
+
+  uv-finite:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Run the Python checks
+        run: |
+          cd uv-finite/code
+          python3 verify.py | tee ../../uv-verify.log
+          grep -q " 0 failed" ../../uv-verify.log
+      - name: Run the C checks
+        run: |
+          cd uv-finite/code
+          cc -O2 -std=c99 -Wall -Wextra -o formfactor_check formfactor_check.c -lm
+          ./formfactor_check | tee ../../uv-c.log
+          grep -q " 0 failed" ../../uv-c.log
+      - name: Regenerate the figures
+        run: |
+          cd uv-finite/code
+          FIG_OUT=../../uv-figs python3 make_figures.py
+          test "$(ls ../../uv-figs/*.png | wc -l)" -eq 10
+      - uses: actions/upload-artifact@v4
+        with:
+          name: uv-finite-logs-and-figures
+          path: |
+            uv-verify.log
+            uv-c.log
+            uv-figs

@@ -1,38 +1,35 @@
 cff-version: 1.2.0
-message: "If you use this software or the results it reproduces, please cite the manuscript below."
+message: "If you use this software or the results it reproduces, please cite the manuscripts below."
 title: "Brane cluster gases and ghost-free form factors for quantum gravity: verification suite and figure scripts"
 abstract: >-
-  Verification suite and figure scripts accompanying the manuscript "Brane
-  cluster gases and ghost-free form factors for quantum gravity". The suite
-  runs 171 independent checks in eleven groups, covering the residue sum rule,
-  the pole dichotomy, the power counting, the Poisson generating functional,
-  the Euclidean propagator of the Gaussian form factor, the weak-field
-  threshold, the Schwinger parametric representation, and the composition of
-  transmission amplitudes through a stack of branes.
+  Source, verification suites and figure scripts for two manuscripts. The
+  first, "Brane cluster gases and ghost-free form factors for quantum gravity",
+  comes with a suite of 171 independent checks in eleven groups, covering the
+  residue sum rule, the pole dichotomy, the power counting, the Poisson
+  generating functional, the Euclidean propagator of the Gaussian form factor,
+  the weak-field threshold, the Schwinger parametric representation, and the
+  composition of transmission amplitudes through a stack of branes. The second,
+  "Finite quantum gravity from a scale-invariant gas of branes" (new in 2.0.0),
+  comes with 178 Python and 80 C checks of its analytical results: the form
+  factor of one realization of a Poisson gas of branes and its fluctuations,
+  the vertex bound and power counting, the one-loop poles of the quartic
+  operators, the vacuum energy and the Newtonian potential.
 type: software
 license: MIT
-version: 1.0.0
-date-released: "2026-09-21"
+version: 2.0.0
+date-released: "2026-10-07"
 keywords:
   - nonlocal gravity
   - brane intersections
   - Poisson processes
+  - ultraviolet finiteness
+  - brane gas
 authors:
   - family-names: Bhattacharjee
     given-names: Deep
     orcid: "https://orcid.org/0000-0003-0466-750X"
     email: itsdeep@live.com
     affiliation: "Formerly, Electro-Gravitational Space Propulsion Laboratory (EGSPL), Bhubaneswar, Odisha 751030, India"
-  - family-names: Mandal
-    given-names: Priyabrata
-    orcid: "https://orcid.org/0000-0001-6472-6239"
-    email: priyabrata@manit.ac.in
-    affiliation: "Department of Mathematics, Bioinformatics and Computer Applications, Maulana Azad National Institute of Technology Bhopal, Bhopal 462003, India"
-  - family-names: Bhattacharya
-    given-names: Ushashi
-    orcid: "https://orcid.org/0009-0002-2254-3914"
-    email: rai.bhattacharya.in@gmail.com
-    affiliation: "Formerly, National Taiwan University, Taipei 106319, Taiwan"
 preferred-citation:
   type: article
   title: "Brane cluster gases and ghost-free form factors for quantum gravity"
@@ -41,9 +38,11 @@ preferred-citation:
     - family-names: Bhattacharjee
       given-names: Deep
       orcid: "https://orcid.org/0000-0003-0466-750X"
-    - family-names: Mandal
-      given-names: Priyabrata
-      orcid: "https://orcid.org/0000-0001-6472-6239"
-    - family-names: Bhattacharya
-      given-names: Ushashi
-      orcid: "https://orcid.org/0009-0002-2254-3914"
+references:
+  - type: article
+    title: "Finite quantum gravity from a scale-invariant gas of branes"
+    year: 2026
+    authors:
+      - family-names: Bhattacharjee
+        given-names: Deep
+        orcid: "https://orcid.org/0000-0003-0466-750X"

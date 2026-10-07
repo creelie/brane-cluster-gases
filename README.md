@@ -1,12 +1,13 @@
 # Brane cluster gases and ghost-free form factors for quantum gravity
 
-Source, figures and verification code for the manuscript
+Source, figures and verification code for two manuscripts by Deep Bhattacharjee,
+prepared for submission to *Physical Review D*. Contact: <itsdeep@live.com>.
 
-> Deep Bhattacharjee, Priyabrata Mandal and Ushashi Bhattacharya,
-> *Brane cluster gases and ghost-free form factors for quantum gravity*.
-
-Prepared for submission to *Physical Review D*. Corresponding author:
-Deep Bhattacharjee, <itsdeep@live.com>.
+1. *Brane cluster gases and ghost-free form factors for quantum gravity*
+   (`paper/`, `code/`).
+2. *Finite quantum gravity from a scale-invariant gas of branes*
+   (`uv-finite/`, added in release 2.0.0). See
+   [the section below](#finite-quantum-gravity-from-a-scale-invariant-gas-of-branes).
 
 ## What the paper does
 
@@ -28,9 +29,11 @@ discussion.
 ## Layout
 
 ```
-paper/    brane-gases.tex, the compiled PDF, and the eight figures it includes
-code/     the verification suite, the eight figure scripts, and the shared style
-docs/     the DOI verification record
+paper/      brane-gases.tex, the compiled PDF, and the eight figures it includes
+code/       the verification suite, the eight figure scripts, and the shared style
+docs/       the DOI verification record
+uv-finite/  the second manuscript: uv-finite-brane-gas.tex, its PDF, figs/,
+            and code/ (verify.py, formfactor_check.c, make_figures.py)
 ```
 
 ## Building the paper
@@ -109,6 +112,35 @@ reach the compiled PDF. To complete the link:
 
 Nothing else in the source needs to change.
 
+## Finite quantum gravity from a scale-invariant gas of branes
+
+The second manuscript derives the form factor from a Poisson gas of branes with
+no preferred size, each multiplying the graviton kinetic operator by a passive,
+saturating factor without resonances, and works with one frozen realization of
+the gas rather than an average. Under its two stated premises (the single-brane
+conditions and the fine graining of the gas) almost every realization gives an
+entire form factor without zeros, and for `n >= 4` the paper proves
+ultraviolet finiteness at every order of perturbation theory around flat space,
+unitarity at every loop order in the Efimov-Pius-Sen prescription, and a finite
+graviton zero-point energy. Infrared divergences are physical and are not
+removed. The open points are listed in its Sec. IX.
+
+Every result is derived analytically in the text. The code only re-evaluates
+the formulas at sample points and samples realizations of the gas:
+
+```
+pip install -r requirements.txt
+cd uv-finite/code
+python3 verify.py                  # 178 checks passed, 0 failed
+cc -O2 -std=c99 -o formfactor_check formfactor_check.c -lm
+./formfactor_check                 # 80 checks passed, 0 failed
+python3 make_figures.py            # writes the ten PNG figures to ../figs/
+```
+
+To build the paper, run `pdflatex uv-finite-brane-gas.tex` three times in
+`uv-finite/`. It uses REVTeX 4.2 and TikZ from TeX Live, and the bibliography
+is inline.
+
 ## References
 
 Every digital object identifier in the bibliography was resolved against its
@@ -122,5 +154,6 @@ of the manuscript.
 
 ## Licence
 
-The code in `code/` is released under the MIT Licence (see `LICENSE`). The
-manuscript and figures in `paper/` are released under CC BY 4.0.
+The code in `code/` and `uv-finite/code/` is released under the MIT Licence
+(see `LICENSE`). The manuscripts and figures in `paper/` and `uv-finite/` are
+released under CC BY 4.0.

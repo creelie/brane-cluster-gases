@@ -38,13 +38,13 @@
 \newcommand{\Ps}{P^{(0)}}
 \newcommand{\dd}{\mathrm{d}}
 
-%% The Zenodo record for the code archive.  Until the archive is deposited,
-%% leave \zenodofalse: the Data Availability section then cites the code as
-%% supplied with the article and makes no claim about a repository.  Once the
-%% identifier is minted, set \zenodotrue and put it in \zenododoi.
+%% The Zenodo record for the code archive.  \zenododoi holds the concept DOI,
+%% which always resolves to the newest release of the repository.  With
+%% \zenodofalse the Data Availability section cites the code as supplied with
+%% the article and makes no claim about a repository.
 \newif\ifzenodo
-\zenodofalse
-\newcommand{\zenododoi}{10.5281/zenodo.0000000}
+\zenodotrue
+\newcommand{\zenododoi}{10.5281/zenodo.22866290}
 
 \hbadness=5000
 \emergencystretch=1.2em
@@ -54,16 +54,8 @@
 \title{Brane cluster gases and ghost-free form factors for quantum gravity}
 
 \author{Deep Bhattacharjee\,\orcidlink{0000-0003-0466-750X}}
-\email[Corresponding author: ]{itsdeep@live.com}
+\email{itsdeep@live.com}
 \affiliation{Formerly, Electro-Gravitational Space Propulsion Laboratory (EGSPL), Bhubaneswar, Odisha 751030, India}
-
-\author{Priyabrata Mandal\,\orcidlink{0000-0001-6472-6239}}
-\email{priyabrata@manit.ac.in}
-\affiliation{Department of Mathematics, Bioinformatics and Computer Applications, Maulana Azad National Institute of Technology Bhopal, Bhopal 462003, India}
-
-\author{Ushashi Bhattacharya\,\orcidlink{0009-0002-2254-3914}}
-\email{rai.bhattacharya.in@gmail.com}
-\affiliation{Formerly, National Taiwan University, Taipei 106319, Taiwan}
 
 \date{\today}
 
@@ -748,7 +740,7 @@ This research received no specific grant from any funding agency in the public, 
 
 \section*{Conflict of interest}
 
-The authors declare no conflict of interest.
+The author declares no conflict of interest.
 
 \begin{acknowledgments}
 Every digital object identifier in the bibliography was resolved against the registration record of the item before inclusion.
