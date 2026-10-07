@@ -88,30 +88,28 @@ Each script writes `paper/figs/<name>.png` at 600 dpi, writes a vector PDF where
 the figure is line art, and runs the label collision test in `figstyle.py`
 before saving. Every figure reports `0 collisions`.
 
-## Archiving this repository and citing the archive
+## Archive and DOI
 
-The Data Availability section of the manuscript cites this repository through a
-switch and a macro, both defined near the top of `paper/brane-gases.tex`:
+Zenodo archives every GitHub release of this repository as a new version of
+one record.
+
+- All versions (resolves to the newest):
+  [10.5281/zenodo.22866290](https://doi.org/10.5281/zenodo.22866290)
+- Version 2.0.0:
+  [10.5281/zenodo.23220676](https://doi.org/10.5281/zenodo.23220676)
+
+The first manuscript cites the archive through a switch and a macro defined
+near the top of `paper/brane-gases.tex`:
 
 ```tex
 \newif\ifzenodo
-\zenodofalse
-\newcommand{\zenododoi}{10.5281/zenodo.0000000}
+\zenodotrue
+\newcommand{\zenododoi}{10.5281/zenodo.22866290}
 ```
 
-While the switch is false the section describes the code as supplied with the
-article and makes no claim about a repository, so no placeholder identifier can
-reach the compiled PDF. To complete the link:
-
-1. Push this repository to GitHub.
-2. Enable it in Zenodo under *GitHub* in your account settings.
-3. Create a release on GitHub. Zenodo archives it and mints a DOI, reading the
-   title, authors, ORCIDs, licence and keywords from `.zenodo.json`.
-4. Put the concept DOI Zenodo returns, the one that always resolves to the
-   newest release, in `\zenododoi`, change `\zenodofalse` to `\zenodotrue`, and
-   recompile.
-
-Nothing else in the source needs to change.
+With `\zenodofalse` the Data Availability section describes the code as
+supplied with the article and makes no claim about a repository. The second
+manuscript cites version 2.0.0 in its bibliography.
 
 ## Finite quantum gravity from a scale-invariant gas of branes
 
