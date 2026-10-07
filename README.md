@@ -33,7 +33,8 @@ paper/      brane-gases.tex, the compiled PDF, and the eight figures it includes
 code/       the verification suite, the eight figure scripts, and the shared style
 docs/       the DOI verification record
 uv-finite/  the second manuscript: uv-finite-brane-gas.tex, its PDF, figs/,
-            and code/ (verify.py, formfactor_check.c, make_figures.py)
+            and code/ (verify.py, formfactor_check.c, verify.jl,
+            PowerCounting.lean, make_figures.py)
 ```
 
 ## Building the paper
@@ -122,8 +123,10 @@ conditions and the fine graining of the gas) almost every realization gives an
 entire form factor without zeros, and for `n >= 4` the paper proves
 ultraviolet finiteness at every order of perturbation theory around flat space,
 unitarity at every loop order in the Efimov-Pius-Sen prescription, and a finite
-graviton zero-point energy. Infrared divergences are physical and are not
-removed. The open points are listed in its Sec. IX.
+graviton zero-point energy, so the theory is ultraviolet complete in
+perturbation theory (its Sec. VII D says exactly in what sense, and what a
+nonperturbative definition would still need). Infrared divergences are physical
+and are not removed. The open points are listed in its Sec. IX.
 
 Every result is derived analytically in the text. The code only re-evaluates
 the formulas at sample points and samples realizations of the gas:
@@ -134,8 +137,16 @@ cd uv-finite/code
 python3 verify.py                  # 178 checks passed, 0 failed
 cc -O2 -std=c99 -o formfactor_check formfactor_check.c -lm
 ./formfactor_check                 # 80 checks passed, 0 failed
+julia verify.jl                    # 96 checks passed, 0 failed (Julia 1.10, stdlib only)
+lean PowerCounting.lean            # compiles with no output (Lean 4.15, core only)
 python3 make_figures.py            # writes the ten PNG figures to ../figs/
 ```
+
+The Python, C and Julia programs share no code. The Julia program works in
+256-bit arithmetic with its own special functions and quadrature. The Lean file
+proves the integer statements behind the power counting and the one-loop tuning
+for all values of their arguments; the analytic estimates are proved in the
+paper and are not formalized.
 
 To build the paper, run `pdflatex uv-finite-brane-gas.tex` three times in
 `uv-finite/`. It uses REVTeX 4.2 and TikZ from TeX Live, and the bibliography
