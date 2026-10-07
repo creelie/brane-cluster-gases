@@ -1,10 +1,10 @@
 {
   "title": "Brane cluster gases and ghost-free form factors for quantum gravity: verification suite and figure scripts",
-  "description": "<p>Verification suite and figure scripts accompanying the manuscript <em>Brane cluster gases and ghost-free form factors for quantum gravity</em> by Deep Bhattacharjee, prepared for Physical Review D.</p><p>The suite <code>checks_clusters.py</code> runs 171 independent checks in eleven groups: the nerve complex and its Euler identity, intersection numbers on the torus, the subset-sum and Poisson generating functions, the Barnes-Rivers projector algebra, the residue sum rule and the pole dichotomy, the superficial degree of divergence, the Euclidean propagator of the Gaussian form factor in D = 3, 4, 5, 6, the Newtonian potential and the weak-field threshold, the on-shell dispersion relation, the Schwinger parametric representation with its spanning-tree bound and the closed-form one-loop bubble, and the composition of transmission amplitudes against the exact transfer matrix. No check uses a formula proved in the paper as an input. The eight figure scripts regenerate every figure at 600 dpi and run a label collision test before saving.</p>",
+  "description": "<p>Source, verification suites and figure scripts for two manuscripts by Deep Bhattacharjee, prepared for Physical Review D.</p><p><strong>Brane cluster gases and ghost-free form factors for quantum gravity</strong> (<code>paper/</code>, <code>code/</code>). The suite <code>checks_clusters.py</code> runs 171 independent checks in eleven groups: the nerve complex and its Euler identity, intersection numbers on the torus, the subset-sum and Poisson generating functions, the Barnes-Rivers projector algebra, the residue sum rule and the pole dichotomy, the superficial degree of divergence, the Euclidean propagator of the Gaussian form factor in D = 3, 4, 5, 6, the Newtonian potential and the weak-field threshold, the on-shell dispersion relation, the Schwinger parametric representation with its spanning-tree bound and the closed-form one-loop bubble, and the composition of transmission amplitudes against the exact transfer matrix. The eight figure scripts regenerate every figure at 600 dpi and run a label collision test before saving.</p><p><strong>Finite quantum gravity from a scale-invariant gas of branes</strong> (<code>uv-finite/</code>, new in 2.0.0). Every result of this paper is derived analytically in the text; the code only re-evaluates the formulas. <code>verify.py</code> runs 178 checks (Python, with numpy, scipy and mpmath): the entire exponential integral and its bounds, the form factor of one realization of the Poisson gas and its closed-form fluctuation statistics, Monte Carlo samples of the gas, the vertex bound and power counting, the one-loop pole matrix of the quartic operators, the Mellin-transform vacuum energy and the Newtonian potential. <code>formfactor_check.c</code> runs 80 checks of the same formulas in C99 with its own special functions. <code>make_figures.py</code> regenerates the ten plotted figures.</p>",
   "upload_type": "software",
   "license": "MIT",
   "access_right": "open",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "language": "eng",
   "keywords": [
     "nonlocal gravity",
@@ -16,7 +16,10 @@
     "power counting",
     "reproducibility",
     "multiple scattering",
-    "parametric representation"
+    "parametric representation",
+    "ultraviolet finiteness",
+    "nonlocal quantum gravity",
+    "brane gas"
   ],
   "creators": [
     {
