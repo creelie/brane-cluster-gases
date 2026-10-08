@@ -28,6 +28,9 @@
 
 \newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
 \raggedbottom
+\makeatletter
+\setlength{\@dblfptop}{0pt}
+\makeatother
 \hbadness=5000
 \emergencystretch=1.5em
 
@@ -1731,11 +1734,11 @@ The argument has two layers, which could fail independently. The first is about 
 
 Under A1 and A2 with $n\ge4$, and with the tuning~\eqref{eq:tuning}, almost every realization of the gas gives a theory with no ultraviolet divergence at any order of perturbation theory around flat space. No physical coupling needs a counterterm, the $S$ matrix has no ultraviolet pole, and the one-loop background-field effective action has none either. The bare couplings are finite numbers, the same for every regulator (Sec.~\ref{sec:nocutoff}), and quantities that have no pole can be computed outright. The zero-point energy of the graviton is $\rho_1+\delta\rho_\Pi$, whose mean over realizations is $3nM^4/(64\pi^2)$ for $\psi_*$ and Eq.~\eqref{eq:rho-gen} in general, and whose relative fluctuation is Eq.~\eqref{eq:drhorel}. The static potential of a point mass is finite at the origin in almost every realization, and for the skeleton its depth is known in closed form to within $1/(2n-1)$, Eq.~\eqref{eq:pot0-sharp}. The renormalizations that remain act only on the gauge-fixing sector and have no physical effect. The physical $S$ matrix is unitary at every loop order, and above an energy between $1.4M$ and $1.9M$ its loop expansion stops being an expansion in a small number (Sec.~\ref{sec:bubble}). Infrared divergences remain, as they must for a massless graviton, and they cancel in inclusive rates exactly as in general relativity~\cite{Weinberg1965}. Table~\ref{tab:divergences} is the full list of divergences, and Table~\ref{tab:status} separates what is proved from what is assumed.
 
-\begin{table}[t]
+\begin{table*}[tp]
 \caption{Status of the claims. ``Proved'' means derived in the text from the stated inputs, with the cited theorems; ``premise'' means a statement about branes that the paper does not derive. Statements about a realization hold for almost every realization of the gas.}
 \label{tab:status}
 \begin{ruledtabular}
-\begin{tabular}{L{3.25cm}L{3.15cm}L{1.6cm}}
+\begin{tabular}{L{4.6cm}L{9.9cm}L{2.0cm}}
 statement & status & Sec.\\
 \colrule
 cells of a brane, (M1)--(M3) & premise & \ref{sec:cells}\\
@@ -1765,7 +1768,7 @@ matter scattering, tree level & bounded by $O(GM^2)$ at fixed angle & \ref{sec:s
 energies above $1.4M$--$1.9M$; nonperturbative definition & open; loop expansion strongly coupled & \ref{sec:bubble}, \ref{sec:complete}\\
 \end{tabular}
 \end{ruledtabular}
-\end{table}
+\end{table*}
 
 The following points are not settled here.
 
@@ -1806,7 +1809,7 @@ The author declares no competing interests.
 
 Spacetime has dimension $D$, set to $4$ except in dimensional regularization, where $D=4-2\epsilon$. Momentum-space computations are done in Euclidean signature, with $\Box\to-p^2$. The curvature conventions are $R^\rho{}_{\sigma\mu\nu}=\partial_\mu\Gamma^\rho_{\nu\sigma}-\partial_\nu\Gamma^\rho_{\mu\sigma}+\Gamma^\rho_{\mu\lambda}\Gamma^\lambda_{\nu\sigma}-\Gamma^\rho_{\nu\lambda}\Gamma^\lambda_{\mu\sigma}$ and $R_{\mu\nu}=R^\rho{}_{\mu\rho\nu}$, and $\kappa^2=32\pi G$. The Gauss--Bonnet density is $E=\Riem^2-4\Ric^2+R^2$. The Euclidean one-loop effective action is $\Gamma_1=\frac12\operatorname{STr}\log S''$, where the supertrace includes the ghosts and the compensating factor of Sec.~\ref{sec:gf}. The ultraviolet pole of $\int\dd^Dk\,(2\pi)^{-D}k^{-4}$ over $|k|\ge M$ is $1/(16\pi^2\epsilon)$. In estimates, $C$ and $K$ denote constants that may change from line to line and depend on the indicated indices and on $n$, but not on momenta. Table~\ref{tab:notation} collects the symbols used most often.
 
-\begin{table}[t]
+\begin{table}[tb]
 \caption{Notation.}
 \label{tab:notation}
 \begin{ruledtabular}
@@ -1881,6 +1884,7 @@ which is Eq.~\eqref{eq:angularRiem}. The Ricci terms cancel, which is why the th
 \section{Divided differences}
 \label{app:dd}
 
+% Table XIV is set here so that it heads the page on which Appendix D starts.
 \begin{table*}[t]
 \caption{Independent checks. ``Py'' is \texttt{verify.py} (195 checks), ``C'' is \texttt{formfactor\_check.c} (84 checks) and ``Jl'' is \texttt{verify.jl} (114 checks); all pass. ``Lean'' is the number of theorems of \texttt{PowerCounting.lean} that prove the statement for all values of its integer arguments; for the insertion lemma only the arithmetic of the constant $C_r$ is formalized. The Julia angular averages use the 24-cell, a spherical design of degree 5, in exact rational arithmetic. The last column gives the equation or section checked.}
 \label{tab:checks}
@@ -1905,28 +1909,9 @@ Hermite--Genocchi; $w^k[z_0,\dots,z_m]=h_{k-m}$; scaling of the bound~\eqref{eq:
 $\bar\omega(L)<0$ for all $L\ge2$ exactly when $n\ge4$, for every $m_\sigma\le n-2$; $n=3$ marginal; both blocks of Table~\ref{tab:power}; merging inequality & 15 & 6 & 5 & 13 & Eq.~\eqref{eq:omega}\\
 insertion lemma, random four-momenta over seven decades; the two-insertion chain of Fig.~\ref{fig:chain} & 2 & 1 & 1 & 1 & Eq.~\eqref{eq:insertion}\\
 growth exponent equals the strength per $e$-fold & 3 & --- & --- & --- & Eq.~\eqref{eq:intensity}\\
-$\Ein(w)\le w$; $J_n$ formula; $K_n\le I_n\le J_n\le\frac{2n}{2n-1}K_n$; $J_{2m}$ product; $\rho_{\rm eff}(0)$ bounds; Wendel's inequality; $n=4,\dots,14$ & 38 & 28 & 16 & --- & Eqs.~\eqref{eq:Jn-closed}--\eqref{eq:rhoeff}\\
-decay of $\delta(r)$ & 1 & --- & --- & --- & Eq.~\eqref{eq:tail}\\
-zero-point count $\log p^2+3\log a$; Mellin transform $\Gamma(s)/s$; sharp and smooth cutoffs, constant term $1$; $\rho_1=3nM^4/(64\pi^2)$ & 6 & 4 & --- & --- & Eqs.~\eqref{eq:count}--\eqref{eq:rho}\\
-admissible class: $C_+$, moments $\int t(1-\psi)\,\dd t$, boundedness of $\Phi-\frac12\log(1+x^2)$, Mellin continuation & 12 & 3 & 1 & --- & Eqs.~\eqref{eq:twosided-gen}--\eqref{eq:moment}\\
-incomplete-gamma variances~\eqref{eq:varR}, \eqref{eq:varf} against quadrature; $\bE R_\infty^2=n\vartheta_0/\zeta$; Eq.~\eqref{eq:moment1} & 3 & 2 & 14 & --- & Sec.~\ref{sec:fluct}\\
-Monte Carlo over $4\times10^4$ gases: Campbell mean, isometry~\eqref{eq:isometry}, variance of Eq.~\eqref{eq:fdef}, $\bE\,a_\Pi\ne\hat a$ by Eq.~\eqref{eq:expmoment}, variance of $\delta\rho_\Pi$ & 4 & --- & --- & --- & Secs.~\ref{sec:avg}, \ref{sec:vacuum}\\
-$R_\infty$ sampled from its L\'evy measure: variance, Eq.~\eqref{eq:EeR}, lower tail~\eqref{eq:lowertail}, $n=4,6,8$ & 1 & 1 & 5 & --- & Sec.~\ref{sec:fluct}\\
-identical branes: $\Psi_*$ in closed form and its asymptotics; variance and characteristic function by Monte Carlo; decay of $|\bE\,e^{iuR_\Pi}|$ & 7 & 1 & 4 & --- & Eq.~\eqref{eq:Psistar}\\
-mean-square decay~\eqref{eq:msdecay} along rays; one realization: slope $-\zeta/2$ over dyadic annuli, and $a-cx^n$ bounded for $\zeta=9$, growing for $\zeta=5$ & 2 & --- & --- & --- & Eqs.~\eqref{eq:asdecay}, \eqref{eq:Gsymbol}\\
-argument principle on $|z|=2M^2$: winding $0$ for a realization, equal to the count of Eq.~\eqref{eq:qzeros} for a resonant product & 1 & --- & --- & --- & Sec.~\ref{sec:onebrane}\\
-Table~\ref{tab:fluct}, both $\zeta=5$ and $\zeta=2n+1$; relative fluctuation~\eqref{eq:drhorel}; mean of $\delta\rho_\Pi$ by continuation & 3 & 1 & 8 & --- & Eqs.~\eqref{eq:drho}, \eqref{eq:drhorel}\\
-remainder $\to1$ for the cutoffs $e^{-u^p}$; sharp-cutoff remainder $1-e^{-W}+WE_1(W)$ & 2 & --- & --- & --- & Sec.~\ref{sec:vacuum}\\
-cutoff variance: $C_\zeta$ in closed form against quadrature, $C_2=\log2$, $(4-\zeta)C_\zeta\to1$, and the limit $1/(\zeta-4)$ for $\zeta>4$ & 3 & 1 & 1 & --- & Eq.~\eqref{eq:cutvar}\\
-one-loop bubble: $\mathrm{Im}\,A_\mu=-\pi^3$; Eq.~\eqref{eq:bubbledec} for a local propagator against the closed form of $A_\mu$; the skeleton independent of $\mu$; the bound and ratio columns of Table~\ref{tab:bubble} & 3 & --- & 2 & --- & Eqs.~\eqref{eq:bubbledec}, \eqref{eq:bubbleIm}\\
-the disk of the bound: $\rho^2\ge7\delta s/64$ on it, and its contribution above the leading term; seagull factor $(t-u)^2/16$, at random angles and in exact rational arithmetic & 2 & --- & 1 & --- & Eqs.~\eqref{eq:bubble}, \eqref{eq:bubblebound}\\
-matter scattering: $T_1\!\cdot T_2-\frac12T_1T_2=-su$ for massless scalars; maximum of $x(1+x^2)^{-n/2}$, $n=4,\dots,8$; the bound below Eq.~\eqref{eq:matter} for the skeleton & --- & --- & 8 & --- & Sec.~\ref{sec:size}\\
-free graviton: $C\cdot C=\frac{p^4}2h\Pt h$ for random modes, $\operatorname{tr}\Pt=5$; $\int_0^\infty x^2(1+x^2)^{-n/2}\dd x$ in closed form; the skeleton integral $0.4237$ and its bounds; logarithmic growth at $n=3$ & --- & --- & 10 & --- & Eq.~\eqref{eq:weyl}\\
-$I_4$, $I_5$ and $|\Phi_N(0)|$ for $n=4,5$; $J_4=3\pi\sqrt2/16$; the constants $c$ for $n=4,\dots,8$ & 4 & --- & --- & --- & Table~\ref{tab:newton}\\
 \end{tabular}
 \end{ruledtabular}
 \end{table*}
-
 
 \textit{Proof of Eq.~\eqref{eq:DK}.} For $f(w)=w^k$, expand $(A+B)^k$ and keep the words with $m$ letters $B$. They are $A^{j_m}BA^{j_{m-1}}\cdots BA^{j_0}$ with $j_0+\dots+j_m=k-m$. Acting on the plane waves, $A^{j_i}$ becomes $z_i^{j_i}$, and the sum over the $j_i$ is the complete homogeneous symmetric polynomial $h_{k-m}(z_0,\dots,z_m)$, which is the divided difference of $w^k$ on $z_0,\dots,z_m$~\cite{deBoor2005}.\footnote{The identity $w^k[z_0,\dots,z_m]=h_{k-m}(z_0,\dots,z_m)$ follows by induction on $m$ from the recursion and $h_r(z_1,\dots,z_m)-h_r(z_0,\dots,z_{m-1})=(z_m-z_0)\,h_{r-1}(z_0,\dots,z_m)$, which holds because both sides count the monomials of degree $r$ that contain $z_m$ but not $z_0$, minus those that contain $z_0$ but not $z_m$.} Both sides of Eq.~\eqref{eq:DK} are linear in $f$. For entire $f=\sum_kf_kw^k$ the series $\sum_k|f_k|\binom km\max|z_i|^{k-m}$ converges, since $|h_{k-m}|\le\binom km\max|z_i|^{k-m}$, so the identity passes to the limit. The functions to which we apply the formula, $\mathcal G$ and $a-cx^n$, are entire, so this argument covers them; for functions that are merely smooth the same formula follows from the functional calculus of self-adjoint operators~\cite{DaletskiiKrein1965}.
 
@@ -1964,11 +1949,43 @@ Adding the three pieces gives $(|q|+s)^2\le(1+2r+2r^2)\Lambda$, which is Eq.~\eq
 \section{Numerical checks}
 \label{app:checks}
 
-The closed-form identities, inequalities and coefficients derived in the text were re-evaluated at sample points by three independent programs, in Python, C and Julia, which share no code. Table~\ref{tab:checks} lists the groups of checks. Where an inequality is checked, it is checked on a grid or at random points, and the tolerance is far below the margin by which it holds; where an identity is checked, the two sides are computed by different routes (closed form against quadrature, series against continued fraction, exact rational arithmetic against floating point). The Julia program works in 256-bit arithmetic with its own power series, continued fractions, arithmetic-geometric mean and double-exponential quadrature. These checks confirm the algebra and guard against transcription errors; they are not part of any proof.
+The closed-form identities, inequalities and coefficients derived in the text were re-evaluated at sample points by three independent programs, in Python, C and Julia, which share no code. Tables~\ref{tab:checks} and \ref{tab:checks2} list the groups of checks. Where an inequality is checked, it is checked on a grid or at random points, and the tolerance is far below the margin by which it holds; where an identity is checked, the two sides are computed by different routes (closed form against quadrature, series against continued fraction, exact rational arithmetic against floating point). The Julia program works in 256-bit arithmetic with its own power series, continued fractions, arithmetic-geometric mean and double-exponential quadrature. These checks confirm the algebra and guard against transcription errors; they are not part of any proof.
+
+\begin{table*}[tp]
+\caption{Independent checks, continued from Table~\ref{tab:checks}.}
+\label{tab:checks2}
+\begin{ruledtabular}
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{L{10.6cm}ccccl}
+statement & Py & C & Jl & Lean & where\\
+\colrule
+$\Ein(w)\le w$; $J_n$ formula; $K_n\le I_n\le J_n\le\frac{2n}{2n-1}K_n$; $J_{2m}$ product; $\rho_{\rm eff}(0)$ bounds; Wendel's inequality; $n=4,\dots,14$ & 38 & 28 & 16 & --- & Eqs.~\eqref{eq:Jn-closed}--\eqref{eq:rhoeff}\\
+decay of $\delta(r)$ & 1 & --- & --- & --- & Eq.~\eqref{eq:tail}\\
+zero-point count $\log p^2+3\log a$; Mellin transform $\Gamma(s)/s$; sharp and smooth cutoffs, constant term $1$; $\rho_1=3nM^4/(64\pi^2)$ & 6 & 4 & --- & --- & Eqs.~\eqref{eq:count}--\eqref{eq:rho}\\
+admissible class: $C_+$, moments $\int t(1-\psi)\,\dd t$, boundedness of $\Phi-\frac12\log(1+x^2)$, Mellin continuation & 12 & 3 & 1 & --- & Eqs.~\eqref{eq:twosided-gen}--\eqref{eq:moment}\\
+incomplete-gamma variances~\eqref{eq:varR}, \eqref{eq:varf} against quadrature; $\bE R_\infty^2=n\vartheta_0/\zeta$; Eq.~\eqref{eq:moment1} & 3 & 2 & 14 & --- & Sec.~\ref{sec:fluct}\\
+Monte Carlo over $4\times10^4$ gases: Campbell mean, isometry~\eqref{eq:isometry}, variance of Eq.~\eqref{eq:fdef}, $\bE\,a_\Pi\ne\hat a$ by Eq.~\eqref{eq:expmoment}, variance of $\delta\rho_\Pi$ & 4 & --- & --- & --- & Secs.~\ref{sec:avg}, \ref{sec:vacuum}\\
+$R_\infty$ sampled from its L\'evy measure: variance, Eq.~\eqref{eq:EeR}, lower tail~\eqref{eq:lowertail}, $n=4,6,8$ & 1 & 1 & 5 & --- & Sec.~\ref{sec:fluct}\\
+identical branes: $\Psi_*$ in closed form and its asymptotics; variance and characteristic function by Monte Carlo; decay of $|\bE\,e^{iuR_\Pi}|$ & 7 & 1 & 4 & --- & Eq.~\eqref{eq:Psistar}\\
+mean-square decay~\eqref{eq:msdecay} along rays; one realization: slope $-\zeta/2$ over dyadic annuli, and $a-cx^n$ bounded for $\zeta=9$, growing for $\zeta=5$ & 2 & --- & --- & --- & Eqs.~\eqref{eq:asdecay}, \eqref{eq:Gsymbol}\\
+argument principle on $|z|=2M^2$: winding $0$ for a realization, equal to the count of Eq.~\eqref{eq:qzeros} for a resonant product & 1 & --- & --- & --- & Sec.~\ref{sec:onebrane}\\
+Table~\ref{tab:fluct}, both $\zeta=5$ and $\zeta=2n+1$; relative fluctuation~\eqref{eq:drhorel}; mean of $\delta\rho_\Pi$ by continuation & 3 & 1 & 8 & --- & Eqs.~\eqref{eq:drho}, \eqref{eq:drhorel}\\
+remainder $\to1$ for the cutoffs $e^{-u^p}$; sharp-cutoff remainder $1-e^{-W}+WE_1(W)$ & 2 & --- & --- & --- & Sec.~\ref{sec:vacuum}\\
+cutoff variance: $C_\zeta$ in closed form against quadrature, $C_2=\log2$, $(4-\zeta)C_\zeta\to1$, and the limit $1/(\zeta-4)$ for $\zeta>4$ & 3 & 1 & 1 & --- & Eq.~\eqref{eq:cutvar}\\
+one-loop bubble: $\mathrm{Im}\,A_\mu=-\pi^3$; Eq.~\eqref{eq:bubbledec} for a local propagator against the closed form of $A_\mu$; the skeleton independent of $\mu$; the bound and ratio columns of Table~\ref{tab:bubble} & 3 & --- & 2 & --- & Eqs.~\eqref{eq:bubbledec}, \eqref{eq:bubbleIm}\\
+the disk of the bound: $\rho^2\ge7\delta s/64$ on it, and its contribution above the leading term; seagull factor $(t-u)^2/16$, at random angles and in exact rational arithmetic & 2 & --- & 1 & --- & Eqs.~\eqref{eq:bubble}, \eqref{eq:bubblebound}\\
+matter scattering: $T_1\!\cdot T_2-\frac12T_1T_2=-su$ for massless scalars; maximum of $x(1+x^2)^{-n/2}$, $n=4,\dots,8$; the bound below Eq.~\eqref{eq:matter} for the skeleton & --- & --- & 8 & --- & Sec.~\ref{sec:size}\\
+free graviton: $C\cdot C=\frac{p^4}2h\Pt h$ for random modes, $\operatorname{tr}\Pt=5$; $\int_0^\infty x^2(1+x^2)^{-n/2}\dd x$ in closed form; the skeleton integral $0.4237$ and its bounds; logarithmic growth at $n=3$ & --- & --- & 10 & --- & Eq.~\eqref{eq:weyl}\\
+$I_4$, $I_5$ and $|\Phi_N(0)|$ for $n=4,5$; $J_4=3\pi\sqrt2/16$; the constants $c$ for $n=4,\dots,8$ & 4 & --- & --- & --- & Table~\ref{tab:newton}\\
+\end{tabular}
+\end{ruledtabular}
+\end{table*}
 
 The integer statements on which the power counting and the one-loop tuning rest are, in addition, proved in Lean~4 without external libraries: the merging inequality and its iterated form, the bound $\bar\omega(L)$ on the superficial degree of any graph, its sign for all $n\ge4$ and $L\ge2$ and for $n\le3$ at two loops, its growth with $m_\sigma$ and its sign for every fine graining that (G) allows, the entries of both blocks of Table~\ref{tab:power}, the determinants $-24$ and $-12$ of the pole matrix, and the cancellation of the three poles by the tuning~\eqref{eq:tuning}. The kernel accepts every proof, and the only axioms used are the standard ones of Lean's core logic, propositional extensionality and quotient soundness. These proofs repeat arguments given in the text in full; the analytic estimates, on special functions, integrals and the gas, are not formalized.
 
 
+% Set the tables of the appendices before the references.
+\clearpage
 \begin{thebibliography}{99}
 
 \bibitem{tHooftVeltman1974}
