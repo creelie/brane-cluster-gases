@@ -100,6 +100,8 @@ and figures attached (built by `.github/release/build.sh`).
   [10.5281/zenodo.22866290](https://doi.org/10.5281/zenodo.22866290)
 - Version 2.0.0:
   [10.5281/zenodo.23220676](https://doi.org/10.5281/zenodo.23220676)
+- Version 2.1.0:
+  [10.5281/zenodo.23225731](https://doi.org/10.5281/zenodo.23225731)
 
 The first manuscript cites the archive through a switch and a macro defined
 near the top of `paper/brane-gases.tex`:
