@@ -91,7 +91,10 @@ before saving. Every figure reports `0 collisions`.
 ## Archive and DOI
 
 Zenodo archives every GitHub release of this repository as a new version of
-one record.
+one record. Releases are published by the `release` workflow: merging a change
+to `.github/release/notes.md` into `main` publishes the release for the version
+in `CITATION.cff`, with the second manuscript's PDF, LaTeX source, arXiv package
+and figures attached (built by `.github/release/build.sh`).
 
 - All versions (resolves to the newest):
   [10.5281/zenodo.22866290](https://doi.org/10.5281/zenodo.22866290)
