@@ -100,6 +100,8 @@ and figures attached (built by `.github/release/build.sh`).
   [10.5281/zenodo.22866290](https://doi.org/10.5281/zenodo.22866290)
 - Version 2.0.0:
   [10.5281/zenodo.23220676](https://doi.org/10.5281/zenodo.23220676)
+- Version 2.1.0:
+  [10.5281/zenodo.23225731](https://doi.org/10.5281/zenodo.23225731)
 
 The first manuscript cites the archive through a switch and a macro defined
 near the top of `paper/brane-gases.tex`:
@@ -112,8 +114,8 @@ near the top of `paper/brane-gases.tex`:
 
 With `\zenodofalse` the Data Availability section describes the code as
 supplied with the article and makes no claim about a repository. The second
-manuscript cites the all-versions DOI, which resolves to the newest release, so
-its code and figures are archived once a release containing them is published.
+manuscript cites the DOI of version 2.1.0, the release that contains its code
+and figures.
 
 ## Finite quantum gravity from a scale-invariant gas of branes
 

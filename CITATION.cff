@@ -28,7 +28,10 @@ identifiers:
   - type: doi
     value: 10.5281/zenodo.23220676
     description: "Version 2.0.0"
-date-released: "2026-10-07"
+  - type: doi
+    value: 10.5281/zenodo.23225731
+    description: "Version 2.1.0"
+date-released: "2026-10-08"
 keywords:
   - nonlocal gravity
   - brane intersections
