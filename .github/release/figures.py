@@ -32,7 +32,6 @@ MACROS = {r"\bE": r"\mathbb{E}", r"\bC": r"\mathbb{C}", r"\bR": r"\mathbb{R}",
 pre = src[src.index("\n", src.index("\\documentclass")) + 1 : src.index("\\begin{document}")]
 pre = pre.replace("\\usepackage{orcidlink}\n", "")
 pre = pre.replace("\\hypersetup{", "\\usepackage{hyperref}\n\\hypersetup{", 1)
-pre = re.sub(r"\\newcolumntype\{L\}.*\n", "", pre)
 labels = "\n".join(l for l in aux.splitlines() if l.startswith("\\newlabel{"))
 
 figs = []

@@ -5,7 +5,6 @@
 \usepackage{amsmath,amssymb,amsfonts,mathtools}
 \usepackage{graphicx}
 \usepackage{enumitem}
-\usepackage{array}
 \usepackage{orcidlink}
 \usepackage{xurl}
 \usepackage{tikz}
@@ -26,7 +25,13 @@
 \newcommand{\sgn}{\operatorname{sgn}}
 \newcommand{\doilink}[1]{\href{https://doi.org/#1}{\nolinkurl{doi:#1}}}
 
-\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+% Paragraph columns of the tables are set ragged right. This is done in the cell box rather than
+% with the array package, whose newer versions clash with the table code of revtex4-2.
+\makeatletter
+\let\uvf@startpbox\@@startpbox
+\def\@@startpbox#1{\uvf@startpbox{#1}\let\uvf@tabcr\\\raggedright\let\\\uvf@tabcr}
+\let\@startpbox\@@startpbox
+\makeatother
 \raggedbottom
 \makeatletter
 \setlength{\@dblfptop}{0pt}
@@ -560,15 +565,15 @@ Table~\ref{tab:class} gives three admissible responses and two that fail, and Fi
 \label{tab:class}
 \begin{ruledtabular}
 \setlength{\tabcolsep}{3pt}
-\begin{tabular}{L{2.6cm}L{1.75cm}L{2.25cm}L{1.55cm}L{1.45cm}L{2.0cm}L{1.0cm}L{2.95cm}}
+\begin{tabular}{p{2.6cm}p{1.75cm}p{2.25cm}p{1.55cm}p{1.45cm}p{2.0cm}p{1.0cm}p{2.95cm}}
 exponent $\psi(w)$ & small $w$ & $C_+$ & $\hat c$, $n=4$ & $\mu_\psi$ & $\rho_1/(nM^4)$ & $\theta$ & skeleton exponent $\Phi(x)$\\
 \colrule
 $1-e^{-w^2}$ & $w^2$ & $\gE/2=0.2886$ & $3.172$ & $\frac12$ & $3/(64\pi^2)$ & $\pi/4$ & $\frac12\Ein(x^2)$\\
 $1-(1+w^2)e^{-w^2}$ & $\frac12w^4$ & $(\gE-1)/2=-0.2114$ & $0.4293$ & $1$ & $3/(32\pi^2)$ & $\pi/4$ & $\frac12[\Ein(x^2)-1+e^{-x^2}]$\\
 $1-e^{-w^4}$ & $w^4$ & $\gE/4=0.1443$ & $1.781$ & $\frac{\sqrt\pi}4$ & $3\sqrt\pi/(128\pi^2)$ & $\pi/8$ & $\frac14\Ein(x^4)$\\
 \colrule
-$1-e^{-w}$ & $w$ & \multicolumn{6}{L{11.4cm}}{fails (S2): unbounded below on the negative axis; the factor decays faster than any power on the timelike axis}\\
-$w^2/(1+w^2)$ & $w^2$ & \multicolumn{6}{L{11.4cm}}{fails (S1) and (S3): poles at $w=\pm i$, and $1-\psi\sim w^{-2}$, so $G$ and $\Lambda$ run at one loop}\\
+$1-e^{-w}$ & $w$ & \multicolumn{6}{p{11.4cm}}{fails (S2): unbounded below on the negative axis; the factor decays faster than any power on the timelike axis}\\
+$w^2/(1+w^2)$ & $w^2$ & \multicolumn{6}{p{11.4cm}}{fails (S1) and (S3): poles at $w=\pm i$, and $1-\psi\sim w^{-2}$, so $G$ and $\Lambda$ run at one loop}\\
 \end{tabular}
 \end{ruledtabular}
 \end{table*}
@@ -738,7 +743,7 @@ From here on the form factor is that of one realization, and we drop the subscri
 \caption{Properties of the skeleton $\hat a=\exp[\frac n2\Ein(x^2)]$ for $\psi_*$, with $\hat c=e^{n\gE/2}$, and of the form factor $a$ of a realization, which hold almost surely for a gas obeying (G). Here $x=z/M^2$, $\varepsilon>0$ is arbitrary and $C$ depends on the realization. All entries are derived in Secs.~\ref{sec:formfactor}--\ref{sec:fluct}; the last column says where each is used.}
 \label{tab:a}
 \begin{ruledtabular}
-\begin{tabular}{L{2.2cm}L{5.9cm}L{5.6cm}L{3.3cm}}
+\begin{tabular}{p{2.2cm}p{5.9cm}p{5.6cm}p{3.3cm}}
 property & skeleton $\hat a$ & realization $a=\hat a\,e^{R_\Pi}$ & used in\\
 \colrule
 analyticity & entire, no zeros, $\hat a(0)=1$, $\hat a(-z)=\hat a(z)$, real coefficients & entire, no zeros by (S5), $a(0)=1$, $a(-z)=a(z)$, real coefficients & pole content, Sec.~\ref{sec:prop}\\
@@ -760,7 +765,7 @@ The two premises are the only places where the brane picture enters. Assumption 
 \caption{Inputs of the paper, what each is used for, and what fails without it. Everything not listed here is derived, for almost every realization of the gas.}
 \label{tab:assumptions}
 \begin{ruledtabular}
-\begin{tabular}{L{1.95cm}L{3.05cm}L{2.9cm}}
+\begin{tabular}{p{1.95cm}p{3.05cm}p{2.9cm}}
 input & used for & if dropped\\
 \colrule
 cells, (M1)--(M3) & derive (S1)--(S5) and $\psi=\psi_*$ & A1 must be assumed\\
@@ -1396,7 +1401,7 @@ Therefore the physical $S$ matrix of the gas is unitary at every order of pertur
 \caption{Inputs of the unitarity argument and where each is established. The last row is the only assumption, and it is the one made for Einstein gravity.}
 \label{tab:unitarity}
 \begin{ruledtabular}
-\begin{tabular}{L{0.75cm}L{4.1cm}L{3.0cm}}
+\begin{tabular}{p{0.75cm}p{4.1cm}p{3.0cm}}
 input & content & established in\\
 \colrule
 (P1) & local propagators after $h=a^{-1/2}\tilde h$ & Eq.~\eqref{eq:redef}, $a$ zero-free\\
@@ -1563,7 +1568,7 @@ What is missing for a complete construction is the interacting measure, defined 
 \caption{Bookkeeping of divergences. ``Removed'' means that the corresponding pole or singularity is absent for $n\ge4$ with the tuning~\eqref{eq:tuning}; the third column gives the reason.}
 \label{tab:divergences}
 \begin{ruledtabular}
-\begin{tabular}{L{4.6cm}L{2.5cm}L{9.6cm}}
+\begin{tabular}{p{4.6cm}p{2.5cm}p{9.6cm}}
 divergence & fate & reason\\
 \colrule
 one loop, $\int\sqrt g$ and $\int\sqrt g\,R$ (running of $\Lambda$, $G$) & absent for $n\ge4$ & one-loop poles are those of a local theory with no dimensionful coupling; saturation (S3) and fine graining (G), Sec.~\ref{sec:form}; the finite vacuum energy has mean $3nM^4/(64\pi^2)$, Sec.~\ref{sec:vacuum}\\
@@ -1717,7 +1722,7 @@ Table~\ref{tab:compare} sets the result beside the better-known alternatives, fo
 \caption{Ultraviolet behavior and pole content of the graviton propagator $1/(p^2a)$ in four dimensions. For a polynomial form factor of degree $N$ the residues of the extra poles add up to $-1$, so at least one is a ghost~\cite{Shapiro2015}. ${}^a$Renormalizable, with divergences at every order. ${}^b$Vertices grow exponentially and power counting is not available; see Ref.~\cite{Talaganis2015}. ${}^c$After adding operators cubic or quartic in curvature~\cite{ModestoRachwal2014}. ${}^d$For almost every realization of a gas obeying (G), with the one-loop tuning~\eqref{eq:tuning}; no coupling is renormalized at any order, and the physical $S$ matrix is unitary at every loop order in the Euclidean prescription (Sec.~\ref{sec:unitarity}); the loop expansion is useful only up to energies of order $M$ (Sec.~\ref{sec:bubble}).}
 \label{tab:compare}
 \begin{ruledtabular}
-\begin{tabular}{L{3.9cm}L{3.6cm}L{3.6cm}L{2.4cm}L{3.2cm}}
+\begin{tabular}{p{3.9cm}p{3.6cm}p{3.6cm}p{2.4cm}p{3.2cm}}
 theory & form factor $a(p^2)$ & divergent loop orders & extra poles & origin of $a$\\
 \colrule
 Einstein~\cite{tHooftVeltman1974,GoroffSagnotti1986} & $1$ & $L\ge1$ off shell, $L\ge2$ on shell & none & ---\\
@@ -1738,7 +1743,7 @@ Under A1 and A2 with $n\ge4$, and with the tuning~\eqref{eq:tuning}, almost ever
 \caption{Status of the claims. ``Proved'' means derived in the text from the stated inputs, with the cited theorems; ``premise'' means a statement about branes that the paper does not derive. Statements about a realization hold for almost every realization of the gas.}
 \label{tab:status}
 \begin{ruledtabular}
-\begin{tabular}{L{4.6cm}L{9.9cm}L{2.0cm}}
+\begin{tabular}{p{4.6cm}p{9.9cm}p{2.0cm}}
 statement & status & Sec.\\
 \colrule
 cells of a brane, (M1)--(M3) & premise & \ref{sec:cells}\\
@@ -1813,7 +1818,7 @@ Spacetime has dimension $D$, set to $4$ except in dimensional regularization, wh
 \caption{Notation.}
 \label{tab:notation}
 \begin{ruledtabular}
-\begin{tabular}{lL{5.6cm}}
+\begin{tabular}{lp{5.6cm}}
 symbol & meaning\\
 \colrule
 $M$ & inverse of the largest brane size\\
@@ -1884,13 +1889,13 @@ which is Eq.~\eqref{eq:angularRiem}. The Ricci terms cancel, which is why the th
 \section{Divided differences}
 \label{app:dd}
 
-% Table XIV is set here so that it heads the page on which Appendix D starts.
+% Tables XIV and XV are set here so that they head the next two pages, before the references.
 \begin{table*}[t]
 \caption{Independent checks. ``Py'' is \texttt{verify.py} (195 checks), ``C'' is \texttt{formfactor\_check.c} (84 checks) and ``Jl'' is \texttt{verify.jl} (114 checks); all pass. ``Lean'' is the number of theorems of \texttt{PowerCounting.lean} that prove the statement for all values of its integer arguments; for the insertion lemma only the arithmetic of the constant $C_r$ is formalized. The Julia angular averages use the 24-cell, a spherical design of degree 5, in exact rational arithmetic. The last column gives the equation or section checked.}
 \label{tab:checks}
 \begin{ruledtabular}
 \setlength{\tabcolsep}{4pt}
-\begin{tabular}{L{10.6cm}ccccl}
+\begin{tabular}{p{10.6cm}ccccl}
 statement & Py & C & Jl & Lean & where\\
 \colrule
 cells of a brane: Poisson sum over the cells, characteristic function of the Gaussian shift, Monte Carlo of the coherent phase, sector $\theta=\pi/4$ & 4 & 1 & 1 & --- & Eqs.~\eqref{eq:cellt}, \eqref{eq:cellpsi}\\
@@ -1909,6 +1914,36 @@ Hermite--Genocchi; $w^k[z_0,\dots,z_m]=h_{k-m}$; scaling of the bound~\eqref{eq:
 $\bar\omega(L)<0$ for all $L\ge2$ exactly when $n\ge4$, for every $m_\sigma\le n-2$; $n=3$ marginal; both blocks of Table~\ref{tab:power}; merging inequality & 15 & 6 & 5 & 13 & Eq.~\eqref{eq:omega}\\
 insertion lemma, random four-momenta over seven decades; the two-insertion chain of Fig.~\ref{fig:chain} & 2 & 1 & 1 & 1 & Eq.~\eqref{eq:insertion}\\
 growth exponent equals the strength per $e$-fold & 3 & --- & --- & --- & Eq.~\eqref{eq:intensity}\\
+\end{tabular}
+\end{ruledtabular}
+\end{table*}
+
+\begin{table*}[tp]
+\caption{Independent checks, continued from Table~\ref{tab:checks}.}
+\label{tab:checks2}
+\begin{ruledtabular}
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{p{10.6cm}ccccl}
+statement & Py & C & Jl & Lean & where\\
+\colrule
+$\Ein(w)\le w$; $J_n$ formula; $K_n\le I_n\le J_n\le\frac{2n}{2n-1}K_n$; $J_{2m}$ product; $\rho_{\rm eff}(0)$ bounds; Wendel's inequality; $n=4,\dots,14$ & 38 & 28 & 16 & --- & Eqs.~\eqref{eq:Jn-closed}--\eqref{eq:rhoeff}\\
+decay of $\delta(r)$ & 1 & --- & --- & --- & Eq.~\eqref{eq:tail}\\
+zero-point count $\log p^2+3\log a$; Mellin transform $\Gamma(s)/s$; sharp and smooth cutoffs, constant term $1$; $\rho_1=3nM^4/(64\pi^2)$ & 6 & 4 & --- & --- & Eqs.~\eqref{eq:count}--\eqref{eq:rho}\\
+admissible class: $C_+$, moments $\int t(1-\psi)\,\dd t$, boundedness of $\Phi-\frac12\log(1+x^2)$, Mellin continuation & 12 & 3 & 1 & --- & Eqs.~\eqref{eq:twosided-gen}--\eqref{eq:moment}\\
+incomplete-gamma variances~\eqref{eq:varR}, \eqref{eq:varf} against quadrature; $\bE R_\infty^2=n\vartheta_0/\zeta$; Eq.~\eqref{eq:moment1} & 3 & 2 & 14 & --- & Sec.~\ref{sec:fluct}\\
+Monte Carlo over $4\times10^4$ gases: Campbell mean, isometry~\eqref{eq:isometry}, variance of Eq.~\eqref{eq:fdef}, $\bE\,a_\Pi\ne\hat a$ by Eq.~\eqref{eq:expmoment}, variance of $\delta\rho_\Pi$ & 4 & --- & --- & --- & Secs.~\ref{sec:avg}, \ref{sec:vacuum}\\
+$R_\infty$ sampled from its L\'evy measure: variance, Eq.~\eqref{eq:EeR}, lower tail~\eqref{eq:lowertail}, $n=4,6,8$ & 1 & 1 & 5 & --- & Sec.~\ref{sec:fluct}\\
+identical branes: $\Psi_*$ in closed form and its asymptotics; variance and characteristic function by Monte Carlo; decay of $|\bE\,e^{iuR_\Pi}|$ & 7 & 1 & 4 & --- & Eq.~\eqref{eq:Psistar}\\
+mean-square decay~\eqref{eq:msdecay} along rays; one realization: slope $-\zeta/2$ over dyadic annuli, and $a-cx^n$ bounded for $\zeta=9$, growing for $\zeta=5$ & 2 & --- & --- & --- & Eqs.~\eqref{eq:asdecay}, \eqref{eq:Gsymbol}\\
+argument principle on $|z|=2M^2$: winding $0$ for a realization, equal to the count of Eq.~\eqref{eq:qzeros} for a resonant product & 1 & --- & --- & --- & Sec.~\ref{sec:onebrane}\\
+Table~\ref{tab:fluct}, both $\zeta=5$ and $\zeta=2n+1$; relative fluctuation~\eqref{eq:drhorel}; mean of $\delta\rho_\Pi$ by continuation & 3 & 1 & 8 & --- & Eqs.~\eqref{eq:drho}, \eqref{eq:drhorel}\\
+remainder $\to1$ for the cutoffs $e^{-u^p}$; sharp-cutoff remainder $1-e^{-W}+WE_1(W)$ & 2 & --- & --- & --- & Sec.~\ref{sec:vacuum}\\
+cutoff variance: $C_\zeta$ in closed form against quadrature, $C_2=\log2$, $(4-\zeta)C_\zeta\to1$, and the limit $1/(\zeta-4)$ for $\zeta>4$ & 3 & 1 & 1 & --- & Eq.~\eqref{eq:cutvar}\\
+one-loop bubble: $\mathrm{Im}\,A_\mu=-\pi^3$; Eq.~\eqref{eq:bubbledec} for a local propagator against the closed form of $A_\mu$; the skeleton independent of $\mu$; the bound and ratio columns of Table~\ref{tab:bubble} & 3 & --- & 2 & --- & Eqs.~\eqref{eq:bubbledec}, \eqref{eq:bubbleIm}\\
+the disk of the bound: $\rho^2\ge7\delta s/64$ on it, and its contribution above the leading term; seagull factor $(t-u)^2/16$, at random angles and in exact rational arithmetic & 2 & --- & 1 & --- & Eqs.~\eqref{eq:bubble}, \eqref{eq:bubblebound}\\
+matter scattering: $T_1\!\cdot T_2-\frac12T_1T_2=-su$ for massless scalars; maximum of $x(1+x^2)^{-n/2}$, $n=4,\dots,8$; the bound below Eq.~\eqref{eq:matter} for the skeleton & --- & --- & 8 & --- & Sec.~\ref{sec:size}\\
+free graviton: $C\cdot C=\frac{p^4}2h\Pt h$ for random modes, $\operatorname{tr}\Pt=5$; $\int_0^\infty x^2(1+x^2)^{-n/2}\dd x$ in closed form; the skeleton integral $0.4237$ and its bounds; logarithmic growth at $n=3$ & --- & --- & 10 & --- & Eq.~\eqref{eq:weyl}\\
+$I_4$, $I_5$ and $|\Phi_N(0)|$ for $n=4,5$; $J_4=3\pi\sqrt2/16$; the constants $c$ for $n=4,\dots,8$ & 4 & --- & --- & --- & Table~\ref{tab:newton}\\
 \end{tabular}
 \end{ruledtabular}
 \end{table*}
@@ -1951,41 +1986,9 @@ Adding the three pieces gives $(|q|+s)^2\le(1+2r+2r^2)\Lambda$, which is Eq.~\eq
 
 The closed-form identities, inequalities and coefficients derived in the text were re-evaluated at sample points by three independent programs, in Python, C and Julia, which share no code. Tables~\ref{tab:checks} and \ref{tab:checks2} list the groups of checks. Where an inequality is checked, it is checked on a grid or at random points, and the tolerance is far below the margin by which it holds; where an identity is checked, the two sides are computed by different routes (closed form against quadrature, series against continued fraction, exact rational arithmetic against floating point). The Julia program works in 256-bit arithmetic with its own power series, continued fractions, arithmetic-geometric mean and double-exponential quadrature. These checks confirm the algebra and guard against transcription errors; they are not part of any proof.
 
-\begin{table*}[tp]
-\caption{Independent checks, continued from Table~\ref{tab:checks}.}
-\label{tab:checks2}
-\begin{ruledtabular}
-\setlength{\tabcolsep}{4pt}
-\begin{tabular}{L{10.6cm}ccccl}
-statement & Py & C & Jl & Lean & where\\
-\colrule
-$\Ein(w)\le w$; $J_n$ formula; $K_n\le I_n\le J_n\le\frac{2n}{2n-1}K_n$; $J_{2m}$ product; $\rho_{\rm eff}(0)$ bounds; Wendel's inequality; $n=4,\dots,14$ & 38 & 28 & 16 & --- & Eqs.~\eqref{eq:Jn-closed}--\eqref{eq:rhoeff}\\
-decay of $\delta(r)$ & 1 & --- & --- & --- & Eq.~\eqref{eq:tail}\\
-zero-point count $\log p^2+3\log a$; Mellin transform $\Gamma(s)/s$; sharp and smooth cutoffs, constant term $1$; $\rho_1=3nM^4/(64\pi^2)$ & 6 & 4 & --- & --- & Eqs.~\eqref{eq:count}--\eqref{eq:rho}\\
-admissible class: $C_+$, moments $\int t(1-\psi)\,\dd t$, boundedness of $\Phi-\frac12\log(1+x^2)$, Mellin continuation & 12 & 3 & 1 & --- & Eqs.~\eqref{eq:twosided-gen}--\eqref{eq:moment}\\
-incomplete-gamma variances~\eqref{eq:varR}, \eqref{eq:varf} against quadrature; $\bE R_\infty^2=n\vartheta_0/\zeta$; Eq.~\eqref{eq:moment1} & 3 & 2 & 14 & --- & Sec.~\ref{sec:fluct}\\
-Monte Carlo over $4\times10^4$ gases: Campbell mean, isometry~\eqref{eq:isometry}, variance of Eq.~\eqref{eq:fdef}, $\bE\,a_\Pi\ne\hat a$ by Eq.~\eqref{eq:expmoment}, variance of $\delta\rho_\Pi$ & 4 & --- & --- & --- & Secs.~\ref{sec:avg}, \ref{sec:vacuum}\\
-$R_\infty$ sampled from its L\'evy measure: variance, Eq.~\eqref{eq:EeR}, lower tail~\eqref{eq:lowertail}, $n=4,6,8$ & 1 & 1 & 5 & --- & Sec.~\ref{sec:fluct}\\
-identical branes: $\Psi_*$ in closed form and its asymptotics; variance and characteristic function by Monte Carlo; decay of $|\bE\,e^{iuR_\Pi}|$ & 7 & 1 & 4 & --- & Eq.~\eqref{eq:Psistar}\\
-mean-square decay~\eqref{eq:msdecay} along rays; one realization: slope $-\zeta/2$ over dyadic annuli, and $a-cx^n$ bounded for $\zeta=9$, growing for $\zeta=5$ & 2 & --- & --- & --- & Eqs.~\eqref{eq:asdecay}, \eqref{eq:Gsymbol}\\
-argument principle on $|z|=2M^2$: winding $0$ for a realization, equal to the count of Eq.~\eqref{eq:qzeros} for a resonant product & 1 & --- & --- & --- & Sec.~\ref{sec:onebrane}\\
-Table~\ref{tab:fluct}, both $\zeta=5$ and $\zeta=2n+1$; relative fluctuation~\eqref{eq:drhorel}; mean of $\delta\rho_\Pi$ by continuation & 3 & 1 & 8 & --- & Eqs.~\eqref{eq:drho}, \eqref{eq:drhorel}\\
-remainder $\to1$ for the cutoffs $e^{-u^p}$; sharp-cutoff remainder $1-e^{-W}+WE_1(W)$ & 2 & --- & --- & --- & Sec.~\ref{sec:vacuum}\\
-cutoff variance: $C_\zeta$ in closed form against quadrature, $C_2=\log2$, $(4-\zeta)C_\zeta\to1$, and the limit $1/(\zeta-4)$ for $\zeta>4$ & 3 & 1 & 1 & --- & Eq.~\eqref{eq:cutvar}\\
-one-loop bubble: $\mathrm{Im}\,A_\mu=-\pi^3$; Eq.~\eqref{eq:bubbledec} for a local propagator against the closed form of $A_\mu$; the skeleton independent of $\mu$; the bound and ratio columns of Table~\ref{tab:bubble} & 3 & --- & 2 & --- & Eqs.~\eqref{eq:bubbledec}, \eqref{eq:bubbleIm}\\
-the disk of the bound: $\rho^2\ge7\delta s/64$ on it, and its contribution above the leading term; seagull factor $(t-u)^2/16$, at random angles and in exact rational arithmetic & 2 & --- & 1 & --- & Eqs.~\eqref{eq:bubble}, \eqref{eq:bubblebound}\\
-matter scattering: $T_1\!\cdot T_2-\frac12T_1T_2=-su$ for massless scalars; maximum of $x(1+x^2)^{-n/2}$, $n=4,\dots,8$; the bound below Eq.~\eqref{eq:matter} for the skeleton & --- & --- & 8 & --- & Sec.~\ref{sec:size}\\
-free graviton: $C\cdot C=\frac{p^4}2h\Pt h$ for random modes, $\operatorname{tr}\Pt=5$; $\int_0^\infty x^2(1+x^2)^{-n/2}\dd x$ in closed form; the skeleton integral $0.4237$ and its bounds; logarithmic growth at $n=3$ & --- & --- & 10 & --- & Eq.~\eqref{eq:weyl}\\
-$I_4$, $I_5$ and $|\Phi_N(0)|$ for $n=4,5$; $J_4=3\pi\sqrt2/16$; the constants $c$ for $n=4,\dots,8$ & 4 & --- & --- & --- & Table~\ref{tab:newton}\\
-\end{tabular}
-\end{ruledtabular}
-\end{table*}
-
 The integer statements on which the power counting and the one-loop tuning rest are, in addition, proved in Lean~4 without external libraries: the merging inequality and its iterated form, the bound $\bar\omega(L)$ on the superficial degree of any graph, its sign for all $n\ge4$ and $L\ge2$ and for $n\le3$ at two loops, its growth with $m_\sigma$ and its sign for every fine graining that (G) allows, the entries of both blocks of Table~\ref{tab:power}, the determinants $-24$ and $-12$ of the pole matrix, and the cancellation of the three poles by the tuning~\eqref{eq:tuning}. The kernel accepts every proof, and the only axioms used are the standard ones of Lean's core logic, propositional extensionality and quotient soundness. These proofs repeat arguments given in the text in full; the analytic estimates, on special functions, integrals and the gas, are not formalized.
 
 
-% Set the tables of the appendices before the references.
-\clearpage
 \begin{thebibliography}{99}
 
 \bibitem{tHooftVeltman1974}
