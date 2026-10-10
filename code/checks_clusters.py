@@ -11,7 +11,7 @@ Groups:
   1  the nerve complex of an arrangement: d^2 = 0, Euler characteristic, census
   2  intersection numbers on tori: |det M| and the two-torus law
   3  generating functions: deterministic arrangements and Poisson gases
-  4  Barnes-Rivers projectors and transversality
+  4  Barnes-Rivers projectors, transversality and the Einstein-Hilbert coefficients
   5  poles and residues: the sum rule and the alternation
   6  power counting: the loop-order formula, the frontier and the census
   7  the Gaussian form factor: exact propagator in D dimensions
@@ -98,7 +98,7 @@ def group1():
         check(f"d^2 = 0 on a random complex, trial {trial}", ok)
     for D in (2, 3, 4, 6, 10, 11, 26):
         counts = [comb(D, K) for K in range(D + 1)]
-        check(f"coordinate arrangement in T^{D}: {sum(counts)} strata, alternating sum 0",
+        check(f"coordinate arrangement in T^{D}: {sum(counts) - 1} strata and the ambient torus, alternating sum 0",
               sum(counts) == 2 ** D and sum((-1) ** K * c for K, c in enumerate(counts)) == 0)
     # explicit enumeration of strata of the coordinate arrangement for D = 4: subsets of {1..D}
     D = 4
@@ -244,6 +244,20 @@ def group4():
         check(f"idempotent and mutually orthogonal, momentum {trial}", ok)
         check(f"spin-two projector transverse, momentum {trial}", np.allclose(np.einsum("m,mnab->nab", p, P2), 0, atol=1e-12))
         check(f"spin-two projector has trace 5 in D=4, momentum {trial}", abs(np.einsum("mnmn->", P2) - 5) < 1e-12)
+    # the linearized Einstein-Hilbert operator is p^2 [P2 - (D-2) Ps] on symmetric tensors: the coefficients of eq. (quad)
+    rng_eh = np.random.default_rng(2026)   # a separate stream, so the later groups draw the same numbers as before
+    for Dd in (3, 4, 5, 6):
+        p = rng_eh.normal(size=Dd)
+        p2 = p @ p
+        e = np.eye(Dd)
+        K = (p2 * np.einsum("ma,nb->mnab", e, e)
+             - np.einsum("m,a,nb->mnab", p, p, e) - np.einsum("n,a,mb->mnab", p, p, e)
+             + np.einsum("m,n,ab->mnab", p, p, e) + np.einsum("mn,a,b->mnab", e, p, p)
+             - p2 * np.einsum("mn,ab->mnab", e, e))
+        K = 0.25 * (K + K.transpose(1, 0, 2, 3) + K.transpose(0, 1, 3, 2) + K.transpose(1, 0, 3, 2))
+        P2, P1, Ps, Pw = projectors(p, Dd)
+        check(f"D={Dd}: linearized Einstein-Hilbert operator = p^2 [P2 - (D-2) Ps]",
+              np.allclose(K, p2 * (P2 - (Dd - 2) * Ps), atol=1e-10))
 
 
 # ----------------------------------------------------------------------------
@@ -421,10 +435,16 @@ def group8():
         enc = integrate.quad(lambda s: 4 * pi * s * s * rho(s), 0, r)[0]
         pred = m * (erf(u) - 2 * u * exp(-u * u) / sqrt(pi))
         check(f"enclosed mass at r={r}", abs(enc - pred) < 1e-9)
-    # laboratory scale: a 1 percent agreement with Newton at 52 micrometers bounds 1/M below 14.3 micrometers
+    # laboratory scale: a 10^-3 agreement with Newton at 52 micrometers would bound 1/M below 11.2 micrometers
     r_lab = 52e-6
-    Mmin = 2 * x2 / r_lab
-    check("1/M < 14.3 micrometers from erfc(M r/2) < 0.01 at r = 52 micrometers", abs(1 / Mmin * 1e6 - 14.28) < 0.05, f"{1/Mmin*1e6:.2f} um")
+    Mmin = 2 * x3 / r_lab
+    check("1/M < 11.2 micrometers from erfc(M r/2) < 10^-3 at r = 52 micrometers", abs(1 / Mmin * 1e6 - 11.17) < 0.05, f"{1/Mmin*1e6:.2f} um")
+    # Lee et al. 2020: a gravitational-strength Yukawa term must have range < 38.6 micrometers; at that range it
+    # changes the potential at 52 micrometers by e^(-52/38.6) = 0.26, which read as epsilon gives 1/M < 33 micrometers
+    eps_lee = exp(-52 / 38.6)
+    xl = optimize.brentq(lambda x: erfc(x) - eps_lee, 0, 10)
+    check("e^(-52/38.6) = 0.26 and the estimate 1/M < 33 micrometers", abs(eps_lee - 0.26) < 5e-3 and abs(r_lab / (2 * xl) * 1e6 - 32.6) < 0.1,
+          f"eps = {eps_lee:.3f}, 1/M = {r_lab/(2*xl)*1e6:.2f} um")
 
 
 # ----------------------------------------------------------------------------

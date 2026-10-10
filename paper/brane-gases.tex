@@ -25,6 +25,7 @@
 \newcommand{\bR}{\mathbb{R}}
 \newcommand{\bZ}{\mathbb{Z}}
 \newcommand{\bE}{\mathbb{E}}
+\newcommand{\bP}{\mathbb{P}}
 \newcommand{\cA}{\mathcal{A}}
 \newcommand{\cB}{\mathcal{B}}
 \newcommand{\cL}{\mathcal{L}}
@@ -76,7 +77,7 @@ Perturbative quantum general relativity breaks down in a way that is visible fro
 
 In that third line of work the exponential is where the construction starts: a function $e^{H}$ is written down, its zero-free character is noted, and its consequences are developed. We address the step before that one. An exponential form factor is a strong assumption, and nothing in the usual presentation says why the ultraviolet completion should supply an exponential when any finite number of higher-derivative corrections produces a polynomial. The answer we give is statistical. Multiplicative contributions from independently placed scatterers exponentiate, because the expectation of a product over a Poisson process is the exponential of an integral, and that integral is the probability generating functional itself, not an approximation to it. On this reading the exponential is what a random medium generically produces, and the polynomial case is recovered exactly when the medium is frozen or finite.
 
-Our question is where such a form factor might come from, and what can be established once it is there. The mechanism we examine is a network of branes. Hypersurfaces in general position generate strata, the intersections of one, two, three or more of them, indexed by the subsets of the collection. If the coupling of the metric to the branes is multiplicative over these strata, the graviton kinetic operator acquires a sum over subsets, and such a sum factorizes into binomials. A deterministic arrangement of $N$ branes therefore gives
+Our question is where such a form factor might come from, and what can be established once it is there. The mechanism we examine is a network of branes. Hypersurfaces in general position generate strata, the nonempty intersections of one, two, three or more of them. If the coupling of the metric to the branes is multiplicative, the graviton kinetic operator acquires a sum over all subsets of the collection, which index the strata when every subset of branes meets, and such a sum factorizes into binomials. A deterministic arrangement of $N$ branes therefore gives
 \begin{equation}
 \label{eq:poly-intro}
 a(z)=\prod_{i=1}^{N}\Bigl(1+\frac{w_i\,z}{M^2}\Bigr),\qquad z=-\Box,
@@ -92,20 +93,20 @@ Equation \eqref{eq:exp-intro} averages the kinetic operator and not the propagat
 
 Before summarizing what follows we fix a term. A form factor is called ghost free here when the spin-two propagator it produces has one pole, at $p^2=0$, with positive residue. The phrase refers to the pole content of the tree-level propagator and carries no claim about unitarity of the interacting theory. That limitation is taken up again in Sec.~\ref{sec:discussion}.
 
-Three results are established. The first concerns the pole content, which turns out to be a dichotomy with a sum rule attached. If the form factor $a$ is entire with $a(0)=1$ and has a zero, the propagator has a pole there. If $a$ is a polynomial of degree $N$ there are $N$ such poles counted with multiplicity, and their residues add to $-1$ (Theorem~\ref{thm:sumrule}). They cannot then all be healthy: for real positive masses they alternate in sign beginning with a negative one, and in general at least one has negative real part. If $a$ has no zero, then $a=e^{H}$ with $H$ entire, the propagator retains a single pole at $p^2=0$ with residue $+1$, and the graviton is massless and luminal at every wavenumber (Theorem~\ref{thm:dichotomy}). The second result is that a Poisson process of branes with multiplicative couplings has an expected form factor equal to the exponential of an entire function (Theorem~\ref{thm:poisson}); nothing is truncated in the sum over strata, and the $1/K!$ responsible for the exponential is the $1/K!$ of the factorial moment measures of the process. The third is the power counting, which closes under a growth condition. If $a(p^2)\sim p^{2n}$ and the vertex form factors grow with it as diffeomorphism invariance requires, the superficial degree of divergence of a connected graph in $D$ dimensions is $(2+2n)+(D-2-2n)L$, a function of the loop order alone. In four dimensions it is negative for $L>(n+1)/(n-1)$, so the divergent loop orders are $\{1,2,3\}$ at $n=2$, $\{1,2\}$ at $n=3$ and $\{1\}$ for every $n\ge4$; in $D$ dimensions only one-loop graphs diverge once $n\ge D$ (Theorem~\ref{thm:power}). The growth condition is a real restriction and we carry it explicitly as Hypothesis~\ref{hyp:growth}. The Gaussian form factor violates it, and for that case the counting is silent.
+Three results are established. The first concerns the pole content, which turns out to be a dichotomy with a sum rule attached. If the form factor $a$ is entire with $a(0)=1$ and has a zero, the propagator has a pole there. If $a$ is a polynomial of degree $N$ there are $N$ such poles counted with multiplicity, and their residues add to $-1$ (Theorem~\ref{thm:sumrule}). They cannot then all be healthy: for real positive masses they alternate in sign beginning with a negative one, and in general at least one has negative real part. If $a$ has no zero, then $a=e^{H}$ with $H$ entire, the propagator retains a single pole at $p^2=0$ with residue $+1$, and the graviton is massless and luminal at every wavenumber (Theorem~\ref{thm:dichotomy}). The second result is that a Poisson process of branes with multiplicative couplings has an expected form factor equal to the exponential of an entire function (Theorem~\ref{thm:poisson}); nothing is truncated in the sum over subsets, and the $1/K!$ responsible for the exponential is the $1/K!$ of the factorial moment measures of the process. The third is the power counting, which closes under a growth condition. If $a(p^2)\sim p^{2n}$ and the vertex form factors grow with it as diffeomorphism invariance requires, the superficial degree of divergence of a connected graph in $D$ dimensions is $(2+2n)+(D-2-2n)L$, a function of the loop order alone. In four dimensions it is negative for $L>(n+1)/(n-1)$, so the divergent loop orders are $\{1,2,3\}$ at $n=2$, $\{1,2\}$ at $n=3$ and $\{1\}$ for every $n\ge4$; in $D$ dimensions only one-loop graphs diverge once $n\ge D$ (Theorem~\ref{thm:power}). The growth condition is a real restriction and we carry it explicitly as Hypothesis~\ref{hyp:growth}. The Gaussian form factor violates it, and for that case the counting is silent.
 
 The Gaussian form factor $a=e^{-\Box/M^2}$ is the case Theorem~\ref{thm:power} excludes, and we treat it separately. In the parametric representation its effect is to raise the lower limit of every Schwinger parameter from zero to $1/M^2$, which deletes the corner of parameter space that carries the ultraviolet divergences and leaves the first Symanzik polynomial bounded below by $t(G)M^{-2L}$, with $t(G)$ the number of spanning trees of the graph (Theorem~\ref{thm:noUV}). With vertices polynomial in the momenta this removes the ultraviolet divergence of every graph at every loop order, and the one-loop bubble is finite with the closed form \eqref{eq:bubble0} at zero external momentum. The vertices of a gravitational theory are not polynomially bounded, which is where the analysis of Talaganis, Biswas and Mazumdar \cite{Talaganis2015} takes over, and Remark~\ref{rem:vertices} says exactly how much of the problem the propagators settle on their own.
 
 Alongside these we work out what the same form factor implies classically. Its Euclidean propagator can be written in every dimension as an incomplete gamma function, and that function is bounded at the origin by $M^{D-2}/(2^{D-1}\pi^{D/2}(D-2))$. The Newtonian potential becomes $-(Gm/r)\erf(Mr/2)$, which stays finite at $r=0$ where the Newtonian potential diverges. The linearized field satisfies $2|\Phi|<1$ at all radii precisely when $m<\sqrt\pi/(2GM)$. This last condition is the linearized form of the horizon-formation threshold Frolov \cite{Frolov2015} obtained in the same approximation, and on its own it says nothing about the nonlinear solution. Finally, a laboratory test of the inverse-square law at separation $r$ and precision $\epsilon$ bounds $M>(2/r)\erfc^{-1}(\epsilon)$.
 
-The brane picture enters through one physical input, and it should be stated precisely. Multiplicativity is not among the assumptions. Amplitudes for successive traversals of a stack compose by multiplication, which is Lemma~\ref{lem:compose}, and the corrections to the product are second order in the single-brane reflection amplitudes. What is assumed is that those reflections are small and that the single-brane forward amplitude may be truncated after its first derivative correction, which is Hypothesis~\ref{hyp:mult}, and this is the same dilute regime that makes a Poisson description of the positions appropriate. Everything downstream is a theorem about entire functions, about graphs, or about the Poisson process, so a reader who does not accept the brane interpretation still keeps those theorems. We make no claim that a brane gas is the only route to a nonlocal form factor, and we prove nothing about unitarity beyond the residue statement at tree level. An earlier preprint by one of us with other collaborators \cite{Bhattacharjee2025brane} proposed brane clustering as an ultraviolet completion, with several of its structures asserted rather than derived; the present paper replaces that proposal with the Poisson mechanism and with proofs, and adds the sum rule, the closed-form propagator and the mass threshold.
+The brane picture enters through one physical input, and it should be stated precisely. Multiplicativity is not among the assumptions. Amplitudes for successive traversals of a stack compose by multiplication, which is Lemma~\ref{lem:compose}, and the corrections to the product are second order in the single-brane reflection amplitudes. What is assumed is that those reflections are small, that the stack dresses the free graviton two-point function by its transmission amplitude, and that the single-brane forward amplitude may be truncated after its first derivative correction, which is Hypothesis~\ref{hyp:mult}, and this is the same dilute regime that makes a Poisson description of the positions appropriate. Everything downstream is a theorem about entire functions, about graphs, or about the Poisson process, so a reader who does not accept the brane interpretation still keeps those theorems. We make no claim that a brane gas is the only route to a nonlocal form factor, and we prove nothing about unitarity beyond the residue statement at tree level. An earlier preprint by one of us with other collaborators \cite{Bhattacharjee2025brane} proposed brane clustering as an ultraviolet completion, with several of its structures asserted rather than derived; the present paper replaces that proposal with the Poisson mechanism and with proofs, and adds the sum rule, the closed-form propagator and the mass threshold.
 
 The paper is arranged as follows. Section~\ref{sec:arrangements} sets up brane arrangements, their nerve complex and their integral charges. Section~\ref{sec:gas} derives the polynomial and the exponential form factors. Section~\ref{sec:propagator} writes down the dressed propagator and its Ward identity, Sec.~\ref{sec:poles} proves the dichotomy and the sum rule, Sec.~\ref{sec:power} the power counting, and Sec.~\ref{sec:gaussian} the classical consequences of the Gaussian form factor. Section~\ref{sec:compare} places the standard frameworks on a single axis, Sec.~\ref{sec:verification} describes the code that recomputes every number, and Sec.~\ref{sec:discussion} states what remains open. Appendix~\ref{app:conventions} fixes the conventions, Appendix~\ref{app:stress} carries out the variation of the form-factor term, and Appendix~\ref{app:poisson} collects the two Poisson identities used in Sec.~\ref{sec:gas}.
 
 \begin{figure*}[t]
 \centering
 \includegraphics[width=\textwidth]{figs/fig01_arrangement.png}
-\caption{(a) Three transverse branes in a cube of three-space: the strata are the three walls, the three lines, and one point, indexed by the nonempty subsets of the arrangement. (b) A Poisson gas of branes in the same box, with its pairwise intersection lines and its triple points; the expected number of $K$-fold strata is $\Lambda^K/K!$ for a gas of intensity $\Lambda$, which is the source of the exponential in Theorem~\ref{thm:poisson}.}
+\caption{(a) Three transverse branes in a cube of three-space: the strata are the three walls, the three lines, and one point, indexed by the nonempty subsets of the arrangement. (b) A Poisson gas of branes in the same box, with its pairwise intersection lines and its triple points; the expected number of $K$-element subsets of the gas is $\Lambda^K/K!$ for a gas with $\Lambda$ branes on average, which is the source of the exponential in Theorem~\ref{thm:poisson}. The expected number of nonempty $K$-fold intersections carries in addition a geometric factor (Appendix~\ref{app:poisson}).}
 \label{fig:arrangement}
 \end{figure*}
 
@@ -116,11 +117,12 @@ The paper is arranged as follows. Section~\ref{sec:arrangements} sets up brane a
 
 \begin{definition}
 \label{def:arrangement}
-A \emph{brane arrangement} in a smooth oriented $D$-manifold $X$ is a finite collection $\cB=\{B_1,\dots,B_N\}$ of closed oriented submanifolds in general position. Its \emph{strata} are the intersections $B_S=\bigcap_{i\in S}B_i$ over the subsets $S\subseteq\{1,\dots,N\}$ for which $B_S\neq\emptyset$; a stratum with $|S|=K$ is a \emph{$K$-cluster}. The \emph{nerve} of $\cB$ is the simplicial complex whose $k$-simplices are the sets $S$ with $|S|=k+1$ and $B_S\ne\emptyset$, and its chain complex $(C_\bullet,\partial)$ is the free abelian group on the strata with
+A \emph{brane arrangement} in a smooth oriented $D$-manifold $X$ is a finite collection $\cB=\{B_1,\dots,B_N\}$ of closed oriented submanifolds in general position. Its \emph{strata} are the intersections $B_S=\bigcap_{i\in S}B_i$ over the nonempty subsets $S\subseteq\{1,\dots,N\}$ for which $B_S\neq\emptyset$; a stratum with $|S|=K$ is a \emph{$K$-cluster}. The ambient manifold $X$, which would be $B_\emptyset$, is not a stratum. The \emph{nerve} of $\cB$ is the simplicial complex whose $k$-simplices are the sets $S$ with $|S|=k+1$ and $B_S\ne\emptyset$, and its chain complex $(C_\bullet,\partial)$ is the free abelian group on the strata with
 \begin{equation}
 \label{eq:boundary}
-\partial[B_S]=\sum_{j=0}^{k}(-1)^{j}\,[B_{S\setminus\{s_j\}}],\qquad S=\{s_0<\cdots<s_k\}.
+\partial[B_S]=\sum_{j=0}^{k}(-1)^{j}\,[B_{S\setminus\{s_j\}}],\qquad S=\{s_0<\cdots<s_k\},
 \end{equation}
+for $k\ge1$, and $\partial[B_S]=0$ for $|S|=1$.
 \end{definition}
 
 The smallest case with strata of every codimension is drawn in Fig.~\ref{fig:arrangement}(a): three transverse branes in a cube, whose seven nonempty strata are the three walls, the three lines and the point, indexed by the seven nonempty subsets. Panel (b) of the same figure replaces the three branes by a gas, which is the object of Sec.~\ref{sec:gas}.
@@ -132,7 +134,7 @@ $\partial\circ\partial=0$, so the homology $H_k(\cB)=\ker\partial_k/\im\partial_
 \label{eq:euler}
 \sum_{k}(-1)^k\rk C_k=\sum_k(-1)^k\rk H_k(\cB).
 \end{equation}
-If every nonempty stratum is contractible, $H_\bullet(\cB)$ is the homology of the union $\bigcup_iB_i$.
+If every stratum is contractible, $H_\bullet(\cB)$ is the homology of the union $\bigcup_iB_i$.
 \end{proposition}
 
 \begin{proof}
@@ -161,7 +163,7 @@ A point of $\Sigma_1\cap\Sigma_2$ is a class $x+\bZ^D$ with $x\in V_1$ and $x\in
 
 \begin{proposition}[census]
 \label{prop:census}
-For the arrangement of the $D$ coordinate hypertori of $T^D$ the number of $K$-clusters is $\binom DK$ and the total number of strata is $2^D$, and
+For the arrangement of the $D$ coordinate hypertori of $T^D$ the number of $K$-clusters is $\binom DK$ for $1\le K\le D$, the number of strata is $2^D-1$, and, counting the ambient torus as the term $K=0$,
 \begin{equation}
 \label{eq:census}
 \sum_{K=0}^{D}(-1)^K\binom DK=0=\chi(T^D).
@@ -169,7 +171,7 @@ For the arrangement of the $D$ coordinate hypertori of $T^D$ the number of $K$-c
 \end{proposition}
 
 \begin{proof}
-Any $K$ of the coordinate hypertori meet transversally in a single subtorus, so the $K$-clusters are the $K$-subsets. The binomial theorem at $x=1$ and $x=-1$ gives the two sums, and the second is the Euler characteristic of the product cell structure of $T^D$, whose $K$-cells are indexed by the same subsets.
+Any $K\ge1$ of the coordinate hypertori meet transversally in a single subtorus, so the $K$-clusters are the $K$-subsets. The binomial theorem at $x=1$ and $x=-1$ gives the two sums, and the second is the Euler characteristic of the product cell structure of $T^D$, whose $K$-cells are indexed by the same subsets.
 \end{proof}
 
 Figure~\ref{fig:torus} collects the two counts: the determinant law of Proposition~\ref{prop:torus} over every primitive pair of winding vectors with small entries, and the census of Proposition~\ref{prop:census} in a range of dimensions.
@@ -200,14 +202,14 @@ For two branes the transmission amplitude of the pair is
 \label{eq:fabry}
 t_{12}=\frac{t_1t_2}{1-r_1'r_2\,e^{2i\delta}},
 \end{equation}
-with $r_1'$ the reflection amplitude of the first brane seen from the right, which for a symmetric lossless brane is $-\overline{r_1}$. For $N$ branes,
+with $r_1'$ the reflection amplitude of the first brane seen from the right, which for a lossless brane is $-\overline{r_1}\,t_1/\overline{t_1}$, and $-\overline{r_1}$ when $t_1$ is real. For $N$ branes,
 \begin{equation}
 \label{eq:product}
 t_{1\cdots N}=\Bigl(\prod_{i=1}^{N}t_i\Bigr)\bigl(1+\mathcal E\bigr),
 \qquad
 |\mathcal E|\le C\!\!\sum_{i<j}|r_i||r_j|
 \end{equation}
-for a constant $C$ depending only on $N$ through the number of reflection paths, so the transmission factorizes whenever the reflection amplitudes are small.
+for a constant $C$ that depends on $N$ and on an upper bound $\rho<1$ for the $|r_i|$, so the transmission factorizes whenever the reflection amplitudes are small. For two branes $C=1/(1-\rho^2)$ suffices.
 \end{lemma}
 
 \begin{proof}
@@ -215,10 +217,10 @@ A mode incident from the left is transmitted through the first brane, transmitte
 \[
 t_1t_2\sum_{n\ge0}\bigl(r_1'r_2e^{2i\delta}\bigr)^{n}=\frac{t_1t_2}{1-r_1'r_2e^{2i\delta}},
 \]
-which is \eqref{eq:fabry}; the series converges because $|r_1'r_2|<1$ for a lossless brane, where $|t_i|^2+|r_i|^2=1$. Iterating over the stack, every term of the expansion of $t_{1\cdots N}$ beyond $\prod_it_i$ contains at least one round trip, hence at least two reflection amplitudes, which gives the bound in \eqref{eq:product}.
+which is \eqref{eq:fabry}; the series converges because $|r_1'r_2|<1$ for a lossless brane, where $|t_i|^2+|r_i|^2=1$. For two branes $\mathcal E=r_1'r_2e^{2i\delta}/(1-r_1'r_2e^{2i\delta})$, so $|\mathcal E|\le|r_1||r_2|/(1-|r_1||r_2|)\le|r_1||r_2|/(1-\rho^2)$. The constant cannot be uniform in $\rho$: as $|r_1r_2|\to1$ the denominator can approach $0$. Iterating over the stack, every term of the expansion of $t_{1\cdots N}$ beyond $\prod_it_i$ contains at least one round trip, hence at least two reflection amplitudes, and the resummed round trips have denominators bounded below in terms of $N$ and $\rho$, which gives the bound in \eqref{eq:product}.
 \end{proof}
 
-The two-point function of the graviton along the stack is the free one multiplied by $t_{1\cdots N}$, so the dressed kinetic operator is $p^2\prod_it_i^{-1}$. What remains is the single-brane factor. A brane is thin compared with the wavelengths of interest, so its forward amplitude admits a derivative expansion, and by parity in $p$ the expansion proceeds in powers of $p^2$:
+We take the two-point function of the graviton along the stack to be the free one multiplied by $t_{1\cdots N}$, so that the dressed kinetic operator is $p^2\prod_it_i^{-1}$. This is an assumption of the model, recorded in Hypothesis~\ref{hyp:mult}, and not a consequence of Lemma~\ref{lem:compose}. What remains is the single-brane factor. A brane is thin compared with the wavelengths of interest, so its forward amplitude admits a derivative expansion, and by parity in $p$ the expansion proceeds in powers of $p^2$:
 \begin{equation}
 \label{eq:derivexp}
 t_i^{-1}(p)=1+\frac{w_ip^2}{M^2}+O\Bigl(\frac{p^4}{M^4}\Bigr),
@@ -234,7 +236,7 @@ where $M$ is the scale set by the brane thickness and tension and $w_i\ge0$ is t
 
 \begin{hypothesis}[dilute independent branes]
 \label{hyp:mult}
-The reflection amplitudes are small enough that $\sum_{i<j}|r_i||r_j|\ll1$, so that \eqref{eq:product} may be used with $\mathcal E$ dropped, and the derivative expansion \eqref{eq:derivexp} is truncated at its first nontrivial order.
+The graviton two-point function along a stack is the free one multiplied by the transmission amplitude of the stack. The reflection amplitudes are small enough that $\sum_{i<j}|r_i||r_j|\ll1$, so that \eqref{eq:product} may be used with $\mathcal E$ dropped, and the derivative expansion \eqref{eq:derivexp} is truncated at its first nontrivial order.
 \end{hypothesis}
 
 Under Hypothesis~\ref{hyp:mult} the dressed kinetic operator is $p^2a_\cB(p^2)$ with
@@ -246,9 +248,9 @@ a_\cB(z)=\prod_{i=1}^{N}\Bigl(1+\frac{w_iz}{M^2}\Bigr)
 \end{equation}
 the sum on the right running over all subsets, including the empty one, which contributes $1$.
 
-Equation \eqref{eq:cluster-sum} says that the $K$-cluster $B_S$ contributes the product of the weights of the branes meeting along it, times $z^K$, so that a $K$-fold intersection carries $K$ extra derivative pairs. The number of terms in the sum is the number of strata, which for the coordinate arrangement of Proposition~\ref{prop:census} is $\sum_K\binom{D}{K}=2^D$, and the $K$-th group of terms is the $K$-cluster count $\binom DK$. This is the cluster expansion of the earlier proposal \cite{Bhattacharjee2025brane}, with the unspecified coefficients of that proposal replaced by explicit products of weights.
+Equation \eqref{eq:cluster-sum} says that each $K$-subset $S$ of branes contributes the product of their weights, times $z^K$; when the branes of $S$ meet, this is the contribution of the $K$-cluster $B_S$, and a $K$-fold intersection carries $K$ extra derivative pairs. The sum has $2^N$ terms whatever the geometry: in a stack of parallel branes no two meet, and the product still expands over all subsets. The terms are indexed by strata only when every subset of branes meets, as for the coordinate arrangement of Proposition~\ref{prop:census}, where the sum has $\sum_K\binom{D}{K}=2^D$ terms, the empty subset included, and the $K$-th group of terms is the $K$-cluster count $\binom DK$. This is the cluster expansion of the earlier proposal \cite{Bhattacharjee2025brane}, with the unspecified coefficients of that proposal replaced by explicit products of weights.
 
-The alternative is worth writing down. If the branes contributed additively, each supplying a term $w_iz/M^2$ to the kinetic operator instead of a factor $1+w_iz/M^2$, the form factor would be $1+z\sum_iw_i/M^2$, a polynomial of degree one whatever the number of branes. By Theorem~\ref{thm:sumrule} that single zero carries residue exactly $-1$, so an additive arrangement of any size reproduces the pole content of curvature-squared gravity and nothing else. The higher strata would be invisible. Only multiplicativity lets the intersections contribute at all, and only multiplicativity makes the degree grow with $N$, which the power counting of Sec.~\ref{sec:power} requires. Both readings are covered by the sum rule, and neither escapes it.
+The alternative is worth writing down. If the branes contributed additively, each supplying a term $w_iz/M^2$ to the kinetic operator instead of a factor $1+w_iz/M^2$, the form factor would be $1+z\sum_iw_i/M^2$, a polynomial of degree one whatever the number of branes. By Theorem~\ref{thm:sumrule} that single zero carries residue exactly $-1$, so an additive arrangement of any size reproduces the pole content of curvature-squared gravity and nothing else. The higher subsets, and with them the intersections, would be invisible. Only multiplicativity lets the intersections contribute at all, and only multiplicativity makes the degree grow with $N$, which the power counting of Sec.~\ref{sec:power} requires. Both readings are covered by the sum rule, and neither escapes it.
 
 \begin{proposition}[deterministic arrangements]
 \label{prop:poly}
@@ -275,7 +277,7 @@ Let $\Pi$ be a brane gas with intensity $\Lambda$ and weights $w$. Then for ever
 \label{eq:pgfl}
 \bE\Bigl[\prod_{x\in\Pi}\Bigl(1+\frac{w(x)z}{M^2}\Bigr)\Bigr]=\exp\Bigl(\frac{z}{M^2}\int_{\mathcal S}w\,\dd\Lambda\Bigr),
 \end{equation}
-and the expected number of $K$-clusters weighted by their products is $\frac{1}{K!}\bigl(\int w\,\dd\Lambda\bigr)^K$. More generally, if each brane contributes a factor $1+u(x,z)$ with $u(x,\cdot)$ entire for every $x$ and $\sup_x|u(x,z)|$ bounded on compact sets, then
+and the expected sum over $K$-subsets of the products of their weights is $\frac{1}{K!}\bigl(\int w\,\dd\Lambda\bigr)^K$. More generally, if each brane contributes a factor $1+u(x,z)$ with $u(x,\cdot)$ entire for every $x$ and $\sup_x|u(x,z)|$ bounded on compact sets, then
 \begin{equation}
 \label{eq:pgfl-general}
 \bE\Bigl[\prod_{x\in\Pi}\bigl(1+u(x,z)\bigr)\Bigr]=e^{H(z)},\quad H(z)=\int_{\mathcal S}u(x,z)\,\dd\Lambda(x),
@@ -299,7 +301,7 @@ the $K$-th term of the exponential series. Equivalently, the $K$-th factorial mo
 \end{proof}
 
 \begin{remark}[linked clusters]
-Equation \eqref{eq:pgfl} is the linked-cluster theorem in its simplest form. The full sum over strata, the left side, is the exponential of the sum over single branes, the exponent. In a gas the connected part of the cluster expansion is one brane deep, and every higher cluster is a product of independent factors, which is why the $1/K!$ of the exponential series is exactly the $1/K!$ of unordered $K$-subsets. Two kinds of truncation behave quite differently here. Cutting the sum over strata at $K\le N_0$ leaves a polynomial, which falls under Proposition~\ref{prop:poly}; cutting the exponent $H$ at any finite order leaves $e^{H}$ zero-free. The gas must therefore be resummed on the exponent and not on the sum.
+Equation \eqref{eq:pgfl} is the linked-cluster theorem in its simplest form. The full sum over subsets, the left side, is the exponential of the sum over single branes, the exponent. In a gas the connected part of the cluster expansion is one brane deep, and every higher cluster is a product of independent factors, which is why the $1/K!$ of the exponential series is exactly the $1/K!$ of unordered $K$-subsets. Two kinds of truncation behave quite differently here. Cutting the sum over subsets at $K\le N_0$ leaves a polynomial, which falls under Proposition~\ref{prop:poly}; cutting the exponent $H$ at any finite order leaves $e^{H}$ zero-free. The gas must therefore be resummed on the exponent and not on the sum.
 \end{remark}
 
 \subsection{Annealed and quenched form factors}
@@ -319,14 +321,14 @@ The left side is the quenched propagator, obtained by averaging observables over
 
 In the annealed regime the branes fluctuate quickly compared with the graviton, so that integrating out the brane sector leaves the metric coupled to the mean operator. The effective quadratic action then carries $\bE[a_\Pi]=e^{H}$, which has no zeros, and the conclusions of Secs.~\ref{sec:poles} to \ref{sec:gaussian} apply as stated: one pole, positive residue, a regular potential.
 
-In the quenched regime the arrangement is frozen on the time scale of the experiment. Each realization carries the polynomial of Proposition~\ref{prop:poly} with its full complement of poles, and Theorem~\ref{thm:sumrule} assigns residues summing to $-1$ to every one of them. Averaging over realizations does not help, because it is an average of propagators each of which already contains the negative residues. No cancellation between realizations can produce a positive spectral density from a family of measures that each fail to have one.
+In the quenched regime the arrangement is frozen on the time scale of the experiment. Each realization carries the polynomial of Proposition~\ref{prop:poly} with its full complement of poles. If the realization contains at least one brane of positive weight, Theorem~\ref{thm:sumrule} assigns its massive poles residues summing to $-1$; a realization with no such brane is the free propagator and has no massive pole. Averaging over realizations does not help: the total massive weight of the quenched propagator is the average of these sums, $-\bP(N'\ge1)$, where $N'$ counts the branes of positive weight, and this is negative as soon as such branes occur with positive probability. A measure of negative total mass is not a positive spectral density.
 
 The control parameter is the ratio of the correlation time of the gas to the inverse momentum at which the graviton is probed, and the annealed description requires it to be small. This is the same dilute, weakly reflecting regime that justified Hypothesis~\ref{hyp:mult}, so the two approximations of the model succeed or fail together. Making the ghost-free conclusion conditional on the annealed description therefore does not weaken it. It states the regime in which the model is defined at all. Figure~\ref{fig:annealed} puts the two side by side for a five-brane gas: the frozen realizations each spike at their own poles and each carry residues summing to $-1$, while the annealed propagator has no massive pole at all.
 
 \begin{figure*}[t]
 \centering
 \includegraphics[width=\textwidth]{figs/fig08_annealed.png}
-\caption{Annealed against quenched, for a five-brane gas. (a) The modulus of the spin-two propagator along the negative real axis for five frozen realizations, each spiking at its own poles, against the annealed propagator built from the averaged kinetic operator. The annealed curve is finite at every $z\neq0$ and simply leaves the plotted range; it has no pole. (b) The residues at the massive poles of each realization, which scatter over four decades, and their total, which is $-1$ in every case by Theorem~\ref{thm:sumrule}. The annealed form factor has no massive pole and so no budget to balance.}
+\caption{Annealed against quenched, for a five-brane gas. (a) The modulus of the spin-two propagator along the negative real axis for five frozen realizations, each spiking at its own poles, against the annealed propagator built from the averaged kinetic operator. The annealed curve is finite at every $z\neq0$ and simply leaves the plotted range; it has no pole. (b) The residues at the massive poles of each realization, which scatter over four decades, and their total, which is $-1$ for every realization containing a brane, by Theorem~\ref{thm:sumrule}. The annealed form factor has no massive pole and so no budget to balance.}
 \label{fig:annealed}
 \end{figure*}
 
@@ -356,7 +358,7 @@ $\theta$ and $\omega$ are complementary orthogonal projectors on vectors, $\thet
 With a form factor $a(p^2)$ on the spin-two part and $b(p^2)$ on the spin-zero part, both normalized to $1$ at $p^2=0$, the gauge-invariant part of the quadratic action is
 \begin{equation}
 \label{eq:quad}
-S^{(2)}=\frac12\!\int\!\frac{\dd^Dp}{(2\pi)^D}\,h(-p)\Bigl[p^2a\,\Pt-\frac{p^2b}{D-2}\Ps_s\Bigr]h(p),
+S^{(2)}=\frac12\!\int\!\frac{\dd^Dp}{(2\pi)^D}\,h(-p)\Bigl[p^2a\,\Pt-(D-2)\,p^2b\,\Ps_s\Bigr]h(p),
 \end{equation}
 and its inverse on the gauge-invariant subspace is the propagator
 \begin{equation}
@@ -415,7 +417,7 @@ $\Pi_2$ is a rational function that decays like $z^{-N-1}$ at infinity, so the i
 
 \begin{corollary}
 \label{cor:ghostfree}
-Within the class of propagators \eqref{eq:propagator} with $a$ entire, the spin-two sector has a single pole of positive residue if and only if $a=e^{H}$ with $H$ entire and $H(0)=0$. A deterministic arrangement of $N\ge1$ weighted branes under Hypothesis~\ref{hyp:mult} always has $N$ extra poles with residues summing to $-1$; a Poisson gas has none.
+Within the class of propagators \eqref{eq:propagator} with $a$ entire, the spin-two sector has a single pole of positive residue if and only if $a=e^{H}$ with $H$ entire and $H(0)=0$. A deterministic arrangement under Hypothesis~\ref{hyp:mult} with $N'\ge1$ branes of positive weight always has $N'$ extra poles, counted with multiplicity, with residues summing to $-1$; the mean form factor of a Poisson gas has none.
 \end{corollary}
 
 \begin{proof}
@@ -482,11 +484,11 @@ Each loop integration contributes $D$ powers of momentum, each internal line $-(
 
 \begin{corollary}
 \label{cor:counterterms}
-Under Hypothesis~\ref{hyp:growth} with $n\ge4$ in $D=4$, the only divergent graphs are one-loop graphs, their divergences are local functionals of dimension at most four, and by the cohomological classification of \cite{BarnichBrandtHenneaux2000} they are diffeomorphism-invariant: linear combinations of $R^2$, $R_{\mu\nu}R^{\mu\nu}$, the Gauss--Bonnet density and a cosmological term, with coefficients that are polynomial in finitely many Taylor coefficients of $H$.
+Under Hypothesis~\ref{hyp:growth} with $n\ge4$ in $D=4$, the only divergent graphs are one-loop graphs, their divergences are local functionals of dimension at most four, and by the cohomological classification of \cite{BarnichBrandtHenneaux2000} they are diffeomorphism-invariant: linear combinations of $R^2$, $R_{\mu\nu}R^{\mu\nu}$, the Gauss--Bonnet density, the Einstein--Hilbert term $R$ and a cosmological term, each with its factor $\sqrt g$, with coefficients that are polynomial in finitely many Taylor coefficients of $H$.
 \end{corollary}
 
 \begin{proof}
-The loop count is Theorem~\ref{thm:power}. A superficially divergent one-loop graph with $\omega\le4$ has a divergent part polynomial in external momenta of degree at most four, hence local of dimension at most four; the invariant monomials of that dimension are the ones listed, up to the total derivative $\Box R$ and the Gauss--Bonnet identity eliminating the Riemann-squared term. The one-loop divergence is the logarithmically divergent part of $\tfrac12\operatorname{tr}\log\delta^2S$, given by the second heat-kernel coefficient of the fluctuation operator \cite{Vassilevich2003}, which depends on $H$ only through the finitely many Taylor coefficients that survive at that order.
+The loop count is Theorem~\ref{thm:power}. A superficially divergent one-loop graph with $\omega\le4$ has a divergent part polynomial in external momenta of degree at most four, hence local of dimension at most four; the invariant monomials of dimension at most four are the ones listed, up to the total derivative $\Box R$ and the Gauss--Bonnet identity eliminating the Riemann-squared term. The one-loop divergence is the logarithmically divergent part of $\tfrac12\operatorname{tr}\log\delta^2S$, given by the second heat-kernel coefficient of the fluctuation operator \cite{Vassilevich2003}, which depends on $H$ only through the finitely many Taylor coefficients that survive at that order.
 \end{proof}
 
 \begin{remark}
@@ -647,14 +649,14 @@ The threshold \eqref{eq:threshold} is the linearized shadow of the mass gap for 
 
 \begin{proposition}[laboratory scale]
 \label{prop:lab}
-A measured agreement with the inverse-square law at separation $r$ to relative precision $\epsilon$ implies $M>(2/r)\erfc^{-1}(\epsilon)$. For $\epsilon=10^{-2}$ at $r=52\,\mu\mathrm m$, the smallest separation probed by the torsion-balance experiment of \cite{Lee2020}, this gives $1/M<14.3\,\mu\mathrm m$; a test at the same separation with $\epsilon=10^{-3}$ would give $1/M<11.2\,\mu\mathrm m$.
+A measured agreement with the inverse-square law at separation $r$ to relative precision $\epsilon$ implies $M>(2/r)\erfc^{-1}(\epsilon)$. For example, a test at $r=52\,\mu\mathrm m$ with $\epsilon=10^{-3}$ would give $1/M<11.2\,\mu\mathrm m$.
 \end{proposition}
 
 \begin{proof}
-By Theorem~\ref{thm:potential}(a) the relative deviation from Newton's potential at separation $r$ is $\erfc(Mr/2)$, and $\erfc$ is decreasing; $\erfc^{-1}(10^{-2})=1.821$ and $\erfc^{-1}(10^{-3})=2.327$.
+By Theorem~\ref{thm:potential}(a) the relative deviation from Newton's potential at separation $r$ is $\erfc(Mr/2)$, and $\erfc$ is decreasing; $\erfc^{-1}(10^{-3})=2.327$.
 \end{proof}
 
-The bound is stated for the potential; the force deviates by a different factor of the same order, and a dedicated fit of the Gaussian profile to the data of \cite{Lee2020}, which is analyzed there in terms of Yukawa corrections, would sharpen the number. The point of Proposition~\ref{prop:lab} is that the scale $M$ is constrained by short-distance experiments and by nothing else in this paper: in the wave zone the theory is indistinguishable from general relativity, as the next statement makes exact.
+The torsion-balance experiment of \cite{Lee2020} took data at detector--attractor separations between $52\,\mu\mathrm m$ and $3\,\mathrm{mm}$ and found Newtonian gravity an excellent fit. It reports its result as a limit on Yukawa corrections: a correction of gravitational strength must have range below $38.6\,\mu\mathrm m$. Such a correction at the largest allowed range changes the potential at $52\,\mu\mathrm m$ by $e^{-52/38.6}\approx0.26$, and reading this as $\epsilon$ at $r=52\,\mu\mathrm m$ gives the rough estimate $1/M\lesssim33\,\mu\mathrm m$. The Gaussian and Yukawa profiles differ in shape, and the force deviates by a different factor from the potential, so only a dedicated fit of the Gaussian profile to the data of \cite{Lee2020} gives a real bound. The point of Proposition~\ref{prop:lab} is that the scale $M$ is constrained by short-distance experiments and by nothing else in this paper: in the wave zone the theory is indistinguishable from general relativity, as the next statement makes exact.
 
 \begin{proposition}[exact luminality]
 \label{prop:luminal}
@@ -696,26 +698,26 @@ gas, Gaussian & $e^{p^2/M^2}$ & none & none \\
 \end{ruledtabular}
 \end{table}
 
-The last two rows are the only ones with no massive pole, and the fifth is the only one in which $\omega$ decreases with $L$ while the propagator keeps a single pole. Einstein gravity as an effective field theory \cite{Donoghue1994} occupies the first row with the understanding that the counterterms are organized by dimension rather than removed.
+Apart from Einstein gravity, the last two rows are the only ones with no massive pole, and the fifth is the only one in which $\omega$ decreases with $L$ while the propagator keeps a single pole. Einstein gravity as an effective field theory \cite{Donoghue1994} occupies the first row with the understanding that the counterterms are organized by dimension rather than removed.
 
 \section{Verification}
 \label{sec:verification}
 
-A program supplied with the manuscript recomputes every number quoted above from its definition, and a second one tests every figure for label collisions. The numerical suite runs $171$ checks in eleven groups. None of them takes a formula proved in the paper as an input.
+A program supplied with the manuscript recomputes every number quoted above from its definition, and a second one tests every figure for label collisions. The numerical suite runs $176$ checks in eleven groups. None of them takes a formula proved in the paper as an input.
 \begin{enumerate}[label=\textup{(\arabic*)},leftmargin=2.4em,itemsep=0.1em]
 \item The nerve complex: $\partial^2=0$ on the nerves of arrangements of up to eight hyperplanes in up to four dimensions and on random simplicial complexes; the two Euler sums of \eqref{eq:euler}; the census of Proposition~\ref{prop:census} for $D\in\{2,3,4,6,10,11,26\}$.
 \item Intersection numbers: $[\bZ^D:M\bZ^D]=|\det M|$ on random integer matrices by enumeration of $M^{-1}\bZ^D/\bZ^D$; the two-torus law on all $960$ primitive pairs with entries in $[-3,3]$.
 \item Generating functions: the subset sum \eqref{eq:cluster-sum} against the product for $N\in\{3,5,8\}$ and the location of the zeros; the Poisson identity \eqref{eq:pgfl} and the factorial moments by Monte Carlo over $4\times10^5$ realizations; the finiteness of $\log|e^{H}|$ on a grid for four entire $H$.
-\item The projector algebra of Lemma~\ref{lem:projectors} on random momenta.
+\item The projector algebra of Lemma~\ref{lem:projectors} on random momenta, and the coefficients of \eqref{eq:quad} against the linearized Einstein--Hilbert operator in $D=3,4,5,6$.
 \item Residues: the sum rule \eqref{eq:sumrule} for $n\in\{1,2,3,5\}$ real masses and for complex conjugate pairs, the closed form \eqref{eq:residues}, the alternation, Stelle's partial fractions at three masses, and the residues $+1$ and $-1$ by contour integration.
 \item Power counting: \eqref{eq:omega} against the direct count on $3000$ random $(V,L,n,D)$; the frontier for $2\le n\le39$; the census; $\omega(1)=4$; the threshold $n\ge D$ for $D\le11$; the rows of Table~\ref{tab:compare}.
 \item The propagator: \eqref{eq:GD} against the radial Fourier integral in $D=3,4,5,6$ to $10^{-15}$; \eqref{eq:G0}; the closed forms in $D=3,4$; the Newtonian tail.
-\item The potential: $\Phi(0)$, the Poisson equation with the Gaussian source to $10^{-7}$, the enclosed mass, the crossover values of $\erfc$, the monotonicity of $\erf(u)/u$, the threshold, and the laboratory number $14.3\,\mu$m.
+\item The potential: $\Phi(0)$, the Poisson equation with the Gaussian source to $10^{-7}$, the enclosed mass, the crossover values of $\erfc$, the monotonicity of $\erf(u)/u$, the threshold, and the laboratory numbers $11.2\,\mu$m and $33\,\mu$m.
 \item Dispersion: $\omega=k$ on shell for three entire $H$, both velocities, and the subluminal group velocity of the massive branch of case (a).
 \item The parametric representation: the Schwinger form \eqref{eq:schwinger} at nine values of $(M,k^2)$; the bound \eqref{eq:Ubound} for the bubble, the triangle, the sunset and the box, with the spanning-tree count taken from Kirchhoff's matrix-tree theorem and the corner verified to be the minimum over random interior points; the slice of the integrand at fixed $u=s_1+s_2$, evaluated as a Dawson function, against direct quadrature at nine values of $(u,p^2)$; the closed form \eqref{eq:bubble0} against the numerical integral in $D=5,6,8,10$ to a relative $10^{-9}$; and the finiteness of the $D=4$ bubble at $p^2>0$ together with its logarithmic growth as $p\to0$.
 \item Composition of amplitudes: the single-brane case; the formula \eqref{eq:fabry} against the exact transfer matrix of two branes at four values of $(|r|,\delta)$, to a relative $10^{-12}$; the $|r|^2$ scaling of the error in \eqref{eq:product} for $N=3,5,8$, measured as a factor of $100$ per decade; its growth with the number of branes; and unitarity of the single brane.
 \end{enumerate}
-All $171$ checks pass.
+All $176$ checks pass.
 
 The figure test renders each figure twice, with and without its text, intersects the bounding boxes of all pairs of labels inset by $1.5$ pixels, and measures the density of image edges under each label in the text-free rendering; labels with an opaque background are exempt. Every figure passes with zero flags.
 
@@ -726,13 +728,13 @@ Two statements do most of the work here, and they point in opposite directions. 
 
 Three things are left unsettled. The first is unitarity beyond the tree-level residue. The factor $e^{-H}$ grows in some directions of the complex $p^2$ plane, so the usual Wick rotation and the usual Cutkosky rules need a prescription. Prescriptions that work have been given \cite{PiusSen2016,BrisceseModesto2019}, but we have not shown that any of them survives to all orders for an $H$ of the form a gas produces. Until that is done, the phrase ghost free should be read as it was defined in Sec.~\ref{sec:intro}, as a statement about the poles of the tree-level propagator.
 
-The status of the average is the second. Since $e^{H}$ is the mean of the kinetic operator, it describes a gas whose fluctuations are fast compared with the graviton. A frozen gas gives instead an average of propagators, each with the poles of Proposition~\ref{prop:poly}, and averaging propagators does not remove the negative residues that Theorem~\ref{thm:sumrule} assigns to every realization. A derivation of the annealed effective action from a microscopic brane theory, with string theory the obvious candidate \cite{Polchinski1995,Johnson2003}, would decide this and also whether the fast-fluctuation regime is the physically relevant one. That derivation is the step the model most needs.
+The status of the average is the second. Since $e^{H}$ is the mean of the kinetic operator, it describes a gas whose fluctuations are fast compared with the graviton. A frozen gas gives instead an average of propagators, each with the poles of Proposition~\ref{prop:poly}, and averaging propagators does not remove the negative residues that Theorem~\ref{thm:sumrule} assigns to every realization containing a brane of positive weight. A derivation of the annealed effective action from a microscopic brane theory, with string theory the obvious candidate \cite{Polchinski1995,Johnson2003}, would decide this and also whether the fast-fluctuation regime is the physically relevant one. That derivation is the step the model most needs.
 
 The scale is the third. In the wave zone the theory cannot be told apart from general relativity, so what constrains it is short-distance tests of the inverse-square law, through Proposition~\ref{prop:lab}. The value of $M$ is the integral $\int w\,\dd\Lambda$ over the gas, and the model does not fix it. Computing it for a particular gas, with a given intensity measure and coupling profile, is the most concrete task this paper leaves undone.
 
 \section*{Data availability}
 
-The data that support the findings of this study are contained in the manuscript. The source code that reproduces every numerical value quoted here and regenerates every figure is supplied with the article\ifzenodo{} and is archived at \href{https://doi.org/\zenododoi}{\nolinkurl{doi:\zenododoi}}\fi. It consists of \texttt{checks\_clusters.py}, which performs the $171$ checks itemized in Sec.~\ref{sec:verification}, together with \texttt{fig01\_arrangement.py} through \texttt{fig08\_annealed.py} and the shared module \texttt{figstyle.py}, which redraw Figs.~\ref{fig:arrangement} to \ref{fig:annealed} and rerun the label collision test. The scripts require \textsc{numpy}, \textsc{scipy} and \textsc{matplotlib}, and take no other input.
+The data that support the findings of this study are contained in the manuscript. The source code that reproduces every numerical value quoted here and regenerates every figure is supplied with the article\ifzenodo{} and is archived at \href{https://doi.org/\zenododoi}{\nolinkurl{doi:\zenododoi}}\fi. It consists of \texttt{checks\_clusters.py}, which performs the $176$ checks itemized in Sec.~\ref{sec:verification}, together with \texttt{fig01\_arrangement.py} through \texttt{fig08\_annealed.py} and the shared module \texttt{figstyle.py}, which redraw Figs.~\ref{fig:arrangement} to \ref{fig:annealed} and rerun the label collision test. The scripts require \textsc{numpy}, \textsc{scipy} and \textsc{matplotlib}, and take no other input.
 
 \section*{Funding}
 

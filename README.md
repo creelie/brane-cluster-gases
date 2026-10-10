@@ -60,11 +60,11 @@ cd code
 python3 checks_clusters.py
 ```
 
-The suite runs 171 checks in eleven groups, matching the eleven items of Sec. IX of
+The suite runs 176 checks in eleven groups, matching the eleven items of Sec. IX of
 the paper, and prints one line per check followed by
 
 ```
-171 checks passed, 0 failed.
+176 checks passed, 0 failed.
 ```
 
 No check uses a formula proved in the paper as an input; each one rebuilds the
