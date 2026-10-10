@@ -93,8 +93,9 @@ before saving. Every figure reports `0 collisions`.
 Zenodo archives every GitHub release of this repository as a new version of
 one record. Releases are published by the `release` workflow: merging a change
 to `.github/release/notes.md` into `main` publishes the release for the version
-in `CITATION.cff`, with the second manuscript's PDF, LaTeX source, arXiv package
-and figures attached (built by `.github/release/build.sh`).
+in `CITATION.cff`, with the PDF, LaTeX source and arXiv package of both
+manuscripts and the second manuscript's figures attached (built by
+`.github/release/build.sh`).
 
 - All versions (resolves to the newest):
   [10.5281/zenodo.22866290](https://doi.org/10.5281/zenodo.22866290)
@@ -104,6 +105,8 @@ and figures attached (built by `.github/release/build.sh`).
   [10.5281/zenodo.23225731](https://doi.org/10.5281/zenodo.23225731)
 - Version 2.1.1:
   [10.5281/zenodo.23226162](https://doi.org/10.5281/zenodo.23226162)
+- Version 2.2.0, with the corrected first manuscript:
+  [10.5281/zenodo.23288723](https://doi.org/10.5281/zenodo.23288723)
 
 The first manuscript cites the archive through a switch and a macro defined
 near the top of `paper/brane-gases.tex`:
