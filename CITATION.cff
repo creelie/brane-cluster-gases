@@ -19,7 +19,7 @@ abstract: >-
   Newtonian potential.
 type: software
 license: MIT
-version: 2.1.1
+version: 2.2.0
 doi: 10.5281/zenodo.22866290
 identifiers:
   - type: doi
@@ -34,7 +34,7 @@ identifiers:
   - type: doi
     value: 10.5281/zenodo.23226162
     description: "Version 2.1.1"
-date-released: "2026-10-08"
+date-released: "2026-10-10"
 keywords:
   - nonlocal gravity
   - brane intersections

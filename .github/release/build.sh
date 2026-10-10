@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
-# Build the release assets of "Finite quantum gravity from a scale-invariant gas of branes":
-# the PDF, the LaTeX source (tex.zip), the arXiv package with the code in anc/ (tar.gz) and
-# every figure as PDF and PNG with its caption (figures.zip).
+# Build the release assets of both manuscripts. For "Finite quantum gravity from a
+# scale-invariant gas of branes" (uv-finite/): the PDF, the LaTeX source (tex.zip), the arXiv
+# package with the code in anc/ (tar.gz) and every figure as PDF and PNG with its caption
+# (figures.zip). For "Brane cluster gases and ghost-free form factors for quantum gravity"
+# (paper/): the PDF, the LaTeX source with the figures as PNG (tex.zip) and the arXiv package
+# with the checks and figure scripts in anc/ (tar.gz).
 #
 # Usage: build.sh <version> <output directory>
 # Needs pdflatex with revtex4-2 and cm-super, pdfinfo and pdftoppm (poppler), zip and python3.
@@ -43,4 +46,29 @@ cp "$src/uv-finite-brane-gas.pdf" "$out/$name.pdf"
 (cd "$work/arxiv" && tar --sort=name --mtime="$stamp" --owner=0 --group=0 --numeric-owner -cf - \
   uv-finite-brane-gas.tex figs anc | gzip -n -9 > "$out/$name-arxiv.tar.gz")
 (cd "$work" && find figures -type f | LC_ALL=C sort | TZ=UTC zip -X -q -9 "$out/$name-figures.zip" -@)
+
+# The first manuscript, built and checked the same way.
+src1=$root/paper
+name1=brane-gases-v$version
+w1=$(mktemp -d)
+mkdir -p "$w1/tex/figs" "$w1/arxiv/anc"
+cp "$src1/brane-gases.tex" "$w1/tex/"
+cp "$src1"/figs/*.png "$w1/tex/figs/"
+cp -r "$w1/tex/." "$w1/arxiv/"
+cp "$root"/code/*.py "$w1/arxiv/anc/"
+cp -r "$w1/tex" "$w1/build"
+(
+  cd "$w1/build"
+  for pass in 1 2 3; do
+    pdflatex -interaction=nonstopmode -halt-on-error brane-gases.tex > /dev/null
+  done
+  pages() { pdfinfo "$1" | awk '/^Pages:/ {print $2}'; }
+  test "$(pages brane-gases.pdf)" = "$(pages "$src1/brane-gases.pdf")"
+  if grep -iE 'undefined|overfull' brane-gases.log; then exit 1; fi
+)
+find "$w1/tex" "$w1/arxiv" -exec touch -h -d "$stamp" {} +
+cp "$src1/brane-gases.pdf" "$out/$name1.pdf"
+(cd "$w1/tex" && find . -type f | LC_ALL=C sort | sed 's|^\./||' | TZ=UTC zip -X -q -9 "$out/$name1-tex.zip" -@)
+(cd "$w1/arxiv" && tar --sort=name --mtime="$stamp" --owner=0 --group=0 --numeric-owner -cf - \
+  brane-gases.tex figs anc | gzip -n -9 > "$out/$name1-arxiv.tar.gz")
 ls -l "$out"
