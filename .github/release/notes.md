@@ -10,6 +10,7 @@ This release corrects eight errors in "Brane cluster gases and ghost-free form f
 - The counterterm corollary includes the Einstein–Hilbert term.
 - The text after Table I includes Einstein gravity.
 - Strata are indexed by nonempty subsets, the nerve complex is not augmented, and the census counts 2^D − 1 strata besides the ambient torus.
+- The abstract is cut to its main results, the experimental caveat on the Lee et al. bound moves to a footnote, and the manuscript states how AI tools were used, as the second manuscript already does.
 
 `code/checks_clusters.py` runs 176 checks, all of which pass.
 
