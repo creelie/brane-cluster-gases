@@ -103,7 +103,7 @@ when the brane density per unit `log t` is at most one. See
 Zenodo archives every GitHub release of this repository as a new version of
 one record. Releases are published by the `release` workflow: merging a change
 to `.github/release/notes.md` into `main` publishes the release for the version
-in `CITATION.cff`, with the PDF, LaTeX source and arXiv package of both
+in `CITATION.cff`, with the PDF, LaTeX source and arXiv package of all three
 manuscripts and the second manuscript's figures attached (built by
 `.github/release/build.sh`).
 

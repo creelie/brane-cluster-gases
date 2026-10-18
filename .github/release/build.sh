@@ -1,10 +1,12 @@
 #!/usr/bin/env bash
-# Build the release assets of both manuscripts. For "Finite quantum gravity from a
+# Build the release assets of the three manuscripts. For "Finite quantum gravity from a
 # scale-invariant gas of branes" (uv-finite/): the PDF, the LaTeX source (tex.zip), the arXiv
 # package with the code in anc/ (tar.gz) and every figure as PDF and PNG with its caption
 # (figures.zip). For "Brane cluster gases and ghost-free form factors for quantum gravity"
 # (paper/): the PDF, the LaTeX source with the figures as PNG (tex.zip) and the arXiv package
-# with the checks and figure scripts in anc/ (tar.gz).
+# with the checks and figure scripts in anc/ (tar.gz). For "Ghosts in Poisson Brane Gases"
+# (ghosts/): the PDF, the LaTeX source with the figures as PNG (tex.zip) and the arXiv package
+# with the Python, C and Julia checks and the Lean file in anc/ (tar.gz).
 #
 # Usage: build.sh <version> <output directory>
 # Needs pdflatex with revtex4-2 and cm-super, pdfinfo and pdftoppm (poppler), zip and python3.
@@ -71,4 +73,29 @@ cp "$src1/brane-gases.pdf" "$out/$name1.pdf"
 (cd "$w1/tex" && find . -type f | LC_ALL=C sort | sed 's|^\./||' | TZ=UTC zip -X -q -9 "$out/$name1-tex.zip" -@)
 (cd "$w1/arxiv" && tar --sort=name --mtime="$stamp" --owner=0 --group=0 --numeric-owner -cf - \
   brane-gases.tex figs anc | gzip -n -9 > "$out/$name1-arxiv.tar.gz")
+# The third manuscript, built and checked the same way.
+src2=$root/ghosts
+name2=ghosts-brane-gases-v$version
+w2=$(mktemp -d)
+mkdir -p "$w2/tex/figures" "$w2/arxiv/anc/lean"
+cp "$src2/paper/main.tex" "$w2/tex/"
+cp "$src2"/paper/figures/*.png "$w2/tex/figures/"
+cp -r "$w2/tex/." "$w2/arxiv/"
+cp "$src2"/code/{verify_ghosts.py,residues.c,verify.jl,make_figure_data.py} "$w2/arxiv/anc/"
+cp "$src2"/lean/{BraneGhosts.lean,Axioms.lean,lakefile.toml,lean-toolchain,lake-manifest.json} "$w2/arxiv/anc/lean/"
+cp -r "$w2/tex" "$w2/build"
+(
+  cd "$w2/build"
+  for pass in 1 2 3; do
+    pdflatex -interaction=nonstopmode -halt-on-error main.tex > /dev/null
+  done
+  pages() { pdfinfo "$1" | awk '/^Pages:/ {print $2}'; }
+  test "$(pages main.pdf)" = "$(pages "$src2/paper/main.pdf")"
+  if grep -iE 'undefined|overfull' main.log; then exit 1; fi
+)
+find "$w2/tex" "$w2/arxiv" -exec touch -h -d "$stamp" {} +
+cp "$src2/paper/main.pdf" "$out/$name2.pdf"
+(cd "$w2/tex" && find . -type f | LC_ALL=C sort | sed 's|^\./||' | TZ=UTC zip -X -q -9 "$out/$name2-tex.zip" -@)
+(cd "$w2/arxiv" && tar --sort=name --mtime="$stamp" --owner=0 --group=0 --numeric-owner -cf - \
+  main.tex figures anc | gzip -n -9 > "$out/$name2-arxiv.tar.gz")
 ls -l "$out"
