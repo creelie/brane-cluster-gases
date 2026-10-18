@@ -2,7 +2,7 @@ cff-version: 1.2.0
 message: "If you use this software or the results it reproduces, please cite the manuscripts below."
 title: "Brane cluster gases and ghost-free form factors for quantum gravity: verification suite and figure scripts"
 abstract: >-
-  Source, verification suites and figure scripts for two manuscripts. The
+  Source, verification suites and figure scripts for three manuscripts. The
   first, "Brane cluster gases and ghost-free form factors for quantum gravity",
   comes with a suite of 176 independent checks in eleven groups, covering the
   residue sum rule, the pole dichotomy, the power counting, the Poisson
@@ -16,10 +16,13 @@ abstract: >-
   its fluctuations, the necessity of fine graining, the vertex bound and power
   counting, the one-loop poles of the quartic operators, the vacuum energy, the
   one-loop bubble and its cutting rule, the free-field curvature and the
-  Newtonian potential.
+  Newtonian potential. The third, "Ghosts in Poisson Brane Gases" (new in
+  3.0.0), computes the gas-averaged propagator exactly and determines the
+  sign of its spectrum; it comes with 19 Python, 5 C and 9 Julia checks and
+  13 Lean 4 theorems.
 type: software
 license: MIT
-version: 2.2.0
+version: 3.0.0
 doi: 10.5281/zenodo.22866290
 identifiers:
   - type: doi
@@ -37,7 +40,7 @@ identifiers:
   - type: doi
     value: 10.5281/zenodo.23288723
     description: "Version 2.2.0"
-date-released: "2026-10-10"
+date-released: "2026-10-18"
 keywords:
   - nonlocal gravity
   - brane intersections
@@ -49,7 +52,7 @@ authors:
     given-names: Deep
     orcid: "https://orcid.org/0000-0003-0466-750X"
     email: itsdeep@live.com
-    affiliation: "Formerly, Electro-Gravitational Space Propulsion Laboratory (EGSPL), Bhubaneswar, Odisha 751030, India"
+    affiliation: "Formerly, Electro-Gravitational Space Propulsion Laboratory (EGSPL), Bhubaneswar, Odisha 751030, India; Formerly, University of Calcutta, Senate House, 87/1 College Street, Kolkata 700073, West Bengal, India"
 preferred-citation:
   type: article
   title: "Brane cluster gases and ghost-free form factors for quantum gravity"
@@ -66,3 +69,13 @@ references:
       - family-names: Bhattacharjee
         given-names: Deep
         orcid: "https://orcid.org/0000-0003-0466-750X"
+  - type: article
+    title: "Ghosts in Poisson Brane Gases"
+    year: 2026
+    authors:
+      - family-names: Bhattacharjee
+        given-names: Deep
+        orcid: "https://orcid.org/0000-0003-0466-750X"
+      - family-names: Bhattacharya
+        given-names: Ushashi
+        orcid: "https://orcid.org/0009-0002-2254-3914"
