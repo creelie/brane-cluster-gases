@@ -8,3 +8,4 @@
 *.fdb_latexmk
 __pycache__/
 *.pyc
+*.toc

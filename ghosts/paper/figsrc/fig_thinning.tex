@@ -1,0 +1,31 @@
+\documentclass[border=4pt]{standalone}
+\input{common}
+\begin{document}
+\begin{tikzpicture}
+\begin{axis}[width=9.4cm, height=7.0cm, view={-32}{30},
+  xlabel={$\log t$}, ylabel={$\log x$}, zlabel={$x/(x+t)$},
+  xmin=-1, xmax=7, ymin=-1, ymax=7, zmin=0, zmax=1.05, grid=major, grid style={gray!25},
+  colormap={cool}{rgb255=(243,233,210) rgb255=(120,150,200) rgb255=(31,95,168)},
+  xlabel style={sloped}, ylabel style={sloped},
+  title={\small (a) the thinning behind $x\,\overline{G}(x)$}]
+  \addplot3[surf, shader=interp, domain=-1:7, y domain=-1:7, samples=36, opacity=0.9]
+     {1/(1+exp(x-y))};
+  \addplot3[only marks, mark=*, mark size=1.6pt, ghost] table[x=lt, y expr=-1, z expr=0] {../figdata/points.dat};
+  \addplot3[ink, line width=1.3pt, domain=-1:7, samples=60, samples y=1] ({x},{4},{1/(1+exp(x-4))});
+  \node[font=\footnotesize, anchor=south] at (axis cs:-0.6,4,1.06) {slice $\log x=4$};
+\end{axis}
+\end{tikzpicture}\hspace{0.4cm}%
+\begin{tikzpicture}
+\begin{axis}[width=8.6cm, height=6.4cm, xmode=log, xlabel={$x=p^2$}, ylabel={$x\,G(x)$},
+  xmin=1e-3, xmax=1e4, ymin=0, ymax=1.75, legend cell align=left,
+  legend style={at={(0.97,0.55)}, anchor=east},
+  title={\small (b) residue at $p^2=0$ versus total weight}]
+  \addplot[healthy, line width=1.2pt, densely dashed] table[x=x,y=kl] {../figdata/monotone.dat};
+  \addlegendentry{positive spectrum: $\frac1x+\frac{0.6}{x+1}$}
+  \addplot[ghost!60, line width=1.2pt] table[x=x,y=e09] {../figdata/monotone.dat};
+  \addlegendentry{gas average, $\lambda=0.9\,e^{-\log^2t}$}
+  \addplot[ghost!100!black, line width=1.2pt] table[x=x,y=e15] {../figdata/monotone.dat};
+  \addlegendentry{gas average, $\lambda=1.5\,e^{-\log^2t}$}
+\end{axis}
+\end{tikzpicture}
+\end{document}

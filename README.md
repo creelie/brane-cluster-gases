@@ -32,6 +32,7 @@ discussion.
 paper/      brane-gases.tex, the compiled PDF, and the eight figures it includes
 code/       the verification suite, the eight figure scripts, and the shared style
 docs/       the DOI verification record
+ghosts/     the third manuscript: paper/, code/ and lean/ (see ghosts/README.md)
 uv-finite/  the second manuscript: uv-finite-brane-gas.tex, its PDF, figs/,
             and code/ (verify.py, formfactor_check.c, verify.jl,
             PowerCounting.lean, make_figures.py)
@@ -87,6 +88,15 @@ python3 fig08_annealed.py
 Each script writes `paper/figs/<name>.png` at 600 dpi, writes a vector PDF where
 the figure is line art, and runs the label collision test in `figstyle.py`
 before saving. Every figure reports `0 collisions`.
+
+## Ghosts in Poisson brane gases
+
+The third manuscript, in `ghosts/`, computes the gas average of the
+propagator itself, `E[1/(z F(z))] = exp(-phi(z))/z`, and shows that it differs
+from `1/(z E F(z))`: the averaged propagator has total massive
+spectral weight `exp(-|nu|) - 1 < 0`, and its spectrum is made of ghosts alone
+when the brane density per unit `log t` is at most one. See
+[`ghosts/README.md`](ghosts/README.md).
 
 ## Archive and DOI
 
