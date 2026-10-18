@@ -117,6 +117,8 @@ manuscripts and the second manuscript's figures attached (built by
   [10.5281/zenodo.23226162](https://doi.org/10.5281/zenodo.23226162)
 - Version 2.2.0, with the corrected first manuscript:
   [10.5281/zenodo.23288723](https://doi.org/10.5281/zenodo.23288723)
+- Version 3.0.0, with the third manuscript, "Ghosts in Poisson Brane Gases":
+  [10.5281/zenodo.23449534](https://doi.org/10.5281/zenodo.23449534)
 
 The first manuscript cites the archive through a switch and a macro defined
 near the top of `paper/brane-gases.tex`:
@@ -130,7 +132,8 @@ near the top of `paper/brane-gases.tex`:
 With `\zenodofalse` the Data Availability section describes the code as
 supplied with the article and makes no claim about a repository. The second
 manuscript cites the DOI of version 2.1.1, the newest release that contains its
-code and figures.
+code and figures. The third manuscript cites the DOI of version 3.0.0, the
+release that first contains it.
 
 ## Finite quantum gravity from a scale-invariant gas of branes
 

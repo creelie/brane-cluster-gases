@@ -40,6 +40,9 @@ identifiers:
   - type: doi
     value: 10.5281/zenodo.23288723
     description: "Version 2.2.0"
+  - type: doi
+    value: 10.5281/zenodo.23449534
+    description: "Version 3.0.0"
 date-released: "2026-10-18"
 keywords:
   - nonlocal gravity
