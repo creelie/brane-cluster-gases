@@ -1,0 +1,32 @@
+\documentclass[border=4pt]{standalone}
+\input{common}
+\begin{document}
+\begin{tikzpicture}
+\begin{axis}[width=8.8cm, height=6.4cm, xmode=log, xlabel={$s/t_0-1$}, ylabel={$s\,|\rho(s)|$},
+  ymode=log, xmin=1e-3, xmax=60, ymin=1e-3, ymax=40, legend cell align=left,
+  legend style={at={(0.03,0.03)}, anchor=south west},
+  title={\small (a) averaged spectra of the scale-free gas}]
+  \addplot[ghost!45, line width=1.1pt] table[x expr=\thisrow{s}-1, y=a] {../figdata/scalefree.dat};
+  \addlegendentry{$\theta=\tfrac14$, ghosts}
+  \addplot[ghost!75, line width=1.1pt] table[x expr=\thisrow{s}-1, y=b] {../figdata/scalefree.dat};
+  \addlegendentry{$\theta=\tfrac12$, ghosts}
+  \addplot[ghost!100!black, line width=1.1pt] table[x expr=\thisrow{s}-1, y=c] {../figdata/scalefree.dat};
+  \addlegendentry{$\theta=\tfrac34$, ghosts}
+  \addplot[healthy, line width=1.2pt, densely dashed] table[x expr=\thisrow{s}-1, y expr=-\thisrow{d}] {../figdata/scalefree.dat};
+  \addlegendentry{$\theta=\tfrac32$, positive, not integrable}
+\end{axis}
+\end{tikzpicture}\hspace{0.5cm}%
+\begin{tikzpicture}
+\begin{axis}[width=8.8cm, height=6.4cm, xmode=log, ymode=log, xlabel={$x=p^2/t_0$},
+  ylabel={$x\,G(x)$}, xmin=1e-2, xmax=1e9, ymin=1e-16, ymax=3, unbounded coords=jump,
+  legend cell align=left, legend style={at={(0.03,0.03)}, anchor=south west},
+  title={\small (b) Euclidean decay, $\theta=\tfrac32$}]
+  \addplot[healthy, line width=1.2pt] table[x=x, y=avg15] {../figdata/decay.dat};
+  \addlegendentry{average $\mathbb{E}\,G$: $(1+x)^{-3/2}$}
+  \addplot[ink, line width=1.2pt, densely dashed] table[x=x, y=frozen] {../figdata/decay.dat};
+  \addlegendentry{one frozen gas: $1/F_\Pi(x)$}
+  \addplot[ghost, line width=1.2pt, dotted] table[x=x, y=annealedF] {../figdata/decay.dat};
+  \addlegendentry{$1/\mathbb{E}F_\Pi(x)=e^{-3x/2}$}
+\end{axis}
+\end{tikzpicture}
+\end{document}

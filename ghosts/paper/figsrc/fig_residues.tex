@@ -1,0 +1,34 @@
+\documentclass[border=4pt]{standalone}
+\input{common}
+\begin{document}
+\begin{tikzpicture}
+\begin{axis}[width=8.8cm, height=6.4cm, xlabel={$k$}, ylabel={$\log_{10}|r_k|$},
+  xmin=0, xmax=41, ymin=-360, ymax=20, legend style={at={(0.03,0.03)}, anchor=south west},
+  legend cell align=left, title={\small (a) residues of three frozen gases, $\theta=1$}]
+  \addplot[gray, line width=1.0pt, densely dashed] table[x=k,y=v] {../figdata/parabola.dat};
+  \addlegendentry{$-\mathbb{E}S_k/\ln 10=-k(k-1)/(2\theta\ln 10)$}
+  \addplot[only marks, mark=*, mark size=1.5pt, scatter, point meta=explicit symbolic,
+    scatter/classes={1={mark=*, ghost, fill=ghost}, -1={mark=*, healthy, fill=healthy}}, forget plot]
+    table[x=k, y=log10r, meta=sign] {../figdata/residues0.dat};
+  \addplot[only marks, mark=square*, mark size=1.5pt, scatter, point meta=explicit symbolic,
+    scatter/classes={1={mark=square*, ghost, fill=ghost}, -1={mark=square*, healthy, fill=healthy}}, forget plot]
+    table[x=k, y=log10r, meta=sign] {../figdata/residues1.dat};
+  \addplot[only marks, mark=triangle*, mark size=1.5pt, scatter, point meta=explicit symbolic,
+    scatter/classes={1={mark=triangle*, ghost, fill=ghost}, -1={mark=triangle*, healthy, fill=healthy}}, forget plot]
+    table[x=k, y=log10r, meta=sign] {../figdata/residues2.dat};
+  \addlegendimage{only marks, mark=*, ghost}\addlegendentry{$r_k<0$ (odd $k$, ghost)}
+  \addlegendimage{only marks, mark=*, healthy}\addlegendentry{$r_k>0$ (even $k$)}
+\end{axis}
+\end{tikzpicture}\hspace{0.5cm}%
+\begin{tikzpicture}
+\begin{axis}[width=8.8cm, height=6.4cm, xlabel={$(S_k-\mathbb{E}S_k)/\sqrt{\operatorname{Var}S_k}$},
+  ylabel={density}, xmin=-4, xmax=4, ymin=0, ymax=0.47, xtick={-4,-2,0,2,4}, legend cell align=left,
+  legend style={at={(0.97,0.97)}, anchor=north east},
+  title={\small (b) the exponent $S_{30}$ over $4\times10^4$ gases}]
+  \addplot[ybar interval, fill=healthy!35, draw=healthy!70!black] table[x=x,y=h] {../figdata/hist.dat};
+  \addlegendentry{histogram}
+  \addplot[sharp plot, ghost, line width=1.2pt] table[x=x,y=g] {../figdata/gauss.dat};
+  \addlegendentry{standard normal}
+\end{axis}
+\end{tikzpicture}
+\end{document}

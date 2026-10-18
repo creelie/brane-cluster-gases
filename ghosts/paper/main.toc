@@ -1,0 +1,25 @@
+\contentsline {title}{Ghosts in Poisson Brane Gases}{1}{section*.2}%
+\contentsline {abstract}{Abstract}{1}{section*.1}%
+\tocdepth@munge 
+\contentsline {section}{\numberline {}Contents}{1}{section*.3}%
+\tocdepth@restore 
+\contentsline {section}{\numberline {I}Introduction}{1}{section*.4}%
+\contentsline {subsection}{\numberline {A}What is proved and what is not}{2}{section*.11}%
+\contentsline {subsection}{\numberline {B}History}{2}{section*.13}%
+\contentsline {section}{\numberline {II}The gas and its frozen propagator}{3}{section*.14}%
+\contentsline {subsection}{\numberline {A}Setting}{3}{section*.15}%
+\contentsline {subsection}{\numberline {B}Residues}{3}{section*.17}%
+\contentsline {subsection}{\numberline {C}Euclidean finiteness of a frozen configuration}{4}{section*.24}%
+\contentsline {subsection}{\numberline {D}The scale-free gas}{4}{section*.29}%
+\contentsline {subsection}{\numberline {E}Residues have no mean}{4}{section*.36}%
+\contentsline {section}{\numberline {III}The averaged propagator}{5}{section*.38}%
+\contentsline {section}{\numberline {IV}The ghost threshold}{6}{section*.46}%
+\contentsline {section}{\numberline {V}Ultraviolet decay against positivity}{7}{section*.60}%
+\contentsline {section}{\numberline {VI}Discussion}{7}{section*.66}%
+\contentsline {section}{\numberline {}Data and code availability}{8}{section*.67}%
+\contentsline {section}{\numberline {}Ethical declarations}{9}{section*.68}%
+\appendix 
+\contentsline {section}{\numberline {A}Poisson processes}{9}{section*.69}%
+\contentsline {section}{\numberline {B}Proof of Theorem~\ref {thm:scalefree}(ii) and (iv)}{9}{section*.71}%
+\contentsline {section}{\numberline {C}Calculations}{9}{section*.72}%
+\contentsline {section}{\numberline {}References}{10}{section*.73}%

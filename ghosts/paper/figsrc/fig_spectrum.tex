@@ -1,0 +1,38 @@
+\documentclass[border=4pt]{standalone}
+\input{common}
+\begin{document}
+\begin{tikzpicture}
+\begin{axis}[name=surf, width=9.2cm, height=7.2cm, view={-38}{28},
+  xlabel={$\operatorname{Re} z$}, ylabel={$\operatorname{Im} z$},
+  zlabel={$\operatorname{Im}\varphi(z)/\pi$},
+  xmin=-4, xmax=1, ymin=0, ymax=1.2, zmin=0, zmax=1.6,
+  colormap={warm}{rgb255=(31,95,168) rgb255=(120,150,200) rgb255=(243,233,210) rgb255=(230,150,120) rgb255=(192,57,43)},
+  point meta min=0, point meta max=1.5, grid=major, grid style={gray!25},
+  xlabel style={sloped}, ylabel style={sloped}, zlabel style={rotate=0},
+  title={\small (a) the phase of the averaged form factor},
+  legend style={at={(0.03,0.97)}, anchor=north west}, legend cell align=left]
+  \addplot3[surf, shader=interp, mesh/rows=25, forget plot] table[x=x,y=y,z=v] {../figdata/imphi.dat};
+  \addplot3[ghost!85!black, line width=1.3pt] table[x=x,y=y,z=v] {../figdata/lamprofile.dat};
+  \addlegendentry{boundary value $\lambda(s)$ at $z=-s$}
+  \addplot3[ink, densely dashed, line width=0.9pt] coordinates {(-4,0,1) (1,0,1) (1,1.2,1)};
+  \addlegendentry{level $1$}
+\end{axis}
+\end{tikzpicture}\hspace{0.6cm}\begin{tikzpicture}
+\begin{axis}[ width=8.4cm, height=6.2cm,
+  xlabel={$\log s$}, ylabel={}, xmin=-3, xmax=3, ymin=-1.95, ymax=1.65,
+  legend style={at={(0.03,0.97)}, anchor=north west}, legend cell align=left,
+  title={\small (b) the spectral density},
+  extra y ticks={1}, extra y tick style={grid=major, grid style={dashed, gray}}]
+  \addplot[name path=rho, ink, line width=1.2pt] table[x=ls,y=srho] {../figdata/density.dat};
+  \addlegendentry{$s\,\rho(s)$}
+  \addplot[healthy!80!black, densely dashed, line width=1.1pt] table[x=ls,y=lam] {../figdata/density.dat};
+  \addlegendentry{$\lambda(s)$}
+  \path[name path=zero] (axis cs:-3,0) -- (axis cs:3,0);
+  \addplot[ghost, opacity=0.35] fill between[of=rho and zero, split, every segment no 0/.style={ghost, opacity=0.35},
+      every segment no 1/.style={healthy, opacity=0.45}, every segment no 2/.style={ghost, opacity=0.35}];
+  \node[font=\footnotesize, text=ghost!85!black] at (axis cs:-2.2,-1.0) {ghosts};
+  \node[font=\footnotesize, text=ghost!85!black, align=center] at (axis cs:1.9,-0.45) {ghosts\\[-1pt](weight $0.004$)};
+  \node[font=\footnotesize, text=healthy!85!black] at (axis cs:0.35,0.62) {healthy};
+\end{axis}
+\end{tikzpicture}
+\end{document}
