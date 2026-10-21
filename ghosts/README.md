@@ -13,6 +13,14 @@ ghosts alone exactly when `lambda <= 1`, and every average with a finite
 four-dimensional tadpole has states of both signs. All proofs are in the paper,
 by hand.
 
+## Journal version
+
+The journal version, for Physical Review D (no author charge: PRD articles in
+high-energy physics are covered by SCOAP3), is `paper/paper1/GhostsBraneGases.pdf`
+with its LaTeX source in `paper/paper2/GhostsBraneGases-tex.zip`. The paper
+cites release 3.3.0 of this repository,
+https://github.com/creelie/brane-cluster-gases/releases/tag/v3.3.0.
+
 ## Layout
 
 ```
