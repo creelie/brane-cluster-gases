@@ -1,13 +1,18 @@
 # Brane cluster gases and ghost-free form factors for quantum gravity
 
-Source, figures and verification code for two manuscripts by Deep Bhattacharjee,
-prepared for submission to *Physical Review D*. Contact: <itsdeep@live.com>.
+Source, figures and verification code for three manuscripts by Deep Bhattacharjee
+and Ushashi Bhattacharya, prepared for submission to *Physical Review D*.
+Contact: <itsdeep@live.com>.
 
 1. *Brane cluster gases and ghost-free form factors for quantum gravity*
    (`paper/`, `code/`).
-2. *Finite quantum gravity from a scale-invariant gas of branes*
-   (`uv-finite/`, added in release 2.0.0). See
-   [the section below](#finite-quantum-gravity-from-a-scale-invariant-gas-of-branes).
+2. *Cancellation of all ultraviolet divergences of quantum gravity by a
+   scale-invariant gas of branes* (`uv-finite/`, added in release 2.0.0 as
+   "Finite quantum gravity from a scale-invariant gas of branes", retitled in
+   3.1.0). See
+   [the section below](#cancellation-of-all-ultraviolet-divergences-of-quantum-gravity-by-a-scale-invariant-gas-of-branes).
+3. *Ghosts in Poisson Brane Gases* (`ghosts/`, added in release 3.0.0). See
+   [the section below](#ghosts-in-poisson-brane-gases).
 
 ## What the paper does
 
@@ -34,8 +39,9 @@ code/       the verification suite, the eight figure scripts, and the shared sty
 docs/       the DOI verification record
 ghosts/     the third manuscript: paper/, code/ and lean/ (see ghosts/README.md)
 uv-finite/  the second manuscript: uv-finite-brane-gas.tex, its PDF, figs/,
-            and code/ (verify.py, formfactor_check.c, verify.jl,
-            PowerCounting.lean, make_figures.py)
+            code/ (verify.py, formfactor_check.c, verify.jl,
+            PowerCounting.lean, make_figures.py) and audit/ (five
+            independent re-derivations, see audit/README.md)
 ```
 
 ## Building the paper
@@ -119,6 +125,9 @@ manuscripts and the second manuscript's figures attached (built by
   [10.5281/zenodo.23288723](https://doi.org/10.5281/zenodo.23288723)
 - Version 3.0.0, with the third manuscript, "Ghosts in Poisson Brane Gases":
   [10.5281/zenodo.23449534](https://doi.org/10.5281/zenodo.23449534)
+- Version 3.1.0, with the second manuscript retitled, with both authors, three
+  new figures and the audit scripts: version DOI to be recorded when Zenodo
+  mints it.
 
 The first manuscript cites the archive through a switch and a macro defined
 near the top of `paper/brane-gases.tex`:
@@ -131,11 +140,12 @@ near the top of `paper/brane-gases.tex`:
 
 With `\zenodofalse` the Data Availability section describes the code as
 supplied with the article and makes no claim about a repository. The second
-manuscript cites the DOI of version 2.1.1, the newest release that contains its
-code and figures. The third manuscript cites the DOI of version 3.0.0, the
-release that first contains it.
+manuscript cites the concept DOI, which resolves to the newest version, and
+names version 3.1.0 as the release that contains its code, figures and audit.
+The third manuscript cites the DOI of version 3.0.0, the release that first
+contains it.
 
-## Finite quantum gravity from a scale-invariant gas of branes
+## Cancellation of all ultraviolet divergences of quantum gravity by a scale-invariant gas of branes
 
 The second manuscript derives the form factor from a Poisson gas of branes with
 no preferred size and works with one frozen realization of the gas rather than
@@ -166,8 +176,19 @@ cc -O2 -std=c99 -o formfactor_check formfactor_check.c -lm
 ./formfactor_check                 # 84 checks passed, 0 failed
 julia verify.jl                    # 114 checks passed, 0 failed (Julia 1.10, stdlib only)
 lean PowerCounting.lean            # compiles with no output (Lean 4.15, core only)
-python3 make_figures.py            # writes the twelve PNG figures to ../figs/
+python3 make_figures.py            # writes the fifteen PNG figures to ../figs/
+cd ../audit
+python3 run_all.py                 # five audit scripts, each PASS/FAIL per check
 ```
+
+The audit scripts in `uv-finite/audit/` re-derive, by methods different from
+those of the paper, the one-loop pole matrix and its tuning (exact rational
+arithmetic), the superficial degree (exhaustive enumeration of vertex
+degrees), the Mellin transform of the vacuum energy and its regulator
+independence, the failure of reflection positivity (a Hankel test on the
+time-slice covariance) and the one-loop bubble table (adaptive quadrature in
+polar coordinates about the graviton pole, with the tail to infinity);
+`audit/README.md` records what each one found.
 
 The Python, C and Julia programs share no code. The Julia program works in
 256-bit arithmetic with its own special functions and quadrature. The Lean file
@@ -183,7 +204,9 @@ is inline.
 
 Every digital object identifier in the bibliography was resolved against its
 registration record before inclusion; `docs/doi-verification.md` lists the 42
-identifiers and what each one resolves to.
+identifiers and what each one resolves to. The bibliography of the second
+manuscript was checked again in October 2026: all 95 identifiers resolve, through
+the Crossref registration record, to the cited title and authors.
 
 ## Statements
 
