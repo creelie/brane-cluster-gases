@@ -25,29 +25,7 @@ abstract: >-
 type: software
 license: MIT
 version: 3.2.0
-doi: 10.5281/zenodo.22866290
-identifiers:
-  - type: doi
-    value: 10.5281/zenodo.22866290
-    description: "Concept DOI: all versions, resolves to the newest"
-  - type: doi
-    value: 10.5281/zenodo.23220676
-    description: "Version 2.0.0"
-  - type: doi
-    value: 10.5281/zenodo.23225731
-    description: "Version 2.1.0"
-  - type: doi
-    value: 10.5281/zenodo.23226162
-    description: "Version 2.1.1"
-  - type: doi
-    value: 10.5281/zenodo.23288723
-    description: "Version 2.2.0"
-  - type: doi
-    value: 10.5281/zenodo.23449534
-    description: "Version 3.0.0"
-  - type: doi
-    value: 10.5281/zenodo.23524276
-    description: "Version 3.1.0"
+url: "https://github.com/creelie/brane-cluster-gases/releases/tag/v3.2.0"
 date-released: "2026-10-21"
 keywords:
   - nonlocal gravity

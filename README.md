@@ -104,54 +104,29 @@ spectral weight `exp(-|nu|) - 1 < 0`, and its spectrum is made of ghosts alone
 when the brane density per unit `log t` is at most one. See
 [`ghosts/README.md`](ghosts/README.md).
 
-## Archive and DOI
+## Releases
 
-Zenodo archives every GitHub release of this repository as a new version of
-one record. Releases are published by the `release` workflow: merging a change
-to `.github/release/notes.md` into `main` publishes the release for the version
-in `CITATION.cff`, with the PDF, LaTeX source and arXiv package of all three
+Releases are published by the `release` workflow: merging a change to
+`.github/release/notes.md` into `main` publishes the release for the version in
+`CITATION.cff`, with the PDF, LaTeX source and arXiv package of all three
 manuscripts and the second manuscript's figures attached (built by
-`.github/release/build.sh`).
+`.github/release/build.sh`). Every release is listed at
+https://github.com/creelie/brane-cluster-gases/releases.
 
-- All versions (resolves to the newest):
-  [10.5281/zenodo.22866290](https://doi.org/10.5281/zenodo.22866290)
-- Version 2.0.0:
-  [10.5281/zenodo.23220676](https://doi.org/10.5281/zenodo.23220676)
-- Version 2.1.0:
-  [10.5281/zenodo.23225731](https://doi.org/10.5281/zenodo.23225731)
-- Version 2.1.1:
-  [10.5281/zenodo.23226162](https://doi.org/10.5281/zenodo.23226162)
-- Version 2.2.0, with the corrected first manuscript:
-  [10.5281/zenodo.23288723](https://doi.org/10.5281/zenodo.23288723)
-- Version 3.0.0, with the third manuscript, "Ghosts in Poisson Brane Gases":
-  [10.5281/zenodo.23449534](https://doi.org/10.5281/zenodo.23449534)
-- Version 3.1.0, with the second manuscript retitled, with both authors, three
-  new figures and the audit scripts:
-  [10.5281/zenodo.23524276](https://doi.org/10.5281/zenodo.23524276)
-- Version 3.2.0, with the second manuscript in the form submitted to the
-  Journal of High Energy Physics and its PDF and source in `paper/paper1/`
-  and `paper/paper2/`:
-  [release v3.2.0](https://github.com/creelie/brane-cluster-gases/releases/tag/v3.2.0) (Zenodo did not archive it).
+- [v3.2.0](https://github.com/creelie/brane-cluster-gases/releases/tag/v3.2.0): the second manuscript in the form submitted to the
+  Journal of High Energy Physics, with its PDF and source in `paper/paper1/`
+  and `paper/paper2/`.
+- [v3.1.0](https://github.com/creelie/brane-cluster-gases/releases/tag/v3.1.0): the second manuscript retitled, with both authors,
+  three new figures and the audit scripts.
+- [v3.0.0](https://github.com/creelie/brane-cluster-gases/releases/tag/v3.0.0): the third manuscript, "Ghosts in Poisson Brane Gases".
+- [v2.2.0](https://github.com/creelie/brane-cluster-gases/releases/tag/v2.2.0): the corrected first manuscript.
 
-The first manuscript cites the archive through a switch and a macro defined
-near the top of `paper/brane-gases.tex`:
-
-```tex
-\newif\ifzenodo
-\zenodotrue
-\newcommand{\zenododoi}{10.5281/zenodo.22866290}
-```
-
-With `\zenodofalse` the Data Availability section describes the code as
-supplied with the article and makes no claim about a repository. The second
-manuscript cites release v3.2.0, which contains its code, figures and audit,
-through its GitHub link. Its two-column REVTeX source is
+The second manuscript cites release v3.2.0, which contains its code, figures
+and audit, through its GitHub link. Its two-column REVTeX source is
 `uv-finite/uv-finite-brane-gas.tex`; the one-column JHEP source,
 `uv-finite/uv-finite-brane-gas-jhep.tex` (with `jheppub.sty`), is the version in
 `paper/paper1/` (`uv-finite-brane-gas-jhep.pdf`) and `paper/paper2/`
 (`uv-finite-brane-gas-jhep-tex.zip`).
-The third manuscript cites the DOI of version 3.0.0, the release that first
-contains it.
 
 ## Cancellation of all ultraviolet divergences of quantum gravity by a scale-invariant gas of branes
 
