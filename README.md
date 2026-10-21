@@ -126,8 +126,8 @@ manuscripts and the second manuscript's figures attached (built by
 - Version 3.0.0, with the third manuscript, "Ghosts in Poisson Brane Gases":
   [10.5281/zenodo.23449534](https://doi.org/10.5281/zenodo.23449534)
 - Version 3.1.0, with the second manuscript retitled, with both authors, three
-  new figures and the audit scripts: version DOI to be recorded when Zenodo
-  mints it.
+  new figures and the audit scripts:
+  [10.5281/zenodo.23524276](https://doi.org/10.5281/zenodo.23524276)
 
 The first manuscript cites the archive through a switch and a macro defined
 near the top of `paper/brane-gases.tex`:
@@ -140,8 +140,8 @@ near the top of `paper/brane-gases.tex`:
 
 With `\zenodofalse` the Data Availability section describes the code as
 supplied with the article and makes no claim about a repository. The second
-manuscript cites the concept DOI, which resolves to the newest version, and
-names version 3.1.0 as the release that contains its code, figures and audit.
+manuscript cites the DOI of version 3.1.0, the release that contains its code,
+figures and audit, and the concept DOI, which resolves to the newest version.
 The third manuscript cites the DOI of version 3.0.0, the release that first
 contains it.
 
