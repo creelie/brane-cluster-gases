@@ -130,7 +130,8 @@ manuscripts and the second manuscript's figures attached (built by
   [10.5281/zenodo.23524276](https://doi.org/10.5281/zenodo.23524276)
 - Version 3.2.0, with the second manuscript in the form submitted to the
   Journal of High Energy Physics and its PDF and source in `paper/paper1/`
-  and `paper/paper2/`: version DOI to be recorded when Zenodo mints it.
+  and `paper/paper2/`:
+  [release v3.2.0](https://github.com/creelie/brane-cluster-gases/releases/tag/v3.2.0) (Zenodo did not archive it).
 
 The first manuscript cites the archive through a switch and a macro defined
 near the top of `paper/brane-gases.tex`:
@@ -143,8 +144,12 @@ near the top of `paper/brane-gases.tex`:
 
 With `\zenodofalse` the Data Availability section describes the code as
 supplied with the article and makes no claim about a repository. The second
-manuscript cites version 3.2.0, the release that contains its code,
-figures and audit, through the concept DOI, which resolves to the newest version.
+manuscript cites release v3.2.0, which contains its code, figures and audit,
+through its GitHub link. Its two-column REVTeX source is
+`uv-finite/uv-finite-brane-gas.tex`; the one-column JHEP source,
+`uv-finite/uv-finite-brane-gas-jhep.tex` (with `jheppub.sty`), is the version in
+`paper/paper1/` (`uv-finite-brane-gas-jhep.pdf`) and `paper/paper2/`
+(`uv-finite-brane-gas-jhep-tex.zip`).
 The third manuscript cites the DOI of version 3.0.0, the release that first
 contains it.
 
