@@ -26,6 +26,8 @@ cp "$src/uv-finite-brane-gas.tex" "$work/tex/"
 cp "$src"/figs/*.png "$work/tex/figs/"
 cp -r "$work/tex/." "$work/arxiv/"
 cp "$src"/code/{verify.py,formfactor_check.c,verify.jl,PowerCounting.lean,make_figures.py} "$work/arxiv/anc/"
+mkdir -p "$work/arxiv/anc/audit"
+cp "$src"/audit/*.py "$src"/audit/README.md "$work/arxiv/anc/audit/"
 
 # The source has to compile from these files alone, to the same number of pages as the
 # committed PDF, with no undefined reference and no overfull box.

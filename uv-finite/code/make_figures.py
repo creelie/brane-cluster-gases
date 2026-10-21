@@ -922,7 +922,7 @@ def bubble_lower(E, n=4):
     """log10 of the rigorous lower bound, maximized over delta (the power-law remainder is dropped)"""
     s = E * E
     best = -np.inf
-    for d in np.linspace(0.01, 0.6, 240):
+    for d in np.linspace(0.01, 0.499, 250):
         v = math.log(math.pi ** 2 * math.sqrt(7) * d ** 2.5 / (64 * (1 - d) ** 2)) + n * ein_minus((1 - d) ** 2 * s * s / 4)
         best = max(best, v)
     return best / math.log(10)
@@ -994,7 +994,121 @@ def fig_bubble():
     print("bubble: log10 Re A at E =", dict(zip(Es.tolist(), np.round(lv, 3).tolist())))
 
 
-ALL = ["gas", "fluct", "formfactor", "complex", "power", "newton", "chain3d", "class", "vacuum", "unitarity", "necessity", "bubble"]
+
+# ---------------------------------------------------------------- Newtonian well over (r, n)
+def fig_well3d():
+    """-Phi_N(r)/(G m M) as a surface over r M in [0, 4] and n = 4, ..., 9, with Newton's 1/r
+    along the two edges and the depth of the well 2 I_n / pi marked on the axis r = 0."""
+    ns = np.arange(4, 10)
+    rs = np.linspace(0.0, 4.0, 161)
+    Z = np.array([[-potential(r, int(n)) for r in rs] for n in ns])
+    Rg, Ng = np.meshgrid(rs, ns)
+    fig = plt.figure(figsize=(3.5, 3.0))
+    ax = fig.add_axes([-0.05, -0.02, 1.05, 0.93], projection="3d")
+    ax.computed_zorder = False
+    zmax = 1.3
+    ax.plot_surface(Rg, Ng, Z, cmap="viridis", rstride=1, cstride=4, linewidth=0.15, edgecolor=(1, 1, 1, 0.3), alpha=0.95, vmin=0, vmax=0.6)
+    rn = rs[1 / np.maximum(rs, 1e-9) <= zmax]
+    for n in (4, 9):
+        ax.plot(rn, np.full_like(rn, n), 1 / rn, color="#c0392b", lw=1.0, ls="--", zorder=10)
+    # the depth of the well at r = 0, one marker per n
+    ax.plot(np.zeros(len(ns)), ns, Z[:, 0], "o", color="#7b2d26", ms=3, zorder=11)
+    ax.plot(np.zeros(len(ns)), ns, Z[:, 0], color="#7b2d26", lw=0.8, zorder=11)
+    # contours of the surface on the floor
+    ax.contour(Rg, Ng, Z, levels=[0.1, 0.2, 0.3, 0.4, 0.5], zdir="z", offset=0, cmap="viridis", linewidths=0.6, vmin=0, vmax=0.6)
+    ax.set_xlabel(r"$rM$", labelpad=-6); ax.set_ylabel(r"$n$", labelpad=-5)
+    ax.set_yticks(list(ns)); ax.set_xticks([0, 1, 2, 3, 4]); ax.set_zticks([0, 0.25, 0.5, 0.75, 1.0, 1.25])
+    ax.set_zlim(0, zmax)
+    zlab(ax, r"$-\Phi_N/(GmM)$", x=0.80, y=0.86)
+    style3d(ax, elev=24, azim=-58)
+    fig.text(0.02, 0.965, r"finite well $-\Phi_N(0)/(GmM)=2I_n/\pi$ (dots); dashed: Newton $1/(rM)$", fontsize=7, va="top", color="#7b2d26")
+    fig.savefig(os.path.join(OUT, "fig_well3d.png"))
+    plt.close(fig)
+    print("well3d: depth at n=4..9:", ", ".join("%.4f" % z[0] for z in Z))
+
+
+# ---------------------------------------------------------------- superficial degree over (n, m_sigma)
+def omega_bar_m(L, n, m):
+    return 4 * L - (2 * n + 2) * (L - 1) + 2 * max(L - n - 1 + m, 0)
+
+
+def fig_degree3d():
+    """omega_bar(L) over the plane (n, m_sigma), 0 <= m_sigma <= n - 2, as one sheet per L = 2, 3, 4.
+    The sheet L = 2 touches zero exactly along n = 3; every sheet is negative for n >= 4."""
+    ns = np.arange(3, 11)
+    ms = np.arange(0, 9)
+    Ng, Mg = np.meshgrid(ns, ms, indexing="ij")
+    fig = plt.figure(figsize=(3.5, 3.0))
+    ax = fig.add_axes([-0.05, -0.02, 1.05, 0.93], projection="3d")
+    ax.computed_zorder = False
+    cols = {2: "#c0392b", 3: "#e67e22", 4: "#1f618d"}
+    for L in (4, 3, 2):
+        Z = np.array([[omega_bar_m(L, int(n), int(m)) if m <= n - 2 else np.nan for m in ms] for n in ns], dtype=float)
+        ax.plot_surface(Ng, Mg, Z, color=cols[L], rstride=1, cstride=1, linewidth=0.2, edgecolor=(0, 0, 0, 0.25), alpha=0.75, shade=True)
+        ax.text(10.3, 0, Z[-1, 0], r"$L=%d$" % L, fontsize=7, color=cols[L])
+    # the plane omega = 0
+    Pn, Pm = np.meshgrid([3, 10], [0, 8])
+    ax.plot_surface(Pn, Pm, np.zeros_like(Pn, dtype=float), color="0.5", alpha=0.18, linewidth=0)
+    ax.scatter([3, 3], [0, 1], [0, 0], color="k", s=10, depthshade=False)
+    ax.set_xlabel(r"$n$", labelpad=-5); ax.set_ylabel(r"$m_\sigma$", labelpad=-5)
+    ax.set_xticks(list(ns)); ax.set_yticks([0, 2, 4, 6, 8]); ax.set_zticks([0, -10, -20, -30, -40])
+    zlab(ax, r"$\bar\omega(L)$", x=0.80, y=0.86)
+    style3d(ax, elev=18, azim=-62)
+    fig.text(0.02, 0.965, r"sheets $\bar\omega(L)$ on $0\leq m_\sigma\leq n-2$; grey plane $\bar\omega=0$; dots: $n=3$, $L=2$", fontsize=7, va="top", color="#7b2d26")
+    fig.savefig(os.path.join(OUT, "fig_degree3d.png"))
+    plt.close(fig)
+    print("degree3d: omega(2,3,0..1) =", omega_bar_m(2, 3, 0), omega_bar_m(2, 3, 1), "; omega(2,4,2) =", omega_bar_m(2, 4, 2))
+
+
+# ---------------------------------------------------------------- time-slice covariance over (q, t)
+def time_slice_cov(t, q, n=4):
+    """F_q(t) = (1/pi) int_0^inf cos(p t) / ((p^2 + q^2) a(p^2 + q^2)) dp for the skeleton, M = 1."""
+    f = lambda p: mp.cos(p * t) / ((p * p + q * q) * mp.exp(0.5 * n * _ein_mp((p * p + q * q) ** 2)))
+    if t == 0:
+        return float(mp.quad(f, [0, 1, 2, 4, mp.inf]) / mp.pi)
+    return float(mp.quadosc(f, [0, mp.inf], omega=t) / mp.pi)
+
+
+def _ein_mp(w):
+    if w < 1:
+        return mp.nsum(lambda k: (-1) ** (k + 1) * w ** k / (k * mp.factorial(k)), [1, mp.inf])
+    return mp.log(w) + mp.euler + mp.e1(w)
+
+
+def fig_positivity3d():
+    """The time-slice covariance F_q(t) of the free graviton of the gas (n = 4) over (q, t), scaled by
+    its value at t = 0, against the completely monotone e^{-q t} of general relativity.  F_q changes
+    sign and its Hankel matrices have negative eigenvalues: the Euclidean measure is not reflection
+    positive, as the Stieltjes argument of the text requires."""
+    mp.mp.dps = 15
+    qs = np.linspace(0.25, 2.0, 15)
+    ts = np.linspace(0.0, 16.0, 33)
+    Z = np.empty((len(qs), len(ts)))
+    for i, q in enumerate(qs):
+        f0 = time_slice_cov(mp.mpf(0), mp.mpf(q))
+        for j, t in enumerate(ts):
+            Z[i, j] = time_slice_cov(mp.mpf(t), mp.mpf(q)) / f0
+    Qg, Tg = np.meshgrid(qs, ts, indexing="ij")
+    fig = plt.figure(figsize=(3.5, 3.0))
+    ax = fig.add_axes([-0.05, -0.02, 1.05, 0.93], projection="3d")
+    ax.computed_zorder = False
+    S = np.sign(Z) * np.log10(1 + np.abs(Z) * 1e4) / 4     # symmetric log, keeps the sign change visible
+    ax.plot_surface(Qg, Tg, S, cmap="coolwarm", vmin=-1, vmax=1, rstride=1, cstride=1, linewidth=0.15, edgecolor=(1, 1, 1, 0.25), alpha=0.95)
+    ax.contour(Qg, Tg, S, levels=[0.0], zdir="z", offset=-1.05, colors="k", linewidths=0.8)
+    ax.plot_surface(Qg, Tg, np.zeros_like(S) - 1.05, color="0.6", alpha=0.08, linewidth=0)
+    ax.set_xlabel(r"$q/M$", labelpad=-6); ax.set_ylabel(r"$tM$", labelpad=-5)
+    ax.set_zlim(-1.05, 1.0); ax.set_zticks([-1, -0.5, 0, 0.5, 1])
+    ax.set_xticks([0.5, 1.0, 1.5, 2.0]); ax.set_yticks([0, 4, 8, 12, 16])
+    zlab(ax, r"$F_q(t)/F_q(0)$, symlog", x=0.70, y=0.86)
+    style3d(ax, elev=24, azim=-50)
+    tneg = [(q, ts[np.argmax(Z[i] < 0)]) for i, q in enumerate(qs) if (Z[i] < 0).any()]
+    fig.text(0.02, 0.965, r"black: zero set on the floor; GR would give $e^{-qt}>0$", fontsize=7, va="top", color="#7b2d26")
+    fig.savefig(os.path.join(OUT, "fig_positivity3d.png"))
+    plt.close(fig)
+    print("positivity3d: first negative t per q:", ", ".join("%.2f:%.1f" % x for x in tneg))
+
+
+ALL = ["gas", "fluct", "formfactor", "complex", "power", "newton", "chain3d", "class", "vacuum", "unitarity", "necessity", "bubble", "well3d", "degree3d", "positivity3d"]
 
 if __name__ == "__main__":
     import sys
