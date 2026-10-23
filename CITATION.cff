@@ -24,9 +24,9 @@ abstract: >-
   13 Lean 4 theorems.
 type: software
 license: MIT
-version: 3.3.0
+version: "annals-research-2026-10-23-p04"
 url: "https://github.com/creelie/brane-cluster-gases/releases/tag/v3.2.0"
-date-released: "2026-10-21"
+date-released: 2026-10-23
 keywords:
   - nonlocal gravity
   - brane intersections
