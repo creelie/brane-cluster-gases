@@ -10,8 +10,8 @@ abstract: >-
   generating functional, the Euclidean propagator of the Gaussian form factor,
   the weak-field threshold, the Schwinger parametric representation, and the
   composition of transmission amplitudes through a stack of branes. The second,
-  "Cancellation of all ultraviolet divergences of quantum gravity by a
-  scale-invariant gas of branes" (new in 2.0.0, retitled in 3.1.0), comes with
+  "Perturbative finiteness of gravity in a scale-invariant gas of branes"
+  (new in 2.0.0, retitled in 3.1.0 and 3.4.0), comes with
   195 Python, 84 C and 114 Julia checks of its analytical results, 17 Lean 4
   theorems on its power counting and five independent audit scripts (3.1.0): the single-brane factor of the
   cell model, the form factor of one realization of a Poisson gas of branes and
@@ -24,9 +24,9 @@ abstract: >-
   13 Lean 4 theorems.
 type: software
 license: MIT
-version: 3.3.0
-url: "https://github.com/creelie/brane-cluster-gases/releases/tag/v3.2.0"
-date-released: "2026-10-21"
+version: 3.4.0
+url: "https://github.com/creelie/brane-cluster-gases/releases/tag/v3.4.0"
+date-released: "2026-10-30"
 keywords:
   - nonlocal gravity
   - brane intersections
@@ -38,7 +38,7 @@ authors:
     given-names: Deep
     orcid: "https://orcid.org/0000-0003-0466-750X"
     email: itsdeep@live.com
-    affiliation: "Formerly, Electro-Gravitational Space Propulsion Laboratory (EGSPL), Bhubaneswar, Odisha 751030, India; Formerly, University of Calcutta, Senate House, 87/1 College Street, Kolkata 700073, West Bengal, India"
+    affiliation: "Formerly, Electro-Gravitational Space Propulsion Laboratory (EGSPL), Bhubaneswar, Odisha 751030, India; Formerly, University of Calcutta (Heramba Chandra College), 23/49 Gariahat Road, Golpark, Kolkata 700029, West Bengal, India"
   - family-names: Bhattacharya
     given-names: Ushashi
     orcid: "https://orcid.org/0009-0002-2254-3914"
@@ -54,7 +54,7 @@ preferred-citation:
       orcid: "https://orcid.org/0000-0003-0466-750X"
 references:
   - type: article
-    title: "Cancellation of all ultraviolet divergences of quantum gravity by a scale-invariant gas of branes"
+    title: "Perturbative finiteness of gravity in a scale-invariant gas of branes"
     year: 2026
     authors:
       - family-names: Bhattacharjee

@@ -1,10 +1,12 @@
-# Ghosts in Poisson Brane Gases: the journal version (v3.3.0)
+# Perturbative finiteness of gravity in a scale-invariant gas of branes: corrected manuscript (v3.4.0)
 
-This release carries the third manuscript, "Ghosts in Poisson Brane Gases" by Deep Bhattacharjee and Ushashi Bhattacharya (`ghosts/`), in its journal form for Physical Review D. The theorems are unchanged: the gas-averaged graviton propagator is exp(-phi(z))/z, it has no positive Källén–Lehmann representation, for nu(dt) = lambda(t) dt/t its massive spectrum consists of ghosts alone exactly when lambda <= 1, and every average with a finite four-dimensional tadpole has states of both signs.
+This release carries the second manuscript by Deep Bhattacharjee and Ushashi Bhattacharya (`uv-finite/`), corrected as the journal version of hexagonmath.org 2610.00342v2.
 
-- The manuscript cites the GitHub releases of this repository and no DOI of its own archive; the draft option that printed equation labels in the margin is off.
-- `ghosts/paper/paper1/` holds the compiled manuscript (`GhostsBraneGases.pdf`) and `ghosts/paper/paper2/` its LaTeX source with the figures (`GhostsBraneGases-tex.zip`).
+- Retitled "Perturbative finiteness of gravity in a scale-invariant gas of branes": every result is perturbative around flat space, and the title now says so.
+- A one-sentence abstract; the preprint id 2610.00342v2 in the title-page footnote; the current affiliations and three e-mail addresses.
+- The all-order unitarity statement names its input: the cutting-rule theorem of Pius and Sen and of Briscese and Modesto, whose written proof is for scalar fields, applied through the properties (P1)–(P3) checked in the paper. The status table and the discussion say the same.
+- The introduction no longer says that the Ein form factor is the only form a gas can produce; it is the form for the cell model, and other admissible responses give other exponents.
 
-The first and second manuscripts are unchanged from 3.2.0.
+The first and third manuscripts are unchanged from 3.3.0. The code and checks are unchanged.
 
 Assets: for each manuscript the PDF, the LaTeX source (tex.zip) and the arXiv package (tar.gz) with its code in `anc/`, and the figures of the second manuscript (figures.zip).

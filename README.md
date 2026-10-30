@@ -2,15 +2,14 @@
 
 Source, figures and verification code for three manuscripts by Deep Bhattacharjee
 and Ushashi Bhattacharya, prepared for submission to *Physical Review D*.
-Contact: <itsdeep@live.com>.
+Contact: <d.bhattacharjee@erl-forschung.de>, <itsdeep@live.com>; GitHub-related contact: <egspl@proton.me>.
 
 1. *Brane cluster gases and ghost-free form factors for quantum gravity*
    (`paper/`, `code/`).
-2. *Cancellation of all ultraviolet divergences of quantum gravity by a
-   scale-invariant gas of branes* (`uv-finite/`, added in release 2.0.0 as
-   "Finite quantum gravity from a scale-invariant gas of branes", retitled in
-   3.1.0). See
-   [the section below](#cancellation-of-all-ultraviolet-divergences-of-quantum-gravity-by-a-scale-invariant-gas-of-branes).
+2. *Perturbative finiteness of gravity in a scale-invariant gas of branes*
+   (`uv-finite/`, added in release 2.0.0 as "Finite quantum gravity from a
+   scale-invariant gas of branes", retitled in 3.1.0 and 3.4.0). See
+   [the section below](#perturbative-finiteness-of-gravity-in-a-scale-invariant-gas-of-branes).
 3. *Ghosts in Poisson Brane Gases* (`ghosts/`, added in release 3.0.0). See
    [the section below](#ghosts-in-poisson-brane-gases).
 
@@ -113,6 +112,8 @@ manuscripts and the second manuscript's figures attached (built by
 `.github/release/build.sh`). Every release is listed at
 https://github.com/creelie/brane-cluster-gases/releases.
 
+- [v3.4.0](https://github.com/creelie/brane-cluster-gases/releases/tag/v3.4.0): the second manuscript corrected and retitled "Perturbative finiteness of gravity in a scale-invariant gas of branes", with a short abstract, the preprint id hexagonmath.org 2610.00342v2 on the title page, and the unitarity statement made explicit about its input (the cutting-rule theorem of Pius and Sen and of Briscese and Modesto, written out for scalar fields).
+- [v3.3.0](https://github.com/creelie/brane-cluster-gases/releases/tag/v3.3.0): the third manuscript in its journal form.
 - [v3.2.0](https://github.com/creelie/brane-cluster-gases/releases/tag/v3.2.0): the second manuscript in the form submitted to the
   Journal of High Energy Physics, with its PDF and source in `paper/paper1/`
   and `paper/paper2/`.
@@ -121,14 +122,14 @@ https://github.com/creelie/brane-cluster-gases/releases.
 - [v3.0.0](https://github.com/creelie/brane-cluster-gases/releases/tag/v3.0.0): the third manuscript, "Ghosts in Poisson Brane Gases".
 - [v2.2.0](https://github.com/creelie/brane-cluster-gases/releases/tag/v2.2.0): the corrected first manuscript.
 
-The second manuscript cites release v3.2.0, which contains its code, figures
+The second manuscript cites release v3.4.0, which contains its code, figures
 and audit, through its GitHub link. Its two-column REVTeX source is
 `uv-finite/uv-finite-brane-gas.tex`; the one-column JHEP source,
 `uv-finite/uv-finite-brane-gas-jhep.tex` (with `jheppub.sty`), is the version in
 `paper/paper1/` (`uv-finite-brane-gas-jhep.pdf`) and `paper/paper2/`
 (`uv-finite-brane-gas-jhep-tex.zip`).
 
-## Cancellation of all ultraviolet divergences of quantum gravity by a scale-invariant gas of branes
+## Perturbative finiteness of gravity in a scale-invariant gas of branes
 
 The second manuscript derives the form factor from a Poisson gas of branes with
 no preferred size and works with one frozen realization of the gas rather than
