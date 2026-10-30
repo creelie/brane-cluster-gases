@@ -112,7 +112,7 @@ manuscripts and the second manuscript's figures attached (built by
 `.github/release/build.sh`). Every release is listed at
 https://github.com/creelie/brane-cluster-gases/releases.
 
-- [v3.4.0](https://github.com/creelie/brane-cluster-gases/releases/tag/v3.4.0): the second manuscript corrected and retitled "Perturbative finiteness of gravity in a scale-invariant gas of branes", with a short abstract, the preprint id hexagonmath.org 2610.00342v2 on the title page, and the unitarity statement made explicit about its input (the cutting-rule theorem of Pius and Sen and of Briscese and Modesto, written out for scalar fields).
+- [v3.4.0](https://github.com/creelie/brane-cluster-gases/releases/tag/v3.4.0): the second manuscript corrected and retitled "Perturbative finiteness of gravity in a scale-invariant gas of branes", with a short abstract, the preprint id hexagonmath.org 2610.00342v2 on the title page, and the unitarity statement made explicit about its input (the cutting-rule theorem of Pius and Sen and of Briscese and Modesto, written out for scalar fields). Zenodo version DOI [10.5281/zenodo.23790571](https://doi.org/10.5281/zenodo.23790571).
 - [v3.3.0](https://github.com/creelie/brane-cluster-gases/releases/tag/v3.3.0): the third manuscript in its journal form.
 - [v3.2.0](https://github.com/creelie/brane-cluster-gases/releases/tag/v3.2.0): the second manuscript in the form submitted to the
   Journal of High Energy Physics, with its PDF and source in `paper/paper1/`
